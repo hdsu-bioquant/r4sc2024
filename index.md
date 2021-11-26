@@ -4,7 +4,7 @@
 
 Welcome to the **IRTG Course - Introduction to R** This workshop is meant for individuals with little previous knowledge R. 
 
-The course will run over 2 days **(Wednesday, 16.06 and Thursday, 17.06)** from 10 am - 12.30 pm and 1.30 pm - 5.30 pm.
+The course will run over 2 days **(Wednesday, 8.12 and Thursday, 9.12)** from 10 am - 12.30 pm and 1.30 pm - 5.30 pm.
 
 
 ******
