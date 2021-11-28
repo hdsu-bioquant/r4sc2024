@@ -45,16 +45,13 @@ Please check that you can open RStudio without error message!
 
 Here are the links to the slides
 
-[comment]: <> * Day 1 : [introduction](./irtg2021_intro.pdf)
-[comment]: <> * Day 1 : [R markdown](./irtg2021_rmarkdown.pdf)
-[comment]: <> * Day 1 : [Data types](./irtg2021_datatypes.pdf)
-[comment]: <> * Day 1 : [Statistical tests](./irtg2021_tests.pdf)
+* Day 1 : [introduction](./irtg2021_intro.pdf)
+* Day 1 : [R markdown](./irtg2021_rmarkdown.pdf)
+* Day 1 : [Data types](./irtg2021_datatypes.pdf)
+* Day 1 : [Statistical tests](./irtg2021_tests.pdf)
 
-[comment]: <> * Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
+* Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
 ## Practical parts
-
-
-
 
 **Please document your progress in this [Google Sheet](https://docs.google.com/spreadsheets/d/1rFcWJJD-qOqeRWZvhqPEqMCt_ddtinvdTlLPl2Syomw/edit?usp=sharing)**
 
@@ -63,26 +60,11 @@ Here are the links to the slides
 
 On the first day, we will guide you through the first steps of working with R, from reading data to exploratory analysis and basic statistics.
 
-0. [Goals of Day 1](./day1/00_Objectives.md)
-1. [Getting started with RStudio](./day1/01_rstudio.md)
-2. [Reading in a data table](./day1/02_dataframe.md)
-3. [Cleaning the dataset](./day1/03_cleanup.md)
-4. [Making plots](./day1/04_plotting.md)
-5. [Statistical tests](./day1/05_test.md)
                                                    
 
 ### Day 2: a simple single-cell RNA-seq analysis workflow
 
 On the second day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
-
-[comment]: <> 0. [Intro on scRNA-seq analysis](./day2/00.md)
-[comment]: <> 1. [Creating a SEURAT object](./day2/01.md)
-[comment]: <> 2. [Basic QC and normalization ](./day2/02.md)
-[comment]: <> 3. [Feature selection](./day2/03.md)
-[comment]: <> 4. [Normalization and Dimensionality reduction](./day2/04.md)
-[comment]: <> 5. [Cluster visualization](./day2/05.md)
-[comment]: <> 6. [Differential gene expression analysis](./day2/06.md)
-[comment]: <> 7. [Profiling cells](./day2/07.md)
 
 
 
