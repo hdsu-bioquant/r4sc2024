@@ -27,21 +27,34 @@ On the second day, we will focus on a simple single-cell analysis workflow, whic
  We will send you a link so that you can freely register to DataCamp and follow this course. 
 
 ********
+
+## Technical pre-requisites
+
+Every participant will work on her/his own laptop. The easiest way to work with R is using the **RStudio** interface.
+Please install RStudio Desktop prior to the start of the course:
+
+1. First install R for your operating system; you will find the correct version [on this website](https://cran.rstudio.com/) 
+2. Once R is installed, you can install the RStudio Desktop version, which you find [here](https://www.rstudio.com/products/rstudio/download/#download)
+3. You need to install a couple of R packages; you can download the 
+[following script](./install_packages.R). Load it into RStudio, and then hit the *Run* button at the top to execute it. It should run smoothly!
+
+Please check that you can open RStudio without error message!
+
+
 ## Slides
 
 Here are the links to the slides
 
-* Day 1 : [introduction](./irtg2021_intro.pdf)
-* Day 1 : [R markdown](./irtg2021_rmarkdown.pdf)
-* Day 1 : [Data types](./irtg2021_datatypes.pdf)
-* Day 1 : [Statistical tests](./irtg2021_tests.pdf)
+[comment]: <> * Day 1 : [introduction](./irtg2021_intro.pdf)
+[comment]: <> * Day 1 : [R markdown](./irtg2021_rmarkdown.pdf)
+[comment]: <> * Day 1 : [Data types](./irtg2021_datatypes.pdf)
+[comment]: <> * Day 1 : [Statistical tests](./irtg2021_tests.pdf)
 
-* Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
+[comment]: <> * Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
 ## Practical parts
 
 
-**You need to install a couple of R packages; you can download the 
-[following script](./install_packages.R). Load it into RStudio, and then hit the *Run* button at the top to execute it. It should run smoothly!**
+
 
 **Please document your progress in this [Google Sheet](https://docs.google.com/spreadsheets/d/1rFcWJJD-qOqeRWZvhqPEqMCt_ddtinvdTlLPl2Syomw/edit?usp=sharing)**
 
@@ -62,14 +75,14 @@ On the first day, we will guide you through the first steps of working with R, f
 
 On the second day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
 
-0. [Intro on scRNA-seq analysis](./day2/00.md)
-1. [Creating a SEURAT object](./day2/01.md)
-2. [Basic QC and normalization ](./day2/02.md)
-3. [Feature selection](./day2/03.md)
-4. [Normalization and Dimensionality reduction](./day2/04.md)
-5. [Cluster visualization](./day2/05.md)
-6. [Differential gene expression analysis](./day2/06.md)
-7. [Profiling cells](./day2/07.md)
+[comment]: <> 0. [Intro on scRNA-seq analysis](./day2/00.md)
+[comment]: <> 1. [Creating a SEURAT object](./day2/01.md)
+[comment]: <> 2. [Basic QC and normalization ](./day2/02.md)
+[comment]: <> 3. [Feature selection](./day2/03.md)
+[comment]: <> 4. [Normalization and Dimensionality reduction](./day2/04.md)
+[comment]: <> 5. [Cluster visualization](./day2/05.md)
+[comment]: <> 6. [Differential gene expression analysis](./day2/06.md)
+[comment]: <> 7. [Profiling cells](./day2/07.md)
 
 
 
@@ -81,13 +94,3 @@ The course will be online only!
 * Lectures will be over **Zoom** (we will send the link via email prior to the course)
 * We will use **Discord channels** for the practical sessions (register [using this link](https://discord.gg/gPXJDukGfQ))
 
-**********
-## Technical pre-requisites
-
-Every participant will work on her/his own laptop. The easiest way to work with R is using the **RStudio** interface.
-Please install RStudio Desktop prior to the start of the course:
-
-1. first install R for your operating system; you will find the correct version [on this website](https://cran.rstudio.com/) 
-2. once R is installed, you can isntall the RStudio Desktop version, which you find [here](https://www.rstudio.com/products/rstudio/download/#download)
-
-Please check that you can open RStudio without error message!
