@@ -7,7 +7,7 @@ output:
 
 
 
-# Quality control
+# 2. Quality control
 
 
 Filtering cells with low sequencing quality is a very important step since it can greatly
@@ -83,9 +83,36 @@ ncol(pbmc.filtered)
 ## [1] 452
 ```
 
+## Quizzes
+
+<br>
+<details>
+<summary> *How are the number of features and UMI counts related?* 
+<br>
+TIP: Use the function FeatureScatter, inspect the manual using ?function.
+</summary>
+<br>
+<b>Answer:</b>
+<br>
+`FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")`
+<br>
+![](figures/qc_ncount_vs_features.png)
+
+We observe as expected a linear relation between the number of UMI counts and the 
+features recorded.
+</details> 
 
 
 
+## Exercises
+
+
+> Performing your own QC
+
+Perform a QC using the downsampled 10 PBMC 250 cells data
+
+* Calculate and visualize QC metrics
+* Filter out cells based on the calculated values
 
 
 
@@ -112,65 +139,4 @@ is equal to 1 as follows:
 ```r
 pbmc.filtered <- ScaleData(pbmc.filtered)
 ```
-
-
-## Quizzes
-
-
-> Performing your own QC
-
-<br>
-**QUIZZ 1**
-<details>
-<summary> *How are the number of features and UMI counts related?* 
-<br>
-a) They are not related and randomly distributed in a scatter plot
-<br>
-b) They are related in a non-linear way
-<br>
-c) They are linearly related
-<br>
-TIP: Use the function FeatureScatter, inspect the manual using ?function.
-</summary>
-<br>
-<b>Answer:</b>
-<br>
-`FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")`
-<br>
-![](figures/qc_ncount_vs_features.png)
-
-We observe as expected a linear relation between the number of UMI counts and the 
-features recorded.
-</details> 
-
-
-
-<br>
-
-**QUIZZ 2**
-<br>
-Load a seurat object using the following command:
-
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-
-*Calculate the mean and median values of the percentage of mitochondrial reads*
-<br>
-a) mean=2.2133 and median=2.0532
-<br>
-b) mean=2.2246 and median=2.0639
-<br>
-c) mean=0.0102. and median=1.1743
-<br>
-
-
-
-
-*Filter out cells based on QC values*
-<br>
-NOTE: Do not skip any step in the pipeline.
-
 

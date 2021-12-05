@@ -131,29 +131,23 @@ DotPlot(pbmc.filtered,
 <img src="07-Profiling_cells_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 
-## Final Report
-
-**Exercise 1**
-<br>
+## Exercises
 
 > Provide a report of all your findings (QC, clustering) including plots, parameter selection
-and conclusions using the 10x PBMC 250 subsampled data
+and conclusions using the 10x PBMC 250 subsampled data.
 
-**Exercise 2**
-<br>
+> Using the scRNA-Seq workflow that we have seen analize a dataset of PBMC cells stimulated
+with IFN beta. 
 
->  Using the scRNA-Seq workflow in this pipeline, process the provided dataset of PBMC cells 
-stimulated with IFN beta
-
-Load the seurat object containing the data to a variable named `ifnb` using the following commands:
+* Load the seurat object containing the data to a variable named `ifnb` using the following commands:
 
 ```
 url_ifn <- 'https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true'
 ifnb <- readRDS(url(url_ifn))
 ```
 
-This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042).
-Provide a report in a Rmd file.   
+* This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042).
+* Provide a report in a Rmd file.   
 
 
 

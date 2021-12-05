@@ -12,7 +12,7 @@ output:
 
 
 
-# Feature selection
+# 3. Feature selection
 
 
 Because of the sparsity in the sequencing data many genes or features are almost no expressed.
@@ -64,57 +64,14 @@ plot1
 
 For further analysis we will use only HVGs. 
 
-## Quizzes
+## Exercises
 
-> Manually calculate the variance in genes and order them
+> Extract normalized expression values and calculate the variance in genes and order them
 by variance.
 
-<!-- Quizz 1-->
-<br>
-
-**QUIZZ 1**
-
-Load a seurat object using the following command:
-
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-Extract the matrix of gene expression normalized values from the Seurat object.
-Calculate variances manually from the matrix. Sort genes based on variances in 
-decreasing order and show top 6 genes.
-
-<details> 
-<summary> *Find the top 6 genes with the highest variance in descending order*
-<br>
-a) HLA-DRA, CST3, S100A8, NKG7, S100A9, LYZ
-<br>
-b) NKG7, S100A8, S100A9, LYZ, CST3, HLA-DRA
-<br>
-c) HLA-DRA, LYZ, NKG7, S100A9, TYROBP, CST3 
-</summary>
-<br>
-<b>Answer:</b>
-```
-pbmc.seurat<- NormalizeData(pbmc.seurat) %>%
-                      ScaleData()
-
-norm.exp <- pbmc.seurat@assays$RNA@scale.data
-
-norm.exp <- GetAssayData(pbmc.seurat, slot = 'data')
-
-## Calculation of the variance in genes
-std.devs <- apply(norm.exp, 1, var)
-
-## Showing the top 6 genes with highest variance
-head(sort(std.devs, decreasing = T))
-```
-</details>
-
-<!-- Quizz 2 -->
+* Extract the matrix of gene expression normalized values from the Seurat object
+* Calculate variances manually from the matrix
+* Sort genes based on variances in decreasing order and show top 6 genes
 
 
 
-
-<br>

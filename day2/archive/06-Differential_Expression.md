@@ -1,14 +1,4 @@
----
-output:
-  html_document:
-    keep_md: yes
----
-
-
-
-
-
-# Differential Expression Analysis
+# 6. Differential Expression Analysis
 
 The main advantage of using scRNA-Seq technologies is the possibility of 
 assessing cell type specificity and heterogeneity, which is not possible while
@@ -107,23 +97,22 @@ pbmc.degs %>%
 <img src="06-Differential_Expression_files/figure-html/vulcano_plot-1.png" style="display: block; margin: auto;" />
 
 
-<!--
-## Quizzes
+## Exercises
 
-> Compare the DEGs from the above shown results with that calculated using the 10X PBMC 250 cells downsample data clusters in the previous exercises
+<blockquote>
+Compare the DEGs from the above shown results with that calculated using the 10X PBMC 250 cells downsample data clusters in the previous exercises
 
 
  * Load the tsv file containing the calculated DEGs from above using the following
 url:
 `https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv`
 
- * Calculate the DEGs using the down-sampled 10X PBMC 250 cells data with the clusters
+ * Calculate the DEGs using the downsampled 10X PBMC 250 cells data with the clusters
  obtained using your parameters
  
  * Intersect both lists of genes 
- 
 
-```r
-degs <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv')
-```
- -->
+</blockquote>
+
+[Previous Chapter](./05-Cluster_visualization.md) | 
+[Next Chapter](./07-Profiling_cells.md)

@@ -1,14 +1,4 @@
----
-output:
-  html_document:
-    keep_md: yes
----
-
-
-
-
-
-# 0. First steps in scRNA-Seq analysis {#intro}
+# 0. First steps in scRNA-Seq analysis
 
 
 We will use available data from 10X genomics of Peripheral Blood Mononuclear cells (PBMC). In order
@@ -116,13 +106,8 @@ here.
 
 > Manipulation of count matrices
 
-
-
-<!-- Quizz 1-->
-**QUIZZ 1**
-<br>
 <details>
-<summary> *What is the mean and median number of UMI counts in these cells?* 
+<summary> What is the mean and median number of UMI counts in these cells?
 <br>
  a) median = 301, mean = 343
 <br>
@@ -132,23 +117,19 @@ here.
 </summary>
 <br>
 <b>Answer:</b>
-<br>
-`umi.sum <- apply(pbmc.mtx, 2, sum)`
-<br>
-`summary(umi.sum)`
 
-`Min. 1st Qu.  Median    Mean 3rd Qu.    Max.` <br>
-`561      1741      2216      2354      2746      7928`  
+```
+umi.sum <- apply(pbmc.mtx, 2, sum)
+summary(umi.sum)
+
+Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+561      1741      2216      2354      2746      7928
+```
 </details> 
 
-
-
-
-<!-- Quizz 2-->
 <br>
-**QUIZZ 2**
-<br>
-<summary> *What are the top genes with the highest number of UMI counts in decreasing order?* 
+<details>
+<summary> What are the top genes with highest number of UMI counts in decreasing order?
 <br>
  a) MALAT1, B2M, TMSB4X, RPL10, RPL13, RPL13A
 <br>
@@ -156,28 +137,21 @@ here.
 <br>
  c) B2M, TMSB4X, RPL13A, RPL10, RPL13, MALAT1
 </summary>
-TIP: You can use the same approach from the previous quizz but now using rows.
+<br>
+<b>Answer:</b>
+<br>
 <br>
 
+```r
+## Getting sum of umi counts per row (gene)
+umi.sum.gene <- apply(pbmc.mtx, 1, sum)
 
 
-<!-- Quizz 3-->
-**QUIZZ 3**
-<br>
-<summary> *Evaluate the degree of zero inflation in the data. Calculate the fraction of zeros in the count matrix.* 
-<br>
- a) 0.3105930
-<br>
- b) 0.8283542
-<br>
- c) 0.7485923
- </summary>
-TIP: Calculate the number of entries with bigger than 0 as follows: `sum(pbmc.mtx[pbmc.mtx>0])`.
-And then divide by the total number of entries in the matrix.
+## Sorting and showing top 6 genes with highest number of UMIs
+sort(umi.sum.gene, decreasing = TRUE) %>% head()
+MALAT1    B2M TMSB4X  RPL10  RPL13 RPL13A
+28672  22976  22741  16616  14179  13975
+```
+</details> 
 
-<!--
-`sum(pbmc.mtx==0)/prod(dim(pbmc.mtx))`
-`0.9385724`
--->
-
-<br>
+[Next Chapter](./01-Seurat.md)
