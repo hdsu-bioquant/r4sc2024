@@ -74,5 +74,5 @@ On the second day, we will go through a step by step simple analysis of a small 
 
 The course will be online only! 
 * Lectures will be over **Zoom** (we will send the link via email prior to the course)
-* We will use **Discord channels** for the practical sessions (register [using this link](https://discord.gg/gPXJDukGfQ))
+* We will use **Discord channels** for the practical sessions (register [using this link](https://discord.gg/RDaYPKPQ))
 
