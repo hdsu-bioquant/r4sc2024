@@ -57,10 +57,14 @@ Here are the links to the slides
 
 ### Day 1: General introduction - (almost) first steps in R!                                        
 
-
 On the first day, we will guide you through the first steps of working with R, from reading data to exploratory analysis and basic statistics.
 
-                                                   
+* Part 0 : [Objectives](./day1/00_Objectives.md)
+* Part 1 : [Rstudio](./day1/01_rstudio.md)
+* Part 2 : [Dataframes](./day1/02_dataframe.md)
+* Part 3 : [Data cleanup](./day1/03_cleanup.md)
+* Part 4 : [Plotting](./day1/04_plotting.md)
+* Part 5 : [Hypothesis tests](./day1/05_test.md)
 
 ### Day 2: a simple single-cell RNA-seq analysis workflow
 
