@@ -48,8 +48,8 @@ Here are the links to the slides
 * Day 1 : [introduction](./irtg2021_intro.pdf)
 * Day 1 : [R markdown](./irtg2021_rmarkdown.pdf)
 * Day 1 : [Data types](./irtg2021_datatypes.pdf)
-* Day 1 : [Cleanup](./irtg2020_cleanup.pdf)
-* Day 1 : [Plots](./irtg2020_plots.pdf)
+* Day 1 : [Cleanup](./irtg2021_cleanup.pdf)
+* Day 1 : [Plots](./irtg2021_plots.pdf)
 * Day 1 : [Statistical tests](./irtg2021_tests.pdf)
 
 * Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
