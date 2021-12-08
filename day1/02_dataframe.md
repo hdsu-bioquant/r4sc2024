@@ -57,13 +57,12 @@ However, we cannot indicate a URL in the function; so we first need to download 
 
 
 ```r
-# we need to load the library xlsx first
-library("xlsx")
+# we need to load the library readxl first
+install.library('readxl')
+library("readxl")
 # here, replace the path with the path to the file!
-dat.xls = read.xlsx("~/Dropbox/IRTG2021/data/diabetes_full.xlsx", 1, stringsAsFactors = FALSE)
+dat.xls = read_xlsx("~/Dropbox/IRTG2021/data/diabetes_full.xlsx")
 ```
-
-However, the `read.xlsx` function might sometimes not recognize the data type of the columns correctly,  and e.g. interpret a column of numerical values as strings...
 
 An alternative could there for be:
 
