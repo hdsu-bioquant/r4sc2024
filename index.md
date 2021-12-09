@@ -83,7 +83,7 @@ On the second day, we will go through a step by step simple analysis of a small 
 * Part 1 : [Introduction to Seurat](./day2/01-Seurat.md)
 * Part 2 : [Quality control](./day2/02-Quality_control.md)
 * Part 3 : [Feature selection](./day2/03-Feature_selection.md)
-* Part 4 : [Dimensonal reduction](./day2/04-Normalization_and_Dimensional_Reduction.md)
+* Part 4 : [Dimensional reduction](./day2/04-Normalization_and_Dimensional_Reduction.md)
 * Part 5 : [Cluster_visualization - UMAP](./day2/05-Cluster_visualization.md)
 * Part 6 : [Differential expression](./day2/06-Differential_Expression.md)
 * Part 7 : [Profiling cells](./day2/07-Profiling_cells.md)
