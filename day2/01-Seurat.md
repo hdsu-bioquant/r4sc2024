@@ -143,8 +143,8 @@ pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/carami
 **QUIZ 1**
 
 <br>
-<details>
-<summary> <i>Found and display the metadata in the seurat object</i>
+
+<summary> <i>Find and display the metadata in the seurat object: which command would you use?</i>
 <br>
 a) <tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
@@ -156,7 +156,8 @@ TIP: You can have
 a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#object-information) 
 of the seurat objects from the GitHub Wiki. Two options are correct.
 </summary>
-<br>
+
+<details>
 <b>Answer:</b>
 <br>
 <tt>pbmc.seurat@meta.data %>% head</tt>
@@ -167,6 +168,7 @@ of the seurat objects from the GitHub Wiki. Two options are correct.
 
 **QUIZ 2**
 
+<blockquote>
 <i>Extract and print the first 5 rows and columns of the count matrix from the seurat object</i>
 <br>
 a) <tt>GetAssayData(pbmc.seurat, slot='count')[1:5, 1:5]</tt>
@@ -176,12 +178,12 @@ b) <tt>pbmc.seurat@assays$RNA@counts[,1:5] %>% head(n=5)</tt>
 c) <tt>pbmc.seurat[1:5, 1:5]</tt>
 <br>
 TIP: Two options are correct.
+</blockquote>
 
 
 
 **QUIZ 3**
 
-<br>
 The file in the follwing URL:
 
 `https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv` 
@@ -197,13 +199,13 @@ Create a Seurat object using the count matrix.
 
 *How many features and cells are present in the count matrix?*
 
-<br> 
-a) 300 features and 250 samples
-<br> 
-b) 19359 features and 200 samples
-<br>
-c) 11167 features and 200 samples
-<br>
+<blockquote>
+
+1. 300 features and 250 samples
+2. 19359 features and 200 samples
+3. 11167 features and 200 samples
+
+</blockquote>
 
 
 

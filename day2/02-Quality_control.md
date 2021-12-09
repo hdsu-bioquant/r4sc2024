@@ -117,7 +117,7 @@ pbmc.filtered <- ScaleData(pbmc.filtered)
 ## Quizzes
 
 
-> Performing your own QC
+Performing your own QC!
 
 <br>
 
@@ -137,21 +137,20 @@ TIP: Use the function FeatureScatter, inspect the manual using ?function.
 <br>
 <b>Answer:</b>
 <br>
-<tt>FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")</tt>
-<br>
-![](figures/qc_ncount_vs_features.png)
+<code>FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")</code>
 
 We observe as expected a linear relation between the number of UMI counts and the 
 features recorded.
+
 </details> 
 
 
 
-<br>
+
 
 **QUIZ 2**
 
-<br>
+
 Load a seurat object using the following command:
 
 
@@ -159,21 +158,21 @@ Load a seurat object using the following command:
 pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
 ```
 
-
+<blockquote>
 *Calculate the mean and median values of the percentage of mitochondrial reads*
-<br>
-a) mean=2.2133 and median=2.0532
-<br>
-b) mean=2.2246 and median=2.0639
-<br>
-c) mean=0.0102. and median=1.1743
-<br>
 
-
-
+1. mean=2.2133 and median=2.0532
+2. mean=2.2246 and median=2.0639
+3. mean=0.0102. and median=1.1743
 
 *Filter out cells based on QC values*
-<br>
+
 NOTE: Do not skip any step in the pipeline.
+</blockquote>
+
+
+
+
+
 
 
