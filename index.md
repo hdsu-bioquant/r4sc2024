@@ -41,6 +41,13 @@ Please install RStudio Desktop prior to the start of the course:
 Please check that you can open RStudio without error message!
 
 
+## Resources
+
+Here is a list of usefull resources if you want to perform basic analysis with R
+
+* [Base R cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/base-r.pdf)
+* [Basic plots in R](http://www.sthda.com/english/wiki/r-base-graphs)
+
 ## Slides
 
 Here are the links to the slides
