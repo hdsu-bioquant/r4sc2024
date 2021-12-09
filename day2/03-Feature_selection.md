@@ -86,7 +86,7 @@ Calculate variances manually from the matrix. Sort genes based on variances in
 decreasing order and show top 6 genes.
 
 <details> 
-<summary> *Find the top 6 genes with the highest variance in descending order*
+<summary> <i<Find the top 6 genes with the highest variance in descending order</i>
 <br>
 a) HLA-DRA, CST3, S100A8, NKG7, S100A9, LYZ
 <br>
@@ -96,25 +96,20 @@ c) HLA-DRA, LYZ, NKG7, S100A9, TYROBP, CST3
 </summary>
 <br>
 <b>Answer:</b>
-```
+
+<code>
 pbmc.seurat<- NormalizeData(pbmc.seurat) %>%
                       ScaleData()
 
 norm.exp <- pbmc.seurat@assays$RNA@scale.data
 
 norm.exp <- GetAssayData(pbmc.seurat, slot = 'data')
-
+</code>
 ## Calculation of the variance in genes
 std.devs <- apply(norm.exp, 1, var)
 
 ## Showing the top 6 genes with highest variance
-head(sort(std.devs, decreasing = T))
-```
+<code>head(sort(std.devs, decreasing = T))</code>
+
 </details>
 
-<!-- Quizz 2 -->
-
-
-
-
-<br>
