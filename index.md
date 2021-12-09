@@ -72,8 +72,15 @@ On the first day, we will guide you through the first steps of working with R, f
 
 On the second day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
 
+* Part 1 : [Introduction to Seurat](./day2/01-Seurat.md)
+* Part 2 : [Quality control](./day2/02-Quality_control.md)
+* Part 3 : [Feature selection](./day2/03-Feature_selection.md)
+* Part 4 : [Normalization](./day2/04-Normalization_and_Dimensional_Reduction.md)
+* Part 5 : [Cluster_visualization](./day2/05-Cluster_visualization.md)
+* Part 6 : [Differential expressoin](./day2/06-Differential_Expression.md)
+* Part 7 : [Profiling cells](./day2/07-Profiling_cells.md)
 
-
+You can check your results using [this form](https://forms.gle/QhSRRSLd9PpjP8NL8)
 
 *********
 ## Organisation
