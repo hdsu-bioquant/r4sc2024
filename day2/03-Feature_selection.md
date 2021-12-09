@@ -96,19 +96,19 @@ c) HLA-DRA, LYZ, NKG7, S100A9, TYROBP, CST3
 </summary>
 <br>
 <b>Answer:</b>
+<br>
 
 <code>
 pbmc.seurat<- NormalizeData(pbmc.seurat) %>%
                       ScaleData()
-
 norm.exp <- pbmc.seurat@assays$RNA@scale.data
-
 norm.exp <- GetAssayData(pbmc.seurat, slot = 'data')
 </code>
-## Calculation of the variance in genes
-std.devs <- apply(norm.exp, 1, var)
 
-## Showing the top 6 genes with highest variance
+<b>Calculation of the variance in genes</b>
+<code>std.devs <- apply(norm.exp, 1, var)</code>
+
+<b>Showing the top 6 genes with highest variance</b>
 <code>head(sort(std.devs, decreasing = T))</code>
 
 </details>
