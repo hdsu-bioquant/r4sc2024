@@ -86,7 +86,7 @@ Calculate variances manually from the matrix. Sort genes based on variances in
 decreasing order and show top 6 genes.
 
 <details> 
-<summary> <i<Find the top 6 genes with the highest variance in descending order</i>
+<summary> <i>Find the top 6 genes with the highest variance in descending order</i>
 <br>
 a) HLA-DRA, CST3, S100A8, NKG7, S100A9, LYZ
 <br>

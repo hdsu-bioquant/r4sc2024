@@ -50,7 +50,7 @@ the number of PC equal to 7.
 
 ## Quizzes
 
-> Manipulation of matrix of PCA
+<b>Manipulation of matrix of PCA</b>
 
 Load a seurat object using the following command:
 
@@ -64,16 +64,15 @@ Extract PCA embedding matrix and make a PCA plot showing the first 2 principal c
 
 <summary> <b>Which command(s) can be used to extract the PCA matrix from the seurat object?</b>
 <br>
-a) <tt>pca <- Embeddings(pbmc.seurat, reduction = 'pca')</tt>
-<br>
-b) <tt>pca <- pbmc.seurat@reductions$pca@cell.embeddings</tt>
-<br>
-c) <tt>pca <- pbmc.seurat@pca$reductions@cell.embeddings</tt>
+
+1. <code>pca <- Embeddings(pbmc.seurat, reduction = 'pca')</code>
+2. <code>pca <- pbmc.seurat@reductions$pca@cell.embeddings</code>
+3. <code>pca <- pbmc.seurat@pca$reductions@cell.embeddings</code>
 </summary>
 
 TIP: Use str(pbmc.seurat) to explore the slots present in the seurat object. Two options
 are correct.
-<br>
+
 
 
 
