@@ -144,7 +144,7 @@ pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/carami
 
 <br>
 <details>
-<summary> *Found and display the metadata in the seurat object* 
+<summary> <i>Found and display the metadata in the seurat object</i>
 <br>
 a) <tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
@@ -164,12 +164,10 @@ of the seurat objects from the GitHub Wiki. Two options are correct.
 <tt>pbmc[[ ]] %>% head</tt>
 </details> 
 
-<br>
 
 **QUIZ 2**
 
-<br>
-*Extract and print the first 5 rows and columns of the count matrix from the seurat object* 
+<i>Extract and print the first 5 rows and columns of the count matrix from the seurat object</i>
 <br>
 a) <tt>GetAssayData(pbmc.seurat, slot='count')[1:5, 1:5]</tt>
 <br>
@@ -179,7 +177,6 @@ c) <tt>pbmc.seurat[1:5, 1:5]</tt>
 <br>
 TIP: Two options are correct.
 
-<br>
 
 
 **QUIZ 3**
