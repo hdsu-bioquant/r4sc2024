@@ -162,7 +162,7 @@ of the seurat objects from the GitHub Wiki. Two options are correct.
 <br>
 <tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
-<tt>pbmc[[ ]] %>% head</tt>
+<tt>pbmc.seurat[[ ]] %>% head</tt>
 </details> 
 
 
