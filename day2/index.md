@@ -119,8 +119,8 @@ here.
 
 
 <!-- Quizz 1-->
-**QUIZZ 1**
-<br>
+**QUIZ 1**
+
 <details>
 <summary> *What is the mean and median number of UMI counts in these cells?* 
 <br>
@@ -145,9 +145,9 @@ here.
 
 
 <!-- Quizz 2-->
-<br>
-**QUIZZ 2**
-<br>
+
+**QUIZ 2**
+
 <summary> *What are the top genes with the highest number of UMI counts in decreasing order?* 
 <br>
  a) MALAT1, B2M, TMSB4X, RPL10, RPL13, RPL13A
@@ -162,9 +162,9 @@ TIP: You can use the same approach from the previous quizz but now using rows.
 
 
 <!-- Quizz 3-->
-**QUIZZ 3**
-<br>
-<summary> *Evaluate the degree of zero inflation in the data. Calculate the fraction of zeros in the count matrix.* 
+**QUIZ 3**
+
+<summary> <i>Evaluate the degree of zero inflation in the data. Calculate the fraction of zeros in the count matrix.</i>
 <br>
  a) 0.3105930
 <br>
