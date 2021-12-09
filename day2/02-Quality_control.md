@@ -120,9 +120,11 @@ pbmc.filtered <- ScaleData(pbmc.filtered)
 > Performing your own QC
 
 <br>
-**QUIZZ 1**
+
+**QUIZ 1**
+
 <details>
-<summary> *How are the number of features and UMI counts related?* 
+<summary> <b>How are the number of features and UMI counts related?</b> 
 <br>
 a) They are not related and randomly distributed in a scatter plot
 <br>
@@ -135,7 +137,7 @@ TIP: Use the function FeatureScatter, inspect the manual using ?function.
 <br>
 <b>Answer:</b>
 <br>
-`FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")`
+<tt>FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")</tt>
 <br>
 ![](figures/qc_ncount_vs_features.png)
 
@@ -147,7 +149,8 @@ features recorded.
 
 <br>
 
-**QUIZZ 2**
+**QUIZ 2**
+
 <br>
 Load a seurat object using the following command:
 

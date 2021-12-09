@@ -139,16 +139,18 @@ pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/carami
 ```
 
 <br>
-**QUIZZ 1**
+
+**QUIZ 1**
+
 <br>
 <details>
 <summary> *Found and display the metadata in the seurat object* 
 <br>
-a) `pbmc.seurat@meta.data %>% head`
+a) <tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
-b) `pbmc.seurat@metadata %>% head`
+b) <tt>pbmc.seurat@metadata %>% head</tt>
 <br>
-c) `pbmc[[ ]] %>% head`
+c) <tt>pbmc[[ ]] %>% head</tt>
 <br>
 TIP: You can have 
 a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#object-information) 
@@ -157,28 +159,31 @@ of the seurat objects from the GitHub Wiki. Two options are correct.
 <br>
 <b>Answer:</b>
 <br>
-`pbmc.seurat@meta.data %>% head`
+<tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
-`pbmc[[ ]] %>% head`
+<tt>pbmc[[ ]] %>% head</tt>
 </details> 
 
 <br>
-**QUIZZ 2**
+
+**QUIZ 2**
+
 <br>
 *Extract and print the first 5 rows and columns of the count matrix from the seurat object* 
 <br>
-a) `GetAssayData(pbmc.seurat, slot='count')[1:5, 1:5]`
+a) <tt>GetAssayData(pbmc.seurat, slot='count')[1:5, 1:5]</tt>
 <br>
-b) `pbmc.seurat@assays$RNA@counts[,1:5] %>% head(n=5)`
+b) <tt>pbmc.seurat@assays$RNA@counts[,1:5] %>% head(n=5)</tt>
 <br>
-c) `pbmc.seurat[1:5, 1:5]`
+c) <tt>pbmc.seurat[1:5, 1:5]</tt>
 <br>
 TIP: Two options are correct.
 
 <br>
 
 
-**QUIZZ 3**
+**QUIZ 3**
+
 <br>
 The file in the follwing URL:
 
@@ -194,6 +199,7 @@ pbmc.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramireza
 Create a Seurat object using the count matrix.
 
 *How many features and cells are present in the count matrix?*
+
 <br> 
 a) 300 features and 250 samples
 <br> 

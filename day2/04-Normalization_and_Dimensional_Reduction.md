@@ -62,14 +62,15 @@ pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/carami
 Perform the seurat standard pre-processing pipeline from the previous sections.
 Extract PCA embedding matrix and make a PCA plot showing the first 2 principal components. 
 
-<summary> *Which command(s) can be used to extract the PCA matrix from the seurat object?*
+<summary> <b>Which command(s) can be used to extract the PCA matrix from the seurat object?</b>
 <br>
-a) `pca <- Embeddings(pbmc.seurat, reduction = 'pca')`
+a) <tt>pca <- Embeddings(pbmc.seurat, reduction = 'pca')</tt>
 <br>
-b) `pca <- pbmc.seurat@reductions$pca@cell.embeddings`
+b) <tt>pca <- pbmc.seurat@reductions$pca@cell.embeddings</tt>
 <br>
-c) `pca <- pbmc.seurat@pca$reductions@cell.embeddings`
+c) <tt>pca <- pbmc.seurat@pca$reductions@cell.embeddings</tt>
 </summary>
+
 TIP: Use str(pbmc.seurat) to explore the slots present in the seurat object. Two options
 are correct.
 <br>
