@@ -76,7 +76,7 @@ by variance.
 
 Load a seurat object using the following command:
 
-** Warning!! Check your Seurat version, and use one of the two commands:**
+**Warning!! Check your Seurat version, and use one of the two commands:**
 
 * if you have Seurat version 4.xx:
 
