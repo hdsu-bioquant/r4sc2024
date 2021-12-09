@@ -76,9 +76,18 @@ by variance.
 
 Load a seurat object using the following command:
 
+** Warning!! Check your Seurat version, and use one of the two commands:**
+
+* if you have Seurat version 4.xx:
 
 ```r
 pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
+```
+
+* if you have Seurat version 3.xx:
+
+```r
+pbmc.seurat <- readRDS(url('https://www.dropbox.com/s/pdeaq8rgzp86lyv/pbmc_10X_200_cells.seu.rds?dl=1'))
 ```
 
 Extract the matrix of gene expression normalized values from the Seurat object.
