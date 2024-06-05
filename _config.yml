@@ -1,4 +1,4 @@
-theme: jekyll-theme-minimal
+remote_theme: just-the-docs/just-the-docs
 markdown: GFM
-title: IRTG Course
+title: R for single-cell
 description: <h3>Introduction to R for genomics</h3>  <figure><img src="./TRR179.png"></figure><h4>Carl Herrmann & Carlos Ramirez</h4>8-9 December 2021 
