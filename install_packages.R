@@ -1,4 +1,4 @@
-## IRTG course 2021
+## Course R for single-cell (R4SC)
 
 ## you can run this script to install the required R packages
 ## simply hit the Run button in the RStudio interface!
@@ -23,3 +23,10 @@ install.packages('rmarkdown')
 install.packages('Seurat')
 install.packages('ggplot2')
 install.packages('ggrepel')
+install.packages('gridExtra')
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("destiny")
+BiocManager::install("Biobase")

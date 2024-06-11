@@ -1,17 +1,17 @@
-# IRTG Course - Introduction to R for genomics
+# Course R for single-cell analysis (R4SC 2024)
 
 ![circos](./circos.png)
 
-Welcome to the **IRTG Course - Introduction to R** This workshop is meant for individuals with little previous knowledge R. 
+Welcome to the **R for single-cell analzsis** This workshop is meant for individuals with little previous knowledge R. 
 
-The course will run over 2 days **(Wednesday, 8.12 and Thursday, 9.12)** from 10 am - 12.30 pm and 1.30 pm - 5.30 pm.
+The course will run over 2 days **(Thursday, 27.06 and Friday, 28.06)** from 9am - 12am and 2pm - 5pm.
 
 
 ******
 ## Tutors
 
-* Carl Herrmann, [Health Data Science Unit](https://www.hdsu.org/) Medical Faculty Heidelberg and BioQuant (carl.herrmann@bioquant.uni-heidelberg.de)
-* Carlos Ramirez, [Health Data Science Unit](https://www.hdsu.org/) Medical Faculty Heidelberg and BioQuant (carlos.ramirez@bioquant.uni-heidelberg.de)
+* Carl Herrmann, [Bioinformatics group](https://www.hdsu.org/) IPMB and BioQuant, Heidelberg University (carl.herrmann@uni-heidelberg.de)
+* Carlos Ramirez, [Bioinformatics group](https://www.hdsu.org/) IPMB and BioQuant, Heidelberg University (carlos.ramirez@bioquant.uni-heidelberg.de)
 
 
 ********
@@ -90,11 +90,3 @@ On the second day, we will go through a step by step simple analysis of a small 
 * Part 7 : [Profiling cells](./day2/07-Profiling_cells.md)
 
 You can check your results using [this form](https://forms.gle/QhSRRSLd9PpjP8NL8)
-
-*********
-## Organisation
-
-The course will be online only! 
-* Lectures will be over **Zoom** (we will send the link via email prior to the course)
-* We will use **Discord channels** for the practical sessions (register [using this link](https://discord.gg/RDaYPKPQ))
-
