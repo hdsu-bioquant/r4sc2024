@@ -15,4 +15,5 @@
 5. [Cluster visualization](./day2/05.md)
 6. [Differential gene expression analysis](./day2/06.md)
 7. [Profiling cells](./day2/07.md)
+8. [Diffusion analysis](./day2/08.md)
 
