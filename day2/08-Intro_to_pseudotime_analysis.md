@@ -9,6 +9,7 @@ output:
 
 
 
+
 ## Pseudotime analysis
 
 While analyzing cells in a temporal context (e.g. developmental processes or time series experiments) we might like
@@ -58,20 +59,17 @@ of their targets.
 
 
 ``` r
-## change this path to the local folder where you stored the data from figshare
-path2data <- "/Users/cbg-mbp-02/Documents/scRNA-Seq_analysis_2024/"
-
 ### read expression values
-colon.exp.file = paste0(path2data, '/colon_scenic_corrected_input.tsv')
+colon.exp.file = "https://www.dropbox.com/scl/fi/xk2axyirstxvramury96d/colon_scenic_corrected_input.tsv?rlkey=anofkf7qurv77bdsm2rspymy7&st=ggf49h72&dl=1"
 colon.exp = read.table(colon.exp.file,header=TRUE,row.names=1)
 colon.exp = t(colon.exp)
 
 ## metadata
-colon.meta.file = paste0(path2data, '/colon_scenic_corrected_annotations.tsv')
+colon.meta.file = "https://www.dropbox.com/scl/fi/vrrzncs81qdah3mjdp4tw/colon_scenic_corrected_annotations.tsv?rlkey=ts44q3xafr6t77hmb9f3o3sfh&st=3dfoxy42&dl=1"
 colon.meta = read.table(colon.meta.file,header=TRUE,row.names=1)
 
 ### read TF activities
-colon.scenic.file = paste0(path2data, '/colon_aucell.csv')
+colon.scenic.file = "https://www.dropbox.com/scl/fi/u8tvpmo2des04yx5vcetr/colon_aucell.csv?rlkey=6ox1vi4vtxpaxdrlh6ntcpju6&st=x4caj77g&dl=1"
 colon.scenic = read.csv(colon.scenic.file,row.names=1,check.names = FALSE)
 
 ### check that the order of cells is comparable
@@ -124,7 +122,7 @@ pathway reported in the Reactome database.
 
 
 ``` r
-ifn = read.table(paste0(path2data, '/REACTOME_INF_SIGNALLING.txt'),
+ifn = read.table("https://www.dropbox.com/scl/fi/tbgc5ekq8yw59qblqfaf6/REACTOME_INF_SIGNALLING.txt?rlkey=l48en2r8v3fowcat80l2gq7mv&st=t799ecl5&dl=1",
                  as.is=TRUE)[,1]
 i.top = which(rownames(eset.sub) %in% ifn) # take genes in the IFN pathway
 ```
