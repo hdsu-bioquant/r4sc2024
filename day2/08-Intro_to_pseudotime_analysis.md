@@ -29,7 +29,7 @@ analysis showed that intestinal cells are permissive to viral infection.
 In this context, we wanted to evaluate differences in infected cells compared to bystander 
 (non-infected cells) with respect of IFN secretion and IFN-stimulated genes (ISGs) expression (see figure). 
 
-![](/Users/cbg-mbp-02/Documents/scripts/caramirezal.github.io/bookdown-minimal/figures/triana_et_al_intestinal_organoids.jpeg){width=2250px}
+![](figures/triana_et_al_intestinal_organoids.jpeg){width=2250px}
 
 
 It's challenging to observe a clear grouping and dynamical relationships between infected and 
