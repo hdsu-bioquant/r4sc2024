@@ -3,7 +3,7 @@ title: "Introduction to pseudotime analysis"
 author: "Ramirez C and Herrmann C"
 date: "2024-06-10"
 output:
-  html_document:
+  html_document: 
     keep_md: yes
 ---
 
