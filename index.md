@@ -63,8 +63,6 @@ Here are the links to the slides
 * Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
 ## Practical parts
 
-**Please document your progress in this [Google Sheet](https://docs.google.com/spreadsheets/d/1rFcWJJD-qOqeRWZvhqPEqMCt_ddtinvdTlLPl2Syomw/edit?usp=sharing)**
-
 ### Day 1: General introduction - (almost) first steps in R!                                        
 
 On the first day, we will guide you through the first steps of working with R, from reading data to exploratory analysis and basic statistics.
@@ -88,5 +86,5 @@ On the second day, we will go through a step by step simple analysis of a small 
 * Part 5 : [Cluster_visualization - UMAP](./day2/05-Cluster_visualization.md)
 * Part 6 : [Differential expression](./day2/06-Differential_Expression.md)
 * Part 7 : [Profiling cells](./day2/07-Profiling_cells.md)
+* Part 8 : [Diffusion analysis](./day2/08-Intro_to_pseudotime_analysis.md)
 
-You can check your results using [this form](https://forms.gle/QhSRRSLd9PpjP8NL8)
