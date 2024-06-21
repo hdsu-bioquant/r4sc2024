@@ -1,6 +1,5 @@
 # Course R for single-cell analysis (R4SC 2024)
 
-![circos](./circos.png)
 
 Welcome to the **R for single-cell analzsis** This workshop is meant for individuals with little previous knowledge R. 
 
