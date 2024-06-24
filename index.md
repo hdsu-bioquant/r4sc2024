@@ -1,7 +1,7 @@
 # Course R for single-cell analysis (R4SC 2024)
 
 
-Welcome to the **R for single-cell analzsis** This workshop is meant for individuals with little previous knowledge R. 
+Welcome to the **R for single-cell analysis** This workshop is meant for individuals with little previous knowledge R. 
 
 The course will run over 2 days **(Thursday, 27.06 and Friday, 28.06)** from 9am - 12am and 2pm - 5pm.
 
@@ -59,7 +59,7 @@ Here are the links to the slides
 * Day 1 : [Plots](./irtg2021_plots.pdf)
 * Day 1 : [Statistical tests](./irtg2021_tests.pdf)
 
-* Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1DSC6gUIbO6PzrqLCt1jp-sIx1U31TvMdDGgKdhohCIY/edit?ts=60c8bafb#slide=id.gdf238a40cf_0_5)
+* Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
 ## Practical parts
 
 ### Day 1: General introduction - (almost) first steps in R!                                        
