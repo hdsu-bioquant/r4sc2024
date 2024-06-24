@@ -37,7 +37,7 @@ First, we will set up the column used to define the clusters using the
 function `Idents()`. 
 
 
-```r
+``` r
 Idents(pbmc.filtered) <- pbmc.filtered$seurat_clusters
 ```
 
@@ -52,7 +52,7 @@ increasing computation time.
 
 
 
-```r
+``` r
 pbmc.degs <- FindAllMarkers(pbmc.filtered, 
                             logfc.threshold = 1, 
                             min.pct = 0.05, 
@@ -67,18 +67,18 @@ we can see next:
 
 
 
-```r
+``` r
 head(pbmc.degs)
 ```
 
 ```
 ##                 p_val avg_log2FC pct.1 pct.2    p_val_adj cluster     gene
-## HLA-DRA  1.355148e-67  -4.415537 0.300 0.968 1.717379e-63       0  HLA-DRA
-## HLA-DRB1 9.575850e-60  -3.310077 0.148 0.884 1.213547e-55       0 HLA-DRB1
-## CD74     3.415369e-51  -3.122109 0.781 0.974 4.328297e-47       0     CD74
-## HLA-DPB1 1.613117e-46  -3.269898 0.310 0.858 2.044303e-42       0 HLA-DPB1
-## IL32     9.357132e-44   3.271671 0.808 0.110 1.185829e-39       0     IL32
-## HLA-DRB5 2.825316e-43  -2.749389 0.084 0.684 3.580523e-39       0 HLA-DRB5
+## HLA-DRA  1.355148e-67  -4.985225 0.300 0.968 1.717379e-63       0  HLA-DRA
+## HLA-DRB1 9.575850e-60  -4.153488 0.148 0.884 1.213547e-55       0 HLA-DRB1
+## CD74     3.415369e-51  -3.268991 0.781 0.974 4.328297e-47       0     CD74
+## HLA-DPB1 1.613117e-46  -3.767549 0.310 0.858 2.044303e-42       0 HLA-DPB1
+## IL32     9.357132e-44   4.489652 0.808 0.110 1.185829e-39       0     IL32
+## HLA-DRB5 2.825316e-43  -4.161331 0.084 0.684 3.580523e-39       0 HLA-DRB5
 ```
 
 
@@ -86,28 +86,31 @@ head(pbmc.degs)
 We can make a vulcano plot using `ggplot`:
 
 
-```r
+``` r
 library(ggplot2)
 library(dplyr)         ## for handling data frames
 library(ggrepel)
 
-pbmc.degs %>%
-  arrange(desc(abs(avg_log2FC))) %>%       ## Arranging genes by FC
-  mutate(rank=1:nrow(pbmc.degs)) %>%        ## Ranking markers by FC
-  mutate(highlight=ifelse(rank<20, TRUE, FALSE)) %>% ## highlighting top FC markers
+pbmc.degs.c0 <- pbmc.degs %>%
+  filter(cluster=="0")
+pbmc.degs.c0 %>%  arrange(desc(avg_log2FC)) %>%       ## Arranging genes by FC
+  mutate(rank=1:nrow(pbmc.degs.c0)) %>%        ## Ranking markers by FC
+  mutate(highlight=ifelse(rank<10, TRUE, FALSE)) %>% ## highlighting top FC markers
   mutate(gene_label=ifelse(highlight==TRUE, gene, '')) %>% ## Adding labels for top markers
   ggplot(aes(x=avg_log2FC, y=-log10(p_val_adj),
              colour=highlight,
              label=gene_label)) +         ## adding labels for top markers
       geom_point() +
-      geom_text_repel() +
+      geom_text_repel(max.overlaps = 1000) +
+      xlim(-10,10) +
+      ylim(-10, 65) +
       theme_bw()
 ```
 
 <img src="06-Differential_Expression_files/figure-html/vulcano_plot-1.png" style="display: block; margin: auto;" />
 
 
-<!--
+
 ## Quizzes
 
 > Compare the DEGs from the above shown results with that calculated using the 10X PBMC 250 cells downsample data clusters in the previous exercises
@@ -123,7 +126,7 @@ url:
  * Intersect both lists of genes 
  
 
-```r
+``` r
 degs <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv')
 ```
- -->
+
