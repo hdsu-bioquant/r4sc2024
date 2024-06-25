@@ -1,12 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
----
-
-
-
-
 # Quality control
 
 
@@ -184,6 +175,7 @@ NOTE: Do not skip any step in the pipeline.
 
 
 
-
+[Previous Chapter (Seurat)](./01-Seurat.md)|
+[Next Chapter (Feature selection)](./03-Feature_selection.md)
 
 

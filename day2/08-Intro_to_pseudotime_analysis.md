@@ -159,4 +159,4 @@ The files  `degs_imm_infected_vs_bystander_12_colon.rds` and `degs_imm_infected_
 list of differential expressed genes comparing infected vs bystander cells at 12 hours or 24 hours, respectively,
 in immature enterocytes. Use both genes lists to compute the diffusion map and compare the output.
 
-
+[Previous Chapter (Profiling cells)](./07-Profiling_cells.md)|

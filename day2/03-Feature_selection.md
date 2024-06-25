@@ -122,3 +122,5 @@ norm.exp <- GetAssayData(pbmc.seurat, slot = 'data')
 
 </details>
 
+[Previous Chapter (Quality control)](./02-Quality_control.md)|
+[Next Chapter (Normalization & Dim. reduction)](./04-Normalization_and_Dimensional_Reduction.md)

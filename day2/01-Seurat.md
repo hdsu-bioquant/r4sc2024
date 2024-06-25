@@ -209,7 +209,7 @@ Create a Seurat object using the count matrix.
 
 
 
-
+[Next Chapter (Quality control)](./02-Quality_control.md)
 
 
 

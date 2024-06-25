@@ -74,6 +74,7 @@ TIP: Use str(pbmc.seurat) to explore the slots present in the seurat object. Two
 are correct.
 
 
-
+[Previous Chapter (Feature selection)](./03-Feature_selection.md)|
+[Next Chapter (Clustering)](./05-Cluster_visualization.md)
 
 

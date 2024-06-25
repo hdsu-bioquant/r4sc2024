@@ -157,3 +157,6 @@ Provide a report in a Rmd file.
 
 
 
+[Previous Chapter (Differential expression)](./06-Differential_Expression.md)|
+[Next Chapter (Pseudotime analysis)](./08-Intro_to_pseudotime_analysis.md)
+

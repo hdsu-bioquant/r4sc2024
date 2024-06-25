@@ -1,12 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
----
-
-
-
-
 
 # Differential Expression Analysis
 
@@ -129,4 +120,7 @@ url:
 ``` r
 degs <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv')
 ```
+ -->
 
+[Previous Chapter (Clustering)](./05-Cluster_visualization.md)|
+[Next Chapter (Profiling cells)](./07-Profiling_cells.md)

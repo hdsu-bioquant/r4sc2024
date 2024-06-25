@@ -138,3 +138,5 @@ Perform the data processing from the previous sections.
 *Address how does subsampling and parameters selection affects clustering? How
 many clusters can you observe by using your own selected parameters*
 
+[Previous Chapter (Normalization & Dim. reduction)](./04-Normalization_and_Dimensional_Reduction.md)|
+[Next Chapter (Differential expression)](./06-Differential_Expression.md)
