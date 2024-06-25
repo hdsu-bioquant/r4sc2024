@@ -47,7 +47,7 @@ head(pbmc.filtered$seurat_clusters)
 ```
 
 
-There are 5 different clusters, labeled from 0 to 4 and stored like a factor.
+There are 3 different clusters, labeled from 0 to 2 and stored like a factor.
 We can plot a frequency table of the number of cells assigned to each cluster
 by the algorithm.
 
@@ -65,14 +65,9 @@ table(pbmc.filtered$seurat_clusters)
 
 So, 297 cells were assigned to the cluster 0.
 
-## Exercises
+## Exercise
 
-> Testing clustering 
-
- * Try different different parameters for the clustering. For example,
-`k.param` in the *FindNeighbors()* function and higher levels of
-resolution.
-
+> Try different different parameters for the clustering. For example, `k.param` in the *FindNeighbors()* function and higher levels of resolution. How do these 2 parameters influence the number of clusters?
 
 
 # Cluster visualization
@@ -117,26 +112,10 @@ DimPlot(pbmc.filtered)
 ## Quizzes
 
 
-> Perform a UMAP visualization with the 10x PBMC 200 cells with your own set
+> Perform a UMAP visualization with the 10x PBMC 200 cells defined in the previous sections. with your own set
 of parameters
-
-
-**EXERCISE**
-<br>
-Load a seurat object using the following command:
-
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-Perform the data processing from the previous sections.
-
-
-
-
-*Address how does subsampling and parameters selection affects clustering? How
-many clusters can you observe by using your own selected parameters*
+> Address how does subsampling and parameters selection affects clustering? How
+many clusters can you observe by using your own selected parameters?
 
 [Previous Chapter (Normalization & Dim. reduction)](./04-Normalization_and_Dimensional_Reduction.md)|
 [Next Chapter (Differential expression)](./06-Differential_Expression.md)

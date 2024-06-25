@@ -48,30 +48,43 @@ until we do not see further variability changes, in these case we can use
 the number of PC equal to 7.
 
 
-## Quizzes
+## Quizz
 
-<b>Manipulation of matrix of PCA</b>
+### Quizz 1
 
-Load a seurat object using the following command:
-
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-Perform the seurat standard pre-processing pipeline from the previous sections.
-Extract PCA embedding matrix and make a PCA plot showing the first 2 principal components. 
-
+<details>
 <summary> <b>Which command(s) can be used to extract the PCA matrix from the seurat object?</b>
 <br>
 
-1. <code>pca <- Embeddings(pbmc.seurat, reduction = 'pca')</code>
-2. <code>pca <- pbmc.seurat@reductions$pca@cell.embeddings</code>
-3. <code>pca <- pbmc.seurat@pca$reductions@cell.embeddings</code>
+1. <code>pca <- Embeddings(pbmc.filtered, reduction = 'pca')</code>
+2. <code>pca <- pbmc.filtered@reductions$pca@cell.embeddings</code>
+3. <code>pca <- pbmc.filtered@pca$reductions@cell.embeddings</code>
 </summary>
-
-TIP: Use str(pbmc.seurat) to explore the slots present in the seurat object. Two options
+TIP: Use str(pbmc.filtered) to explore the slots present in the seurat object. Two options
 are correct.
+</details>
+
+### Quizz 2
+
+<details>
+<summary>
+Look at the feature loadings of the principal components. Which are the genes with the highest/lowest loadings for PC1?
+
+1. highest: MTMR11,NTMT1,DGAT1,CCL4L1,LDHB lowest: OSBP,DFFB,EFCAB2,RNF170,POMZP3 
+2. highest: MALAT1,IL32,LTB,CD3D,LDHB lowest: S100A9,CST3,S100A8,LYZ,FTL 
+3. highest: C2CD2L,C16orf58,CENPL,ZNF181,RABL5 lowest: INO80D,CHST2,OAF,LAGAP2YZ,ADRB2 
+
+</summary>
+<blockquote>
+> sort(pbmc.filtered@reductions$pca@feature.loadings[,1])[1:5]
+    S100A9       CST3     S100A8        LYZ        FTL 
+-0.1380440 -0.1375347 -0.1338024 -0.1336727 -0.1324367 
+> sort(pbmc.filtered@reductions$pca@feature.loadings[,1],decreasing=TRUE)[1:5]
+    MALAT1       IL32        LTB       CD3D       LDHB 
+0.11474983 0.07876368 0.07786466 0.07604930 0.06500361 
+</blockquote>
+</details>
+
 
 
 [Previous Chapter (Feature selection)](./03-Feature_selection.md)|

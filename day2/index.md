@@ -1,14 +1,7 @@
----
-output:
-  html_document:
-    keep_md: yes
----
 
 
 
-
-
-# 0. First steps in scRNA-Seq analysis {#intro}
+# 0. First steps in scRNA-Seq analysis 
 
 
 We will use available data from 10X genomics of Peripheral Blood Mononuclear cells (PBMC). In order
@@ -122,7 +115,7 @@ here.
 **QUIZ 1**
 
 <details>
-<summary> *What is the mean and median number of UMI counts in these cells?* 
+<summary> What is the mean and median number of UMI counts in these cells?
 <br>
  a) median = 301, mean = 343
 <br>
@@ -133,9 +126,9 @@ here.
 <br>
 <b>Answer:</b>
 <br>
-`umi.sum <- apply(pbmc.mtx, 2, sum)`
+umi.sum <- apply(pbmc.mtx, 2, sum)
 <br>
-`summary(umi.sum)`
+summary(umi.sum)
 
 `Min. 1st Qu.  Median    Mean 3rd Qu.    Max.` <br>
 `561      1741      2216      2354      2746      7928`  
@@ -148,7 +141,8 @@ here.
 
 **QUIZ 2**
 
-<summary> *What are the top genes with the highest number of UMI counts in decreasing order?* 
+<details>
+<summary> What are the top genes with the highest number of UMI counts in decreasing order?
 <br>
  a) MALAT1, B2M, TMSB4X, RPL10, RPL13, RPL13A
 <br>
@@ -158,26 +152,30 @@ here.
 </summary>
 TIP: You can use the same approach from the previous quizz but now using rows.
 <br>
+</details>
 
 
 
 <!-- Quizz 3-->
-**QUIZ 3**
+**QUIZZ 3**
 
+<details>
 <summary> <i>Evaluate the degree of zero inflation in the data. Calculate the fraction of zeros in the count matrix.</i>
 <br>
  a) 0.3105930
 <br>
- b) 0.8283542
+ b) 0.9385724
 <br>
  c) 0.7485923
  </summary>
-TIP: Calculate the number of entries with bigger than 0 as follows: `sum(pbmc.mtx[pbmc.mtx>0])`.
+TIP: Calculate the number of entries that are zero as follows: `sum(pbmc.mtx==0)`.
 And then divide by the total number of entries in the matrix.
 
-<!--
 `sum(pbmc.mtx==0)/prod(dim(pbmc.mtx))`
 `0.9385724`
--->
+</details>
+
 
 <br>
+
+[Next Chapter (Seurat)](./01-Seurat.md)

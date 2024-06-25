@@ -142,35 +142,26 @@ features recorded.
 **QUIZ 2**
 
 
-Load a seurat object using the following command:
+Repeat the analysis for the content in mitochondrial reads on the `pbmc200.seurat` object you created in the previous section. 
 
 
-**Warning!! Check your Seurat version, and use one of the two commands:**
-
-* if you have Seurat version 4.xx:
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-* if you have Seurat version 3.xx:
-
-```r
-pbmc.seurat <- readRDS(url('https://www.dropbox.com/s/pdeaq8rgzp86lyv/pbmc_10X_200_cells.seu.rds?dl=1'))
-```
-
-
-<blockquote>
-*Calculate the mean and median values of the percentage of mitochondrial reads*
+<details>
+<summary>
+Calculate the mean and median values of the percentage of mitochondrial reads
 
 1. mean=2.2133 and median=2.0532
 2. mean=2.2246 and median=2.0639
 3. mean=0.0102. and median=1.1743
+</summary>
 
-*Filter out cells based on QC values*
+<code>pbmc_v2.seurat[["percent.mt"]] <- PercentageFeatureSet(pbmc_v2.seurat, pattern = "^MT-")</code>
+<code>summary(pbmc_v2.seurat@meta.data$percent.mt)</code>
+<blockquote>
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1667  1.4922  2.0639  2.2246  2.7384 10.4478 
+ </blockquote>
 
-NOTE: Do not skip any step in the pipeline.
-</blockquote>
+</details>
 
 
 

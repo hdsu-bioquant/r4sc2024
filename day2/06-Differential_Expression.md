@@ -102,25 +102,12 @@ pbmc.degs.c0 %>%  arrange(desc(avg_log2FC)) %>%       ## Arranging genes by FC
 
 
 
-## Quizzes
+## Exercises
 
-> Compare the DEGs from the above shown results with that calculated using the 10X PBMC 250 cells downsample data clusters in the previous exercises
-
-
- * Load the tsv file containing the calculated DEGs from above using the following
-url:
-`https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv`
-
- * Calculate the DEGs using the down-sampled 10X PBMC 250 cells data with the clusters
- obtained using your parameters
+> Compare the DEGs from the above shown results with that calculated using the `pbmc200.seurat` object defined in the previous exercises
+> Intersect both lists of genes 
  
- * Intersect both lists of genes 
  
-
-``` r
-degs <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv')
-```
- -->
 
 [Previous Chapter (Clustering)](./05-Cluster_visualization.md)|
 [Next Chapter (Profiling cells)](./07-Profiling_cells.md)
