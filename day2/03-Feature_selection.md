@@ -50,9 +50,9 @@ plot1
 
 For further analysis we will use only HVGs. 
 
-## Quizzes
+## Quiz
 
-Repeat this analysis using the `pbmc200.seurat` object.
+Repeat this analysis using the `pbmc200.seurat` object. 
 
 <details> 
 Normalize the gene expression values from the Seurat object.

@@ -129,23 +129,13 @@ hist(actin$ACTB)
 ## Quizzes
 
 
-> Create a Seurat object 
-
-Load a seurat object using the following command:
-
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_500_cells.rds'))
-```
-
-<br>
 
 **QUIZ 1**
 
 <br>
 
 <details>
-<summary> <i>Find and display the metadata in the seurat object: which command would you use?</i>
+<summary> Find and display the metadata in the seurat object: which command would you use?
 <br>
 a) <tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
@@ -186,7 +176,7 @@ TIP: Two options are correct.
 
 **QUIZ 3**
 
-The file in the follwing URL:
+The file in the following URL:
 
 `https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv` 
 
@@ -194,23 +184,20 @@ contains 200 cells down-sampled from the 10x PBMC data and stored in tsv format.
 in tsv format using the following command.
 
 ```
-pbmc.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv', sep = '\t')
+pbmc200.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv', sep = '\t')
 ```
                            
-Create a Seurat object using the count matrix.
+Create a Seurat object <code>pbmc200.seurat</code> using the count matrix.
 
 <details>
 <summary>
 How many features and cells are present in the count matrix?
 </summary>
 
-<blockquote>
-
 1. 300 features and 250 samples
 2. 12673 features and 200 samples
 3. 11167 features and 200 samples
 
-</blockquote>
 </details>
 
 

@@ -101,8 +101,14 @@ pbmc.degs.c0 %>%  arrange(desc(avg_log2FC)) %>%       ## Arranging genes by FC
 <img src="06-Differential_Expression_files/figure-html/vulcano_plot-1.png" style="display: block; margin: auto;" />
 
 
-
 ## Exercises
+
+### Exercise 1
+
+> What does this plot represent? Can you make the equivalent volcano plot for the other clusters?
+
+
+### Exercise 2
 
 > Compare the DEGs from the above shown results with that calculated using the `pbmc200.seurat` object defined in the previous exercises
 > Intersect both lists of genes 

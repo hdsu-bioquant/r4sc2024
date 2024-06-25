@@ -157,10 +157,10 @@ TIP: You can use the same approach from the previous quizz but now using rows.
 
 
 <!-- Quizz 3-->
-**QUIZZ 3**
+**QUIZ 3**
 
 <details>
-<summary> <i>Evaluate the degree of zero inflation in the data. Calculate the fraction of zeros in the count matrix.</i>
+<summary> Evaluate the degree of zero inflation in the data. Calculate the fraction of zeros in the count matrix.
 <br>
  a) 0.3105930
 <br>
