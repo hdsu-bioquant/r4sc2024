@@ -150,6 +150,7 @@ What is the mean and median values of the percentage of mitochondrial reads?
 
 <code>pbmc_v2.seurat[["percent.mt"]] <- PercentageFeatureSet(pbmc_v2.seurat, pattern = "^MT-")</code>
 <code>summary(pbmc_v2.seurat@meta.data$percent.mt)</code>
+
 <code>
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
  0.1667  1.4922  2.0639  2.2246  2.7384 10.4478 
