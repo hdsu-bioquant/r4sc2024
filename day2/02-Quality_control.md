@@ -105,17 +105,14 @@ pbmc.filtered <- ScaleData(pbmc.filtered)
 ```
 
 
+
 ## Quizzes
 
-
-Performing your own QC!
-
-<br>
 
 **QUIZ 1**
 
 <details>
-<summary> <b>How are the number of features and UMI counts related?</b> 
+<summary> How are the number of features and UMI counts related?
 <br>
 a) They are not related and randomly distributed in a scatter plot
 <br>
@@ -136,9 +133,6 @@ features recorded.
 </details> 
 
 
-
-
-
 **QUIZ 2**
 
 
@@ -147,7 +141,7 @@ Repeat the analysis for the content in mitochondrial reads on the `pbmc200.seura
 
 <details>
 <summary>
-Calculate the mean and median values of the percentage of mitochondrial reads
+What is the mean and median values of the percentage of mitochondrial reads?
 
 1. mean=2.2133 and median=2.0532
 2. mean=2.2246 and median=2.0639
@@ -156,13 +150,14 @@ Calculate the mean and median values of the percentage of mitochondrial reads
 
 <code>pbmc_v2.seurat[["percent.mt"]] <- PercentageFeatureSet(pbmc_v2.seurat, pattern = "^MT-")</code>
 <code>summary(pbmc_v2.seurat@meta.data$percent.mt)</code>
-<blockquote>
+<code>
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
  0.1667  1.4922  2.0639  2.2246  2.7384 10.4478 
- </blockquote>
+ </code>
 
 </details>
 
+Apply the same filtering on the `pbmc200.seurat` object!
 
 
 

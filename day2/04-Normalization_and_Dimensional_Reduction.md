@@ -48,9 +48,9 @@ until we do not see further variability changes, in these case we can use
 the number of PC equal to 7.
 
 
-## Quizz
+## Quizzes
 
-### Quizz 1
+### Quiz 1
 
 <details>
 <summary> <b>Which command(s) can be used to extract the PCA matrix from the seurat object?</b>
@@ -64,7 +64,7 @@ TIP: Use str(pbmc.filtered) to explore the slots present in the seurat object. T
 are correct.
 </details>
 
-### Quizz 2
+### Quiz 2
 
 <details>
 <summary>
@@ -75,16 +75,19 @@ Look at the feature loadings of the principal components. Which are the genes wi
 3. highest: C2CD2L,C16orf58,CENPL,ZNF181,RABL5 lowest: INO80D,CHST2,OAF,LAGAP2YZ,ADRB2 
 
 </summary>
-<blockquote>
+<code>
 > sort(pbmc.filtered@reductions$pca@feature.loadings[,1])[1:5]
     S100A9       CST3     S100A8        LYZ        FTL 
 -0.1380440 -0.1375347 -0.1338024 -0.1336727 -0.1324367 
 > sort(pbmc.filtered@reductions$pca@feature.loadings[,1],decreasing=TRUE)[1:5]
     MALAT1       IL32        LTB       CD3D       LDHB 
 0.11474983 0.07876368 0.07786466 0.07604930 0.06500361 
-</blockquote>
+</code>
 </details>
 
+## Exercise
+
+> Perform the PCA analysis on the `pbmc200.seurat` object!
 
 
 [Previous Chapter (Feature selection)](./03-Feature_selection.md)|

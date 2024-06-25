@@ -109,12 +109,13 @@ DimPlot(pbmc.filtered)
 <img src="05-Cluster_visualization_files/figure-html/umap_plot-1.png" style="display: block; margin: auto;" />
 
 
-## Quizzes
+## Exercise
 
 
-> Perform a UMAP visualization with the 10x PBMC 200 cells defined in the previous sections. with your own set
-of parameters
-> Address how does subsampling and parameters selection affects clustering? How
+> Perform a UMAP visualization with the 10x PBMC 200 cells defined in the previous sections using your own set
+of parameters.
+<br>
+> Verify how subsampling and parameters selection affects clustering. How
 many clusters can you observe by using your own selected parameters?
 
 [Previous Chapter (Normalization & Dim. reduction)](./04-Normalization_and_Dimensional_Reduction.md)|
