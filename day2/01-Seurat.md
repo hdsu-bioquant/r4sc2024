@@ -87,7 +87,7 @@ pbmc.seurat$nCount_RNA %>% head
  
 
 ```r
-pbmc.seurat@assays$RNA@counts[1:5, 1:5]
+pbmc.seurat@assays$RNA$counts[1:5, 1:5]
 ```
 
 ```
@@ -129,22 +129,13 @@ hist(actin$ACTB)
 ## Quizzes
 
 
-> Create a Seurat object 
-
-Load a seurat object using the following command:
-
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_500_cells.rds'))
-```
-
-<br>
 
 **QUIZ 1**
 
 <br>
 
-<summary> <i>Find and display the metadata in the seurat object: which command would you use?</i>
+<details>
+<summary> Find and display the metadata in the seurat object: which command would you use?
 <br>
 a) <tt>pbmc.seurat@meta.data %>% head</tt>
 <br>
@@ -157,7 +148,6 @@ a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#ob
 of the seurat objects from the GitHub Wiki. Two options are correct.
 </summary>
 
-<details>
 <b>Answer:</b>
 <br>
 <tt>pbmc.seurat@meta.data %>% head</tt>
@@ -168,7 +158,8 @@ of the seurat objects from the GitHub Wiki. Two options are correct.
 
 **QUIZ 2**
 
-<blockquote>
+
+<summary>
 <i>Extract and print the first 5 rows and columns of the count matrix from the seurat object</i>
 <br>
 a) <tt>GetAssayData(pbmc.seurat, slot='count')[1:5, 1:5]</tt>
@@ -178,13 +169,13 @@ b) <tt>pbmc.seurat@assays$RNA@counts[,1:5] %>% head(n=5)</tt>
 c) <tt>pbmc.seurat[1:5, 1:5]</tt>
 <br>
 TIP: Two options are correct.
-</blockquote>
+</summary>
 
 
 
 **QUIZ 3**
 
-The file in the follwing URL:
+The file in the following URL:
 
 `https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv` 
 
@@ -192,24 +183,25 @@ contains 200 cells down-sampled from the 10x PBMC data and stored in tsv format.
 in tsv format using the following command.
 
 ```
-pbmc.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv', sep = '\t')
+pbmc200.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv', sep = '\t')
 ```
                            
-Create a Seurat object using the count matrix.
-
-*How many features and cells are present in the count matrix?*
-
-<blockquote>
-
-1. 300 features and 250 samples
-2. 19359 features and 200 samples
-3. 11167 features and 200 samples
-
-</blockquote>
 
 
+<details>
+<summary>
+* Create a Seurat object <code>pbmc200.seurat</code> using the count matrix.
+* How many features and cells are present in the count matrix?
+
+  1. 300 features and 250 samples
+  2. 12673 features and 200 samples
+  3. 11167 features and 200 samples
+</summary>
+<code>dim(pbmc200.mtx)</code>
+</details>
 
 
+[Next Chapter (Quality control)](./02-Quality_control.md)
 
 
 

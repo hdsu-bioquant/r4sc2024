@@ -1,12 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
----
-
-
-
-
 # Quality control
 
 
@@ -114,17 +105,14 @@ pbmc.filtered <- ScaleData(pbmc.filtered)
 ```
 
 
+
 ## Quizzes
 
-
-Performing your own QC!
-
-<br>
 
 **QUIZ 1**
 
 <details>
-<summary> <b>How are the number of features and UMI counts related?</b> 
+<summary> How are the number of features and UMI counts related?
 <br>
 a) They are not related and randomly distributed in a scatter plot
 <br>
@@ -145,45 +133,36 @@ features recorded.
 </details> 
 
 
-
-
-
 **QUIZ 2**
 
 
-Load a seurat object using the following command:
+Repeat the analysis for the content in mitochondrial reads on the `pbmc200.seurat` object you created in the previous section. 
 
 
-**Warning!! Check your Seurat version, and use one of the two commands:**
-
-* if you have Seurat version 4.xx:
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-* if you have Seurat version 3.xx:
-
-```r
-pbmc.seurat <- readRDS(url('https://www.dropbox.com/s/pdeaq8rgzp86lyv/pbmc_10X_200_cells.seu.rds?dl=1'))
-```
-
-
-<blockquote>
-*Calculate the mean and median values of the percentage of mitochondrial reads*
+<details>
+<summary>
+What is the mean and median values of the percentage of mitochondrial reads?
 
 1. mean=2.2133 and median=2.0532
 2. mean=2.2246 and median=2.0639
 3. mean=0.0102. and median=1.1743
+</summary>
 
-*Filter out cells based on QC values*
+<code>pbmc_v2.seurat[["percent.mt"]] <- PercentageFeatureSet(pbmc_v2.seurat, pattern = "^MT-")</code>
+<code>summary(pbmc_v2.seurat@meta.data$percent.mt)</code>
 
-NOTE: Do not skip any step in the pipeline.
-</blockquote>
+<code>
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </code>
+<code> 0.1667  1.4922  2.0639  2.2246  2.7384 10.4478 
+ </code>
+
+</details>
+
+**Apply the same filtering rules on the `pbmc200.seurat` object!**
 
 
 
-
-
+[Previous Chapter (Seurat)](./01-Seurat.md)|
+[Next Chapter (Feature selection)](./03-Feature_selection.md)
 
 

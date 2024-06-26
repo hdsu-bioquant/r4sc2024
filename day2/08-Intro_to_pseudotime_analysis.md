@@ -1,8 +1,14 @@
 ---
+title: "Introduction to pseudotime analysis"
+author: "Ramirez C and Herrmann C"
+date: "2024-06-10"
 output:
-  html_document:
+  html_document: 
     keep_md: yes
 ---
+
+
+
 
 ## Pseudotime analysis
 
@@ -50,20 +56,27 @@ transcription factors calculated using the SCENIC algorithm, which is out of the
 in general this pipeline aims to measure how active TFs are by looking at the gene expression
 of their targets.
 
+*IMPORTANT* - Please, download the zip file in the fig share link above, unzip the file and copy the files to a known folder
+you create. For example, "~/Documents/r4sc2024/data/scRNA-Seq_analysis_2024/".
+
 
 
 ``` r
-### read expression values
-colon.exp.file = "https://www.dropbox.com/scl/fi/xk2axyirstxvramury96d/colon_scenic_corrected_input.tsv?rlkey=anofkf7qurv77bdsm2rspymy7&st=ggf49h72&dl=1"
+## download the files from figshare and unzip
+## modifiy this path to the folder where the files where extracted
+path2data <- "~/Documents/r4sc2024/data/scRNA-Seq_analysis_2024/"
+
+colon.exp.file <- paste0(path2data, "colon_scenic_corrected_input.tsv")
 colon.exp = read.table(colon.exp.file,header=TRUE,row.names=1)
 colon.exp = t(colon.exp)
 
 ## metadata
-colon.meta.file = "https://www.dropbox.com/scl/fi/vrrzncs81qdah3mjdp4tw/colon_scenic_corrected_annotations.tsv?rlkey=ts44q3xafr6t77hmb9f3o3sfh&st=3dfoxy42&dl=1"
+
+colon.meta.file <- paste0(path2data, "colon_scenic_corrected_annotations.tsv")
 colon.meta = read.table(colon.meta.file,header=TRUE,row.names=1)
 
 ### read TF activities
-colon.scenic.file = "https://www.dropbox.com/scl/fi/u8tvpmo2des04yx5vcetr/colon_aucell.csv?rlkey=6ox1vi4vtxpaxdrlh6ntcpju6&st=x4caj77g&dl=1"
+colon.scenic.file <- paste0(path2data, "colon_aucell.csv")
 colon.scenic = read.csv(colon.scenic.file,row.names=1,check.names = FALSE)
 
 ### check that the order of cells is comparable
@@ -116,8 +129,9 @@ pathway reported in the Reactome database.
 
 
 ``` r
-ifn = read.table("https://www.dropbox.com/scl/fi/tbgc5ekq8yw59qblqfaf6/REACTOME_INF_SIGNALLING.txt?rlkey=l48en2r8v3fowcat80l2gq7mv&st=t799ecl5&dl=1",
-                 as.is=TRUE)[,1]
+ifn_file <- paste0(path2data, "REACTOME_INF_SIGNALLING.txt")
+ifn <- readLines(ifn_file)
+ifn <- ifn[2:length(ifn)]
 i.top = which(rownames(eset.sub) %in% ifn) # take genes in the IFN pathway
 ```
 

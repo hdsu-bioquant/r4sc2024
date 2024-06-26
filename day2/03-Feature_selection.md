@@ -1,17 +1,3 @@
----
-output:
-  html_document:
-    keep_md: yes
----
-
-
-
-
-
-
-
-
-
 # Feature selection
 
 
@@ -64,38 +50,15 @@ plot1
 
 For further analysis we will use only HVGs. 
 
-## Quizzes
+## Quiz
 
-> Manually calculate the variance in genes and order them
-by variance.
-
-<!-- Quizz 1-->
-<br>
-
-**QUIZZ 1**
-
-Load a seurat object using the following command:
-
-**Warning!! Check your Seurat version, and use one of the two commands:**
-
-* if you have Seurat version 4.xx:
-
-```r
-pbmc.seurat <- readRDS(url('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.seu.rds'))
-```
-
-* if you have Seurat version 3.xx:
-
-```r
-pbmc.seurat <- readRDS(url('https://www.dropbox.com/s/pdeaq8rgzp86lyv/pbmc_10X_200_cells.seu.rds?dl=1'))
-```
-
-Extract the matrix of gene expression normalized values from the Seurat object.
-Calculate variances manually from the matrix. Sort genes based on variances in 
-decreasing order and show top 6 genes.
+Repeat this analysis using the `pbmc200.seurat` object. 
 
 <details> 
-<summary> <i>Find the top 6 genes with the highest variance in descending order</i>
+Normalize the gene expression values from the Seurat object.
+Calculate variances manually from the matrix. Sort genes based on variances in 
+decreasing order and show top 6 genes.
+<summary> Find the top 6 genes with the highest variance in descending order
 <br>
 a) HLA-DRA, CST3, S100A8, NKG7, S100A9, LYZ
 <br>
@@ -108,10 +71,9 @@ c) HLA-DRA, LYZ, NKG7, S100A9, TYROBP, CST3
 <br>
 
 <code>
-pbmc.seurat<- NormalizeData(pbmc.seurat) %>%
+pbmc200.seurat<- NormalizeData(pbmc200.seurat) %>%
                       ScaleData()
-norm.exp <- pbmc.seurat@assays$RNA@scale.data
-norm.exp <- GetAssayData(pbmc.seurat, slot = 'data')
+norm.exp <- GetAssayData(pbmc200.seurat, slot = 'data')
 </code>
 
 <b>Calculation of the variance in genes</b>
@@ -122,3 +84,5 @@ norm.exp <- GetAssayData(pbmc.seurat, slot = 'data')
 
 </details>
 
+[Previous Chapter (Quality control)](./02-Quality_control.md)|
+[Next Chapter (Normalization & Dim. reduction)](./04-Normalization_and_Dimensional_Reduction.md)
