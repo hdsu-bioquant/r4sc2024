@@ -8,7 +8,7 @@ output:
 
 
 
-# Markers visualization
+# Profiling cells
 
 
 First, we will take top 10 ranked genes based in Log FC and visualize their
@@ -16,7 +16,7 @@ expression in clusters using a heatmap representation.
 
 
 
-```r
+``` r
 top10 <- pbmc.degs %>% 
              group_by(cluster) %>% 
              top_n(n = 10, wt = avg_log2FC)
@@ -34,7 +34,7 @@ We can visualize additional known canonical markers in order to assign cell
 categories. 
 
 
-```r
+``` r
 canonical_markers <- c('IL7R',     ## CD4+ cell
                        'CCR7',     ## Naive CD4+ T cell
                        'CD8A',     ## CD8+
@@ -57,7 +57,7 @@ object. We will map the cluster names as follows:
 
 
 
-```r
+``` r
 mapping <- data.frame(seurat_cluster=c('0', '1', '2'),
                       cell_type=c('Lymphocyte', 
                                   'Monocyte', 
@@ -77,7 +77,7 @@ as follows:
 
 
 
-```r
+``` r
 pbmc.filtered$'cell_type' <- plyr::mapvalues(
   x = pbmc.filtered$seurat_clusters,
   from = mapping$seurat_cluster,
@@ -90,7 +90,7 @@ Now, we can plot the clusters with the assigned cell types.
 
 
 
-```r
+``` r
 DimPlot(pbmc.filtered, 
         group.by = 'cell_type',   ## set the column to use as category
         label = TRUE)  +          ## label clusters
@@ -106,7 +106,7 @@ We can visualize the expression of the different markers across identified clust
 using violin plots using the `VlnPlot()` function as follows:
 
 
-```r
+``` r
 VlnPlot(pbmc.filtered, 
         features = canonical_markers,
         group.by = 'cell_type')
@@ -121,7 +121,7 @@ with the frequency of cells expressing the marker. The `DotPlot()` function come
 
 
 
-```r
+``` r
 DotPlot(pbmc.filtered, 
         features = canonical_markers, 
         group.by = 'cell_type', 
@@ -129,6 +129,72 @@ DotPlot(pbmc.filtered,
 ```
 
 <img src="07-Profiling_cells_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+
+
+## Cell profiling automation
+
+There are several tools for the automation of cell type identification, for example,
+sctype, singleR, CellAssign, etc. In general, they use a reference in the form of a previously 
+curated dataset and transfer information to a query dataset. Here, we will quickly
+exemplified the sctype R library. 
+
+
+
+``` r
+library(openxlsx)
+library(HGNChelper)
+source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_wrapper.R") 
+sample <- run_sctype(pbmc.filtered, 
+                     assay = "RNA", 
+                     scaled = TRUE, 
+                     known_tissue_type="Immune system",
+                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx", 
+                     name="sctype_classification")
+```
+
+```
+## [1] "Using Seurat v5 object"
+## [1] "New metadata added:  sctype_classification"
+```
+
+Let's inspect again the metadata.
+
+
+``` r
+head(sample@meta.data)
+```
+
+```
+##                  orig.ident nCount_RNA nFeature_RNA percent.mt RNA_snn_res.0.1
+## AAAGAGACGGACTT-1       PBMC       1151          457   2.345786               0
+## AAAGTTTGATCACG-1       PBMC       1268          444   3.470032               2
+## AAATGTTGTGGCAT-1       PBMC       2761         1017   1.919594               1
+## AAATTCGAGCTGAT-1       PBMC       2969          980   2.189289               1
+## AAATTGACTCGCTC-1       PBMC       3411         1013   1.495163               0
+## AACAAACTCATTTC-1       PBMC       2178          731   1.423324               0
+##                  seurat_clusters  cell_type   sctype_classification
+## AAAGAGACGGACTT-1               0 Lymphocyte      Naive CD8+ T cells
+## AAAGTTTGATCACG-1               2     B cell           Naive B cells
+## AAATGTTGTGGCAT-1               1   Monocyte Non-classical monocytes
+## AAATTCGAGCTGAT-1               1   Monocyte Non-classical monocytes
+## AAATTGACTCGCTC-1               0 Lymphocyte      Naive CD8+ T cells
+## AACAAACTCATTTC-1               0 Lymphocyte      Naive CD8+ T cells
+```
+
+Now we see a new column called `sctype_classification` which contains the labels 
+annotated to each cell type. Let's plot now this annotations in a UMAP.
+
+
+``` r
+DimPlot(sample, 
+        group.by = 'sctype_classification', 
+        label = TRUE) + NoLegend()
+```
+
+<img src="07-Profiling_cells_files/figure-html/sctype_annotations-1.png" style="display: block; margin: auto;" />
+
+
+Does it look similar to our conclusions?
 
 
 ## Final Report
