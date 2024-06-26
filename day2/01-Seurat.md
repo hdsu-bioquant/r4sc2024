@@ -158,7 +158,7 @@ of the seurat objects from the GitHub Wiki. Two options are correct.
 
 **QUIZ 2**
 
-<details>
+
 <summary>
 <i>Extract and print the first 5 rows and columns of the count matrix from the seurat object</i>
 <br>
@@ -170,7 +170,6 @@ c) <tt>pbmc.seurat[1:5, 1:5]</tt>
 <br>
 TIP: Two options are correct.
 </summary>
-</details>
 
 
 
@@ -187,17 +186,18 @@ in tsv format using the following command.
 pbmc200.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv', sep = '\t')
 ```
                            
-Create a Seurat object <code>pbmc200.seurat</code> using the count matrix.
+
 
 <details>
 <summary>
-How many features and cells are present in the count matrix?
+* Create a Seurat object <code>pbmc200.seurat</code> using the count matrix.
+* How many features and cells are present in the count matrix?
+
+  1. 300 features and 250 samples
+  2. 12673 features and 200 samples
+  3. 11167 features and 200 samples
 </summary>
-
-1. 300 features and 250 samples
-2. 12673 features and 200 samples
-3. 11167 features and 200 samples
-
+<code>dim(pbmc200.mtx)</code>
 </details>
 
 
