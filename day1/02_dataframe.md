@@ -58,7 +58,7 @@ However, we cannot indicate a URL in the function; so we first need to download 
 
 ```r
 # we need to load the library readxl first
-install.packages('readxl')
+install.library('readxl')
 library("readxl")
 # here, replace the path with the path to the file!
 dat.xls = read_xlsx("~/Dropbox/IRTG2021/data/diabetes_full.xlsx")
