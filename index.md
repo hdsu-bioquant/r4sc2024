@@ -53,7 +53,7 @@ Here is a list of usefull resources if you want to perform basic analysis with R
 Here are the links to the slides
 
 * Day 1 : [introduction](./r4sc_intro.pdf)
-* Day 1 : [R markdown](./r4sc_rmarkdown.pdf)
+* Day 1 : [R markdown](./r4sc_markdown.pdf)
 * Day 1 : [Data types](./r4sc_datatypes.pdf)
 * Day 1 : [Cleanup](./r4sc_cleanup.pdf)
 * Day 1 : [Plots](./r4sc_plots.pdf)
