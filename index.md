@@ -57,7 +57,7 @@ Here are the links to the slides
 * Day 1 : [Data types](./r4sc_datatypes.pdf)
 * Day 1 : [Cleanup](./r4sc_cleanup.pdf)
 * Day 1 : [Plots](./r4sc_plots.pdf)
-* Day 1 : [Statistical tests](./r4sc_tests.pdf)
+* Day 1 : [Statistical tests](./r4sc_test.pdf)
 
 * Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
 ## Practical parts
