@@ -761,9 +761,11 @@ The arguments in the `apply` function are as follows:
 2. Compute the standard deviation for all genes
 
 3. Order the genes in the matrix by decreasing standard deviation (see 3.6)
+</blockquote>
+
 
 <details>
-<summary>Click here for solution!</summary>
+<summary><b>Click here for solution!</b></summary>
 
 ```r
 ## maximum expression for all genes
@@ -777,7 +779,6 @@ X %>% arrange(desc(sd.exp))
 ```
 </details>
 
-</blockquote>
 
 
 ### Exercise 3.2: filtering according to bmi

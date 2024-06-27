@@ -1,0 +1,525 @@
+---
+title: "IRTG Course - Introduction to R for Genomics"
+author: "Carl Herrmann & Carlos Ramirez"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print=200)
+opts_chunk$set(echo=TRUE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=150)
+```
+
+
+
+# 0. Objectives
+ 
+In this practical session you will learn to use RStudio and how to implement some of the ideas taught in the first lesson using the R programming language. Throughout this course we will use a common diabetes dataset to practically implement the concepts of data analysis using R. 
+
+Diabetes is a collection of metabolic disorders where the blood glucose levels increases drastically due to defective insulin secretion and/or insulin resistance. There are many risk factors associated with diabetes like obesity, old age etc. Diabetes in turn majorly increases the risk of cardiovascular disease. For more information [see here](https://www.ncbi.nlm.nih.gov/books/NBK1671/). Our dataset has various pathophysiological measurements of >400 individuals. Clinical parameters like blood glucose levels, cholesterol levels, age, body size, weight, blood pressure etc have been measured. We will use this dataset to explore the statistical properties of each variable (like its distribution, mean value etc) and question relations between variables (like is blood glucose level correlated with obesity?).
+
+# 1. First steps in RStudio and R
+
+R is a powerful programming language for the analysis of data. It is recommended that you take the introductory classes for R in DataCamp to get to know this language before you start coding here. In this course you will learn to use RStudio, a software that allows you to use R in a very user-friendly way. When you open RStudio you can see the console on the left side of your screen. The console is one of the two panes you can write you code in. Let's find out more about them.
+
+## 1.1 The Console
+
+The console is where you type commands that you want to execute immediately and don't need to save. For example, if you want to import a dataset or visualize a matrix you can type the respective commands in. To execute those commands press enter. Here a few examples of code you can type in.
+
+```{r eval = FALSE}
+3 + 4
+String1 = "HelloWorld"
+DatFrm = data.frame()
+```
+
+The first line gives you the result of the sum of the two numbers. The second one assigns to the variable `String1` the value `HelloWorld` and the third line creates an empty dataframe called `DatFrm`. All these commands have been executed immediately. You can also use the console to visualize of a variable or data structure. Let's take a look at that string again.
+
+```{r eval = FALSE}
+# To visualize the value of the string in the console just type its name and press enter
+String1 
+# To open a new bar in the window above use the function view()
+View(String1)
+```
+This is one of many ways to use the console. If instead you want to write a code that you will need again or can change you use the Source to write a **R  script** which you can save and use again.
+
+## 1.2 The Source
+
+The source is the panel in which you can write commands as an **R script**. An **R script** is a text file containing R commands (similar to the commands you would type in the console), but which are stored so that they can be executed again several times. 
+
+Whether it's a project or a document like this one, the source a sort of text editor. When you first open Rstudio the Source is not open because there is no file open, but now it should have been open to view the "String1" variable. Go to the left top corner and click on the `New File` icon with a plus on a green circle and select `R Script`. This is your script and here you can work freely, typing as much code as you want, running it multiple times and correcting it when necessary.
+Now try inserting the following code into the new script. In order to run it, select the amount of code you want to execute and press `CONTROL + ENTER` (or `COMMAND + ENTER` in Mac).
+
+```{r eval = FALSE}
+String1 = "HelloWorld"
+
+String1 
+
+View(String1)
+```
+
+Notice that the result of the second line is printed in the console. Before you continue, make sure you have a grasp on these two different ways to write and execute your code. This exercise can help you get more comfortable with them.
+
+### Exercise 1.1: simple variables and variable types
+
+1. Summing up numbers
+   + assign the value 7 to a variable `a` and -2.2 to a variable `b`
+   + assign the sum of `a` and `b` to a new variable `c`
+   + check the type of `a`, `b` and `c` using the `class()` function
+2. Assign the string corresponding to your surname to a variable called `myName`, and check the type of `myName` using the `class` function
+
+
+<details>
+<summary><b>Click for Answer</b></summary>
+```{r}
+a=7
+b=-2.2
+c = a+b
+c
+class(a);class(b);class(c)
+##
+myName='Carl'
+class(myName)
+```
+
+</details>
+
+### Exercise 1.2: more sophisticated data types
+
+1. Create a vector `alpha` using the function `c()` containing all letters from `a` to `g`
+2. Print the 5th letter
+3. Print the length of the vector `alpha` using the `length()` function
+4. What is the type of `alpha`?
+5. Create a matrix `mat` using the `matrix()` function which contains all numbers between 1 and 100, such that the matrix has 10 rows and 10 columns *(check the help page for the `matrix` function!!)*
+6. Create a matrix `mat2` which contains all numbers between 1 and 100, such that the matrix has 5 rows and 20 columns
+7. Check the dimension of the matrix using the `dim()` function
+
+
+<details>
+<summary><b>Click for Answer</b></summary>
+```{r}
+##
+alpha = c('a','b','c','d','e','f','g')  
+## alternative solution would be:
+alpha = letters[1:8]
+##
+alpha[5]
+##
+length(alpha)
+##
+class(alpha)
+##
+mat = matrix(1:100,nrow=10,ncol=10)
+##
+mat2 = matrix(1:100,nrow=5,ncol=20)
+##
+dim(mat2)
+```
+
+Note how the `matrix` function arranges the  numbers inside the matrix; if you want to change the ordering, you can change the `byrow=...` argument in the `matrix` function! Try it out, and check the difference!
+</details>
+
+
+
+# 2. First steps in the analysis of a data matrix
+
+## 2.1 reading in the data!
+
+Most of the time, the dataset you want to analyse comes in the form of a large data matrix, with columns and rows. Typically, an Excel sheet!
+
+In this section, we will learn how to read in such a table, and start doing some first exploratory analysis on it!
+
+The diabetes dataset, which we will be using throughout this practical will be downloaded from an online repository. We will load that into R and have a sneak peek into how it looks like with the console. In the following you will see several functions that give us information about our dataset. You will also see how the "$" sign is used to access specific columns of out dataframe. 
+
+Depending on the format of the input file, there are two possibilities to read the file:
+
+1. If your data file is in the form of a text file,, with tab delimited columns (typically with the ending `.tsv` or `.csv`), you can use the following command to read the data file:
+
+```{r}
+dat = read.delim('https://tinyurl.com/ex9hxvvr', stringsAsFactors = FALSE)
+head(dat, 10) # Look at the first 10 lines of the table
+```
+
+Note that we indicated here a url to a remote file! If you have instead a local file stored on your computer, indicate the path to this file instead of the url!
+
+
+2. If on the other hand the file is an Excel file, then you can use a specific library containing a command to read in Excel formated files.
+
+However, we cannot indicate a URL in the function; so we first need to download the file to a local folder, and then read the file from this local storage.
+
+* Download the file under [this link](https://tinyurl.com/25x5t6wr); note that this is an excel file with `.xlsx` ending. **Please remember where you downloaded the file, and the path to it!!**
+
+* Run the following code, and replace the path string with the path to the file on your computer!
+
+```{r}
+# we need to load the library xlsx first
+library('xlsx')
+# here, replace the path with the path to the file!
+dat = read.xlsx('~/Dropbox/IRTG2021/data/diabetes_full.xlsx',1,stringsAsFactors=FALSE)
+```
+
+
+## 2.2 explore and understand our dataset
+
+Now that we have read in the data, we can start analysing it!
+First of all, what is the data type of the data we just read?
+
+```{r}
+class(dat)
+```
+
+Yes, this is a data frame, the closest equivalent in R to an Excel sheet. It can contain all sorts of data (numbers, boolean, strings,...)
+
+
+
+Let's start by asking some simple questions:
+
+* what is the dimension of our dataset (i.e. how many rows/columns are there in our data)
+
+```{r}
+# Dimension
+dim(dat)
+```
+
+```{r, results='hide'}
+# Number of columns
+ncol(dat)
+# Number of rows
+nrow(dat)
+```
+
+* what are the column names of our dataset
+
+```{r}
+colnames(dat) # Similarly rownames for rows
+```
+
+Probably you are confused about what these column names mean. For more description on these values [look here](http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/Cdiabetes.html)
+
+
+
+
+
+* how do we extract the minimum and maximum age of patients in our dataset
+
+```{r, results='hide'}
+min(dat$age)
+max(dat$age)
+range(dat$age)
+# Try to find out the same for height and weight
+```
+
+* how does the overall summary of our entire dataset look like?
+
+```{r rows.print=10}
+summary(dat) # Can you explain what you see?
+```
+
+You have just seen a lot of new functions. If you're wondering how any of them work, you can use the function "help()"  or the sign "?" in the console to read more about any function in the bottom right pane. For example:
+
+```{r eval = FALSE}
+help("max")
+?max
+```
+will both get you more information on this function. Remember that every function will automatically print its result in the console pane, unless it is assigned to a variable. You can try by running the following line of code:
+
+```{r eval = FALSE}
+max(dat$age)
+MaxAge = max(dat$age)
+```
+
+See the difference? Now that value is saved into this new variable. Before we keep going, here is a quick reminder of how indexing and slicing works in R. If you're already familiar with it you can skip the next chunk.
+
+<details>
+<summary><b>HOWTO: access rows/columns/cells in a data frame </b></summary>
+
+```{r eval = FALSE}
+
+# Returning a specific column or line of a data structure
+dat[1,] # Returns the first line
+dat[,1] # Returns the first column
+dat[1,1] # Returns only the first object of the first line
+
+
+# Returning an interval of columns or lines of a data structure 
+dat[1:3,] # Returns the first three lines
+dat[,1:3] # Returns the first three columns
+dat[1:3,1:3] # Returns the first three elements of the first three lines
+
+# Returning a value or an interval of values in a vector
+dat$age[1] # Returns the first value
+dat$age[1:3] # Returns the first three values
+
+```
+
+
+Feel free to play around with this syntax until you feel comfortable with it. You can open a window with View(dat) to compare your results.
+</details>
+
+Let's do some practice with the dataset we have downloaded and the new functions we have learned.
+
+#### Exercise set B
+
+**Save the code you use for the exercises!**
+
+*For this exercise set it is given that all the data cleanup steps have been taken, you don't need to put them in the results.*
+
+1. Try to obtain the same result of the `head()` function by using the slicing we just looked at on the dataset `dat`.
+2. Print out the first three column names of dat.
+3. Print out the last element in the last column of dat using the dim() function instead of using numerals.  
+
+
+# 4. Data cleanup
+
+Very often the first thing one needs to do before any data science project is to clean up the raw data and transform it into a format that is readily understood and easy to use for all downstream analysis. This process usually involves --
+
+* Removing empty value rows/columns
+* Removing unused or unnecessary rows/columns
+* Reordering the data matrix
+* Keeping columns uniformly numeric (age, weight etc) or string (names, places etc) or logical (TRUE/FALSE, 1/0)
+* Handling strange caveats which are data specific like replacing `,` or `.`, or `;` from numbers etc
+
+Lets do some clean up of our own diabetes data --
+
+1. We will make the `id` column the row names for the dataset. 
+2. We will remove the `bp.2s` and `bp.2d` columns as it has mostly missing values (see summary above)
+3. We will also remove the column `time.ppn` which will not be required in our analysis
+4. We will reorder the columns of the data such that all the qualitative and quantitative values are separated. Among the quantitative values we will keep related variables together
+
+```{r}
+## Assign the id column as row names
+rownames(dat) = dat$id
+
+## Remove columns with names being "id","bp.2s", "bp.2d" or "time.ppn"
+dat = dat[, -which(colnames(dat) %in% c("id","bp.2s", "bp.2d", "time.ppn"))]
+
+## Reorder remaining columns in the order 8,6,11,9,10,14,15,2,5,1,3,4,12,13
+dat = dat[,c(8,6,11,9,10,14,15,2,5,1,3,4,12,13)]
+```
+
+Now lets look at our cleaned data
+```{r}
+summary(dat)
+```
+
+The ordering and selection of columns looks right, however it seems that there are certain rows that have missing values (like `glyhb` column has 13 `NA` values). Lets remove all rows with any missing value. Also lets make the columns `Location` and `Gender` nominal and the `frame` ordinal.
+
+Before we do so, let's have a look at the `is.na` function
+
+```{r}
+is.na(dat$glyhb)
+```
+
+Understand how it works? This is a vector of **logical** (or boolean) values. Let's go one step further:
+
+```{r}
+sum(is.na(dat$glyhb))
+```
+
+What just happened? Because we have used the `sum` function, R has transformed `TRUE` into `1` and `FALSE` into `0`...
+
+
+Now we can apply the same principle on **rows** instead of **columns**, and repeat that for all rows of the data frame:
+
+```{r}
+rmv.rows = apply(dat,1,function(x){sum(is.na(x))}) # Go through each row and sum up all missing values
+rmv.rows [1:20] # The number of missing values in the first 20 row
+which(rmv.rows > 0) # The rows where there is at least 1 missing value
+dat = dat[- which(rmv.rows > 0),] # Removing any row with 1 or more missing values
+rm(rmv.rows)
+dat$location = factor(dat$location) # Making data nominal
+dat$gender = factor(dat$gender) # Making data nominal
+dat$frame = factor(dat$frame, levels=c("small", "medium", "large")) # Making data ordinal
+```
+
+Now our cleaned data has no missing values, columns are cleanly ordered and each column is in the right format
+
+```{r}
+summary(dat)
+```
+
+
+
+
+
+*Can you identify which types of data (continuous, discrete etc) each column above represents and why?*
+
+That was again a lot of new code! There are many new functions to look up, but we will stop to look at two in particular: `which` and `apply`. 
+
+## which 
+
+`which` is used on a data structure and generates a data structure with only the values that satisfy  a condition you specify. Let's look at an example.
+```{r, eval = TRUE}
+# Let's create a vector
+Points = c(1,4,5,2,6,3,5,2)
+# Let's use our function now
+which(Points > 3)
+
+```
+This is very useful, but we can go one step further, by selecting values from a different vector, like this.
+
+```{r, eval = TRUE}
+# Let's create a different vector (of the same length)
+Players = c("Anna", "Benedict", "Carlos", "David", "Emmanuel", "Franziska", "Gerard", "Hannah")
+# Let's use the "which()" function now
+Players[which(Points > 3)]
+
+```
+See? The type of condition can also vary, depending also on the data type in your dataset. Just remember that it must have a boolean output (TRUE/FALSE) to be used in "which", e.g. is.na() can be used inside a "which" function.
+
+## apply
+
+`apply` is used to apply a function to an entire dataset at once and outputs a vector of results. We have seen it used like this:
+
+```{r eval = FALSE}
+rmv.rows = apply(dat,1,function(x){sum(is.na(x))})
+```
+
+But let's see it used on something more simple:
+```{r eval = FALSE}
+
+Mat = matrix(data = c(2,4,7,1,6,3,9,5,3), ncol = 3, nrow = 3)
+Mat
+apply(Mat,1,function(x){sum(x)})
+apply(Mat,1,function(x){mean(x)})
+```
+
+Now you know two of the most important functions in R. Let's practice them!
+
+#### Exercise set C
+
+**Save the code you use for the exercises!**
+
+1. Write a code to calculate the mean of each line of the matrix `Mat` without using the `mean()` function and print out the result
+2. Add one line of code that prints out the results from exercise 1 that are greater than 4.5 by using the `which()` function
+3. Anna, Benedict and Carlos have played three rounds of darts and written down the results. Use this information to construct a 3x3 dataframe with appropriate column names and row names. Then use the `which()` function to determine who is the winner of the first round, the second round and the third round by printing out the results. Finally use the `apply()` function to sum the values of each player up and use `which()` and `max()` to determine the final winner.
+
+
+```{r}
+Names = c("Anna", "Benedict", "Carlos")
+FirstRound = c(6,4,2)
+SecondRound = c(5,7,3)
+ThirdRound = c(6,5,8)
+```
+
+# 5. Visualizing data distribution
+
+In this section you will learn the essential functions to plot data in an intuitive and useful way.
+
+### Histograms
+```{r eval = FALSE}
+summary(dat$stab.glu) # What are these values? Replace summary by quantile and see what happens
+hist(dat$stab.glu, xlab ="Stabilized Glucose concentration in blood", main ="")
+abline(v=summary(dat$stab.glu)[2:5], col = c("blue", "red", "black", "orange"), lty=2)
+```
+
+
+Add the parameter `breaks = 50` in the above lines of code and see what happens. Try different values for `breaks` like `10, 20, 75, 100` and try to interpret the differences. Is this a good or bad thing about histograms in general? Type `help("hist")` to see more details about the histogram function in R. Also try plotting histograms and summaries for other continuous numeric data in our diabetes dataset.
+
+### Density plots
+```{r eval = FALSE}
+plot(density(dat$stab.glu), xlab ="Stabilized Glucose concentration in blood", main ="")
+abline(v=summary(dat$stab.glu)[2:5], col = c("blue", "red", "black", "orange"), lty=2)
+```
+
+Using the function `abline` plot a vertical line highlighting the glucose concentration of `300 units`.
+
+### Boxplots
+
+```{r eval = FALSE}
+boxplot(dat$stab.glu, xlab ="Stabilized Glucose concentration in blood", horizontal = T)
+abline(v=summary(dat$stab.glu)[2:5], col = c("blue", "red", "black", "orange"), lty=2)
+```
+
+Using the `abline` function draw lines passing through the whiskers of the boxplot
+
+### QQ-plots
+
+As discussed in the lecture, we can use **QQ-plots** to either (1) compare two distributions, or (2) compare a distribution with a theoretical distribution (typically the normal distribution).
+
+We can for example compare the distribution of the blood pressure values to check if they are normally distributed
+
+```{r eval=FALSE}
+## Let's first make a histogram
+hist(dat$bp.1s)
+
+## Maybe with more bins?
+hist(dat$bp.1s,breaks = 20)
+```
+
+Now we can use the function `qqnorm` to generate the qqplot of this distribution against the standard normal distribution:
+
+```{r eval = FALSE}
+qqnorm(dat$bp.1s)
+```
+
+Using the additional command `qqline()`, we can add a straight line that goes through the first and third quantiles:
+
+```{r eval = FALSE}
+qqnorm(dat$bp.1s); qqline(dat$bp.1s)
+```
+
+So, is the distribution normal??
+
+Now let's compare the quantiles of the cholesterol values of men and women!
+
+```{r eval = FALSE}
+## Select the cholesterol values for men and women
+bp.men = dat$bp.1s[dat$gender=='male']
+bp.women = dat$bp.1s[dat$gender=='female']
+
+## Compute the quantiles (note the na.rm option to ignore missing NA values!)
+q.men = quantile(bp.men,probs=seq(0,1,by=0.05),na.rm=TRUE)
+q.women = quantile(bp.women,probs=seq(0,1,by=0.05),na.rm=TRUE)
+
+## Now plot against each other!
+plot(q.men,q.women,pch=20)
+```
+
+
+### Integrate histograms, density plots, violin plots and boxplots
+
+```{r, eval=FALSE}
+library(vioplot)
+layout(matrix(c(1:3)))
+
+par(mar=c(0,4,0.5,0.5), mgp=c(2.8,0.5,0), las=2)
+hist(dat$stab.glu, xlab ="", main = "", freq = F, ylim=c(0,0.035), xlim=c(0,400), xaxt="n", breaks="FD")
+box();lines(density(dat$stab.glu), col="green", lwd=2)
+abline(v=summary(dat$stab.glu)[2:5], col = c("blue", "red", "black", "orange"), lty=2)
+
+par(mar=c(0,4,0,0.5), mgp=c(2.8,0.5,0), las=2, xaxt="n", yaxt="n")
+vioplot(dat$stab.glu,horizontal = T, ylim=c(0,400), names = "", col="white")
+abline(v=summary(dat$stab.glu)[2:5], col = c("blue", "red", "black", "orange"), lty=2)
+
+par(mar=c(4,4,0,0.5), mgp=c(2.8,0.5,0), las=2, xaxt="s", yaxt="s")
+boxplot(dat$stab.glu, xlab ="Stabilized Glucose concentration in blood", horizontal = T, ylim=c(0,400))
+abline(v=summary(dat$stab.glu)[2:5], col = c("blue", "red", "black", "orange"), lty=2)
+```
+
+Which do you think is a better plot for visualizing data distribution? What are the advantages and disadvantages of each of these plots?
+
+Once again, we are looking at a lot of new functions. `hist()`, `plot()`, `vioplot()` and `boxplot()` all serve to visualize data in different ways. Make sure you understand how to read them, use the lecture material if you have difficulties. The `par()` function, which is short for "parameters", is an often recurring function that sets graphic parameters such as font size, margins size, colors etc. for the following plots. Try to learn more about it with `help("par")` and then try plotting the same data with different parameters. Regardless of what you are plotting, `par()` will always help you get the plot you want!
+
+#### Exercise set D
+
+This is the last exercise set, best of luck! 
+
+**Save the code you use for the exercises!**
+
+*For this exercise set it is given that all the data cleanup steps have been taken, you don't need to put them in the results.*
+
+1. Visualize the cholesterol levels of all the patients with a histogram
+2. Visualize the cholesterol levels of all male patients with a histogram and mark the median, first and third quantile with lines. Then mark median, first and third quantile for female patients in the same graph with a different color. What can you tell from the differences in these values?
+3. Use a qqplot to plot waist against hip, height against hip and chol against hip. Can you correctly interpret these plots? How are those distributions different?

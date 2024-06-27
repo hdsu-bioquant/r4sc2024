@@ -1,0 +1,349 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print=200)
+opts_chunk$set(echo=TRUE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=150)
+```
+
+
+
+# 3. Data filtering and cleanup
+
+Very often the first thing one needs to do before any data science project is to clean up the raw data and transform it into a format that is readily understood and easy to use for all downstream analysis. This process usually involves:
+
+* Removing empty value rows/columns
+* Removing unused or unnecessary rows/columns
+* Reordering the data matrix
+* Keeping columns uniformly numeric (age, weight etc) or string (names, places etc) or logical (TRUE/FALSE, 1/0)
+* Handling strange caveats which are data specific like replacing `,` or `.`, or `;` from numbers etc
+
+In addition, you often want to filter rows according to vertain criteria: for example, selecting only women of age more than 45.
+
+Here, we will learn how to
+
+* clean up the data
+* filter the data
+
+In order to do these manipulations easily, we will rely on a library which has a lot of functions to easily manipulate tables: [dplyr](https://dplyr.tidyverse.org/). This library is part of a large eco-system of data analysis called **tidyverse**.
+
+Let's load the library
+
+```{r}
+library(tidyverse)
+```
+
+We read again our dataset:
+
+```{r}
+dat = read.delim('https://tinyurl.com/ex9hxvvr', stringsAsFactors = FALSE)
+```
+
+
+Lets do some clean up of our own diabetes data!
+
+## 3.1 Setting row names
+
+As it is, our data frame has no row names (check by running `rownames(dat)`); however, it might be interesting to have row names.
+
+**IMPORTANT**: for data frames, all row names must be distinct!! This can be a problem if you are working with genes, which have sometimes ambiguous names. 
+Here, we will assign the column `id` as row names:
+
+```{r}
+## Assign the id column as row names
+dat.clean = dat %>% column_to_rownames(c('id'))
+```
+
+<details>
+<summary><b>More information: the pipe function %>%</b></summary>
+
+You noticed how we used the syntax `dat %>% column_to_rownames(c('id'))`; what does it mean?
+
+The symbol `%>%` is a so called pipe, and as the name indicates, it "pipes" the content on the left hand side to the function on the right hand side.
+
+Here, the content of the variable `dat` is transfered to the function `column_to_rownames(c('id'))` which then applies the operation (here, using column `id` as rownames, and then removing this column) to the content of the data frame.
+
+Note that we also assigned the result of this whole operation to a new variable `data.clean`.
+
+We could extend the pipe principle and chain several commands!
+</details>
+<p></p>
+
+## 3.2 Adding new columns
+
+Very often, we want to add new columns to an existing data frame! For example, we could add a column names `ageMont` in which we compute the age in month instead of year.
+
+This can be done with the function `mutate()` from the `dplyr` package:
+
+
+```{r}
+dat.clean = dat.clean %>% mutate(ageMonth = age *12)
+head(dat.clean)
+```
+
+See what changed? We could also have more complex formula in the `mutate()` function, involving, for example, several columns!
+
+As the newly created column is not really informative, we can remove it with the `select()` function. This function selects some specific columns. If we however append the "-" sign, it will select all column BUT the ones specified!
+
+```{r}
+dat.clean = dat.clean %>% select(-ageMonth)
+```
+
+
+## 3.3 Reordering columns
+
+Now, we want to reorder the columns so that all numerical columns come first, and the other columns after:
+
+The `relocate` function allows to put a column to a certain position: try the following:
+
+```{r}
+head(dat.clean)
+```
+
+Notice the order of the columns!
+Now:
+
+```{r}
+dat.clean %>% relocate(gender)
+```
+
+Notice the difference? You can also position a column to a specific position, before or after a specified column:
+
+```{r}
+dat.clean %>% relocate(gender,.before=age)
+```
+
+Here, we would like to place all numeric columns first, and the columns containing string or other types of variables after:
+
+```{r}
+dat.clean = dat.clean %>% relocate(where(is.numeric))
+head(dat.clean)
+```
+
+
+> try to place all string variables first; use the `is.character` function!
+
+<details>
+<summary><b>Click for solution!</b></summary> 
+
+```{r}
+dat.clean %>% relocate(where(is.character))
+```
+
+</details> 
+<p></p>
+
+Now lets look at our cleaned data
+```{r}
+summary(dat.clean)
+```
+
+The ordering and selection of columns looks right, however it seems that there are certain rows that have missing values (note which columns seem problematic!). 
+We will now deal with the missing values.
+
+
+## 3.4 Dealing with NAs
+
+Some columns and rows contain missing values, which are encoded by `NA` in the data frame. Missing values, especially if there are many can be an issue, as it will bias the results.
+Dealing with missing values is a chapter in itself! Basically, there can be two strategies:
+
+1. **imputing** missing value: this means that we try to make a "best guess" of what the missing value might be. For example, if the weight is missing for one patient, you could replace it with the average weight of the other patients. Of course, there are more sophisticated methods....
+
+2. **removing** missing values: you could remove all patients (i.e. rows) are have
+  + any missing value
+  + more than a certain number of missing values
+  + only missing values.
+But you could also remove variables (i.e. columns) with a  lot of missing values!
+  
+Let's implement some of these strategies:
+
+### Strategy 1: removing all rows which have **any** missing values:
+
+```{r}
+dat.nona = dat.clean %>% drop_na()
+dim(dat.clean);dim(dat.nona)
+```
+
+> Do you understand why we reduced so dramatically our dataset?
+> Could there be an alternative approach?
+
+### Strategy 2: let us first remove problematic columns
+
+Two of the columns have very high number of missing values `bp.2s` and `bp.2d`; we should remove these columns first and then remove rows with missing values:
+
+
+```{r}
+dat.clean = dat.clean %>% select(-bp.2s,-bp.2d)
+head(dat.clean)
+```
+
+We can now remove the rows with missing values:
+
+```{r}
+dat.nona = dat.clean %>% drop_na()
+dim(dat.nona)
+```
+
+See? We have lost much less rows (or patients) here...
+
+
+Let's continue with the cleaned matrix obtained with strategy 2:
+
+
+## 3.5 Converting strings into factors
+
+Factors is a data type besides `numeric`, `characters` (or strings) `boolean`. It is very similar to the string type, but introduces the notion of **levels**, which indicates which categories are represented. Let's see an example:
+
+
+```{r}
+head(dat.nona$location)
+```
+
+These are strings. We cannot see easily however, how many different locations are represented in the column `location`. Let's convert this column into factors:
+
+```{r}
+dat.nona$location = factor(dat.nona$location)
+head(dat.nona$location)
+```
+
+See the difference?
+
+> Convert the `gender` and `frame` columns into factors!
+
+
+<details>
+<summary><b>Click for solution!</b></summary> 
+```{r}
+dat.nona$gender = factor(dat.nona$gender) # Making data nominal
+dat.nona$frame = factor(dat.nona$frame, levels=c("small", "medium", "large")) # Making data ordinal
+```
+Notice that in the last command, we also indicated in which order the levels should be considered. Since we have ordinal data here (there is a clear order between small/medium/large), we should indicate this order here. Otherwise, the levels are ordered by alphabetical order!
+
+</details> 
+<p></p>
+
+Let's inspect our cleaned dataset again:
+
+```{r}
+summary(dat.nona)
+```
+
+
+## 3.6 Reordering rows
+
+We now have a clean dataset to work with, congratulations!
+Let's see how we can order the rows according to certain columns. We will use the function `arrange()` from the `dplyr` package.
+
+### Sorting according to numerical column
+
+```{r}
+### order the rows by increasing age
+dat.nona = dat.nona %>% arrange(age)
+head(dat.nona)
+tail(dat.nona)
+```
+
+If we want to order by decreasing age:
+
+```{r}
+dat.nona = dat.nona %>% arrange(desc(age))
+head(dat.nona)
+```
+
+### Sorting according to a column containing strings or factors
+
+```{r}
+dat.nona = dat.nona %>% arrange(gender)
+head(dat.nona)
+```
+
+Given that there are many patients with the same value in this column, how can we order the patients within a certain category (for example, sorting the female patients by increasing age):
+
+```{r}
+dat.nona = dat.nona %>% arrange(gender,age)
+head(dat.nona)
+```
+
+> Order the rows by location, then gender, and decreasing weight!
+
+<details>
+<summary><b>Click for solution!</b></summary>
+
+```{r}
+dat.nona = dat.nona %>% arrange(location, gender, desc(weight))
+head(dat.nona)
+```
+
+</details>
+
+
+## 3.7 Filtering rows
+
+Often, we want to filter the rows accordin to certain criteria. This can be easily done using the `filter()` command from the `dplyr()` package.
+
+```{r}
+## filter femal patients
+dat.nona %>% filter(gender=='female')
+
+## filter female patients which are over 50
+dat.nona %>% filter(gender=='female' & age > 50)
+
+```
+
+
+## 3.8 Applying operations on all rows or columns
+
+If we have a matrix or data frame consisting only of numerical values, we sometimes want to apply a certain operation on all rows or columns; some examples might be
+
+* compute the standard deviation on all genes (=rows) in a gene expression matrix!
+* compute the median value on all numerical variables (=columns) in our diabetes matrix.
+
+To do this, we can use the function `apply()`; let us see an example to understand how it works:
+
+```{r}
+## we generate a matrix with random numbers
+X = matrix(rnorm(50),nrow=10)
+colnames(X) = paste0('Patient_',1:5)
+rownames(X) = paste0('Gene_',1:10)
+X
+```
+
+Suppose we want to compute the mean expression of the 10 genes for all patients; hence, we want to apply the `mean()` function on all columns. Here we go...
+
+```{r}
+## mean over all columns
+apply(X,2,mean)
+```
+
+The arguments in the `apply` function are as follows:
+
+1. the name of the matrix or data frame
+2. 1=on all rows, 2=on all columns
+3. the function to apply
+
+
+
+> Compute the maximum expression for all genes
+> Compute the standard deviation for all genes
+> Order the genes in the matrix by decreasing standard deviation (see 3.6)
+
+### Exercice 3.1: filtering according to bmi
+
+1. Compute the bmi index for all patients. Since the weight is in pound and the height in inches, the formula is `bmi = weight/height^2 *
+703`
+2. Add this bmi index as a new column `bmi` using the `mutate()` function.
+3. Filter the women with a bmi index over 30; how many do you find?
+4. Same question for the men younger that 50 with a bmi over 30.

@@ -1,0 +1,29 @@
+---
+title: "Day 1"
+output: html_document
+date: "2024-06-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+dat = read.delim("https://tinyurl.com/ex9hxvvr", stringsAsFactors = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+dat = read.delim("https://tinyurl.com/ex9hxvvr", stringsAsFactors = FALSE)
+```
+
+```{r}
+dat.clean = dat %>% column_to_rownames(c("id"))
+
+```
+
