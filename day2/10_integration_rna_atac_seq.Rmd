@@ -259,13 +259,13 @@ DefaultAssay(pbmc) <- 'peaks'
 # wilcox is the default option for test.use
 da_peaks <- FindMarkers(
   object = pbmc,
-  ident.1 = "CD4 Naive",
-  ident.2 = "CD14+ Monocytes",
+  ident.1 = "B cell progenitor",
+  ident.2 = "pre-B cell",
   test.use = 'wilcox',
   min.pct = 0.1
 )
 
-head(da_peaks)
+tail(da_peaks)
 ```
 
 Now we can visualize cell type specific peaks as follows.
@@ -275,7 +275,8 @@ plot1 <- VlnPlot(
   object = pbmc,
   features = rownames(da_peaks)[1],
   pt.size = 0.1,
-  idents = c("CD4 Naive","CD14+ Monocytes")
+  idents = c("B cell progenitor", 
+             "pre-B cell")
 )
 plot2 <- FeaturePlot(
   object = pbmc,
@@ -297,23 +298,23 @@ features in chromosome references.
 
 
 ```{r,  getting_peaks, include=TRUE}
-open_cd4naive <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
-open_cd14mono <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
+open_bcellprog <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
+open_prebcell <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
 
-closest_genes_cd4naive <- ClosestFeature(pbmc, regions = open_cd4naive)
-closest_genes_cd14mono <- ClosestFeature(pbmc, regions = open_cd14mono)
+closest_genes_bcellprog <- ClosestFeature(pbmc, regions = open_bcellprog)
+closest_genes_prebcell <- ClosestFeature(pbmc, regions = open_prebcell)
 ```
 
 
 
 ```{r,  cd4_peaks, include=TRUE}
-head(closest_genes_cd4naive)
+head(closest_genes_bcellprog)
 ```
 
 
 
 ```{r,  cd14mono_peaks, include=TRUE}
-head(closest_genes_cd14mono)
+head(closest_genes_prebcell)
 ```
 
 
@@ -341,36 +342,20 @@ CD4 gene.
 pbmc <- SortIdents(pbmc)
 
 # find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), 
-                                      LookupGeneCoords(pbmc, "CD4"))
+regions_highlight <- subsetByOverlaps(StringToGRanges(open_bcellprog), 
+                                      LookupGeneCoords(pbmc, "TRAM2"))
 
 CoveragePlot(
   object = pbmc,
-  region = "CD4",
+  region = "TRAM2",
   region.highlight = regions_highlight,
-  extend.upstream = 1000,
-  extend.downstream = 1000
+  extend.upstream = 100,
+  extend.downstream = 100
 )
 ```
 
 It's interesting to play with the parameters for plotting. We can zoom in/out
 chromosomic regions by extending bases up/downstream to the selected
-
-
-```{r,  vis_peaks_alt, include=TRUE}
-# find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), 
-                                      LookupGeneCoords(pbmc, "CD4"))
-
-CoveragePlot(
-  object = pbmc,
-  region = "CD4",
-  region.highlight = regions_highlight,
-  extend.upstream = 50000,
-  extend.downstream = 50000
-)
-```
-
 
 
 

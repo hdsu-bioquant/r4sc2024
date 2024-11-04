@@ -173,23 +173,23 @@ DefaultAssay(pbmc) <- 'peaks'
 # wilcox is the default option for test.use
 da_peaks <- FindMarkers(
   object = pbmc,
-  ident.1 = "CD4 Naive",
-  ident.2 = "CD14+ Monocytes",
+  ident.1 = "B cell progenitor",
+  ident.2 = "pre-B cell",
   test.use = 'wilcox',
   min.pct = 0.1
 )
 
-head(da_peaks)
+tail(da_peaks)
 ```
 
 ```
-##                                  p_val avg_log2FC pct.1 pct.2    p_val_adj
-## chr1-59814285-59815204    3.410189e-50   7.140323 0.617 0.006 2.726276e-45
-## chr12-119988529-119989427 1.577804e-43   4.602373 0.617 0.032 1.261376e-38
-## chr7-142808582-142809442  1.662968e-42   7.953730 0.525 0.003 1.329460e-37
-## chr17-82126437-82127355   3.934464e-41  12.420762 0.500 0.000 3.145407e-36
-## chr8-11016117-11017015    8.371607e-40   4.974866 0.567 0.029 6.692681e-35
-## chr6-96924166-96925086    1.137904e-37   3.576527 0.633 0.067 9.096973e-33
+##                           p_val avg_log2FC pct.1 pct.2 p_val_adj
+## chr1-208245107-208245847      1  0.2244174 0.114 0.118         1
+## chr10-101835715-101836606     1  0.1896736 0.114 0.118         1
+## chr12-132904475-132905376     1  0.1616110 0.114 0.118         1
+## chr19-46613876-46614775       1  0.1402740 0.114 0.118         1
+## chr8-94904992-94905967        1  0.1656689 0.114 0.118         1
+## chr19-14073184-14074084       1 -0.1317303 0.257 0.255         1
 ```
 
 Now we can visualize cell type specific peaks as follows.
@@ -200,7 +200,8 @@ plot1 <- VlnPlot(
   object = pbmc,
   features = rownames(da_peaks)[1],
   pt.size = 0.1,
-  idents = c("CD4 Naive","CD14+ Monocytes")
+  idents = c("B cell progenitor", 
+             "pre-B cell")
 )
 plot2 <- FeaturePlot(
   object = pbmc,
@@ -225,59 +226,59 @@ features in chromosome references.
 
 
 ``` r
-open_cd4naive <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
-open_cd14mono <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
+open_bcellprog <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
+open_prebcell <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
 
-closest_genes_cd4naive <- ClosestFeature(pbmc, regions = open_cd4naive)
-closest_genes_cd14mono <- ClosestFeature(pbmc, regions = open_cd14mono)
+closest_genes_bcellprog <- ClosestFeature(pbmc, regions = open_bcellprog)
+closest_genes_prebcell <- ClosestFeature(pbmc, regions = open_prebcell)
 ```
 
 
 
 
 ``` r
-head(closest_genes_cd4naive)
+head(closest_genes_bcellprog)
 ```
 
 ```
 ##                           tx_id gene_name         gene_id   gene_biotype type
-## ENST00000455990 ENST00000455990     HOOK1 ENSG00000134709 protein_coding  cds
-## ENSE00002206071 ENST00000397558    BICDL1 ENSG00000135127 protein_coding exon
-## ENST00000632998 ENST00000632998     PRSS2 ENSG00000275896 protein_coding  utr
-## ENST00000665763 ENST00000665763    CCDC57 ENSG00000176155 protein_coding  gap
-## ENST00000416569 ENST00000416569      XKR6 ENSG00000171044 protein_coding  gap
-## ENST00000544166 ENST00000544166    KLHL32 ENSG00000186231 protein_coding  utr
-##                            closest_region              query_region distance
-## ENST00000455990    chr1-59815118-59815180    chr1-59814285-59815204        0
-## ENSE00002206071 chr12-119989869-119990297 chr12-119988529-119989427      441
-## ENST00000632998  chr7-142774509-142774564  chr7-142808582-142809442    34017
-## ENST00000665763   chr17-82101867-82127691   chr17-82126437-82127355        0
-## ENST00000416569    chr8-10924831-11200575    chr8-11016117-11017015        0
-## ENST00000544166    chr6-96924620-96925026    chr6-96924166-96925086        0
-```
-
-
-
-
-``` r
-head(closest_genes_cd14mono)
-```
-
-```
-##                           tx_id gene_name         gene_id   gene_biotype type
-## ENSE00001389095 ENST00000340607     PTGES ENSG00000148344 protein_coding exon
-## ENST00000336600 ENST00000336600  C6orf223 ENSG00000181577 protein_coding  utr
-## ENST00000606214 ENST00000606214    TBC1D7 ENSG00000145979 protein_coding  gap
-## ENST00000554237 ENST00000554237     VASH1 ENSG00000071246 protein_coding  gap
-## ENST00000373313 ENST00000373313      MAFB ENSG00000204103 protein_coding  utr
-## ENST00000610832 ENST00000610832      KLF4 ENSG00000136826 protein_coding  utr
+## ENSE00001239301 ENST00000576742     TRPV3 ENSG00000167723 protein_coding exon
+## ENST00000524347 ENST00000524347      SGCD ENSG00000170624 protein_coding  gap
+## ENST00000672146 ENST00000672146     OPRL1 ENSG00000125510 protein_coding  utr
+## ENST00000270162 ENST00000270162      SIK1 ENSG00000142178 protein_coding  utr
+## ENSE00000674098 ENST00000056233    NFE2L3 ENSG00000050344 protein_coding exon
+## ENSE00001811909 ENST00000391984    CAPN10 ENSG00000142330 protein_coding exon
 ##                           closest_region             query_region distance
-## ENSE00001389095 chr9-129752887-129753042 chr9-129776921-129777829    23878
-## ENST00000336600   chr6-44003127-44007612   chr6-44058502-44059239    50889
-## ENST00000606214   chr6-13267836-13305061   chr6-13302519-13303438        0
-## ENST00000554237  chr14-76763131-76769962  chr14-76768047-76768963        0
-## ENST00000373313  chr20-40688851-40689236  chr20-40688870-40689743        0
-## ENST00000610832 chr9-107489168-107489766 chr9-107489471-107490352        0
+## ENSE00001239301    chr17-3557676-3557995    chr17-3558417-3559246      421
+## ENST00000524347 chr5-156393866-156508600 chr5-156402205-156403126        0
+## ENST00000672146  chr20-64098887-64100633  chr20-64099915-64100843        0
+## ENST00000270162  chr21-43414483-43416741  chr21-43352428-43353343    61139
+## ENSE00000674098   chr7-26152198-26153068   chr7-25968069-25968997   183200
+## ENSE00001811909 chr2-240586734-240587052 chr2-240584285-240585390     1343
+```
+
+
+
+
+``` r
+head(closest_genes_prebcell)
+```
+
+```
+##                           tx_id gene_name         gene_id   gene_biotype type
+## ENST00000340722 ENST00000340722     TCL1B ENSG00000213231 protein_coding  utr
+## ENST00000652626 ENST00000652626   GUCY1B1 ENSG00000061918 protein_coding  cds
+## ENSE00003713479 ENST00000517566      OXR1 ENSG00000164830 protein_coding exon
+## ENST00000395153 ENST00000395153     DACT1 ENSG00000165617 protein_coding  cds
+## ENSE00003630226 ENST00000603223     GFOD1 ENSG00000145990 protein_coding exon
+## ENST00000358024 ENST00000358024     TMCC2 ENSG00000133069 protein_coding  utr
+##                           closest_region             query_region distance
+## ENST00000340722  chr14-95691931-95692628  chr14-95695641-95696543     3012
+## ENST00000652626 chr4-155759141-155759143 chr4-155758521-155759415        0
+## ENSE00003713479 chr8-106359476-106359636 chr8-106269756-106270665    88810
+## ENST00000395153  chr14-58638203-58638547  chr14-58637398-58638262        0
+## ENSE00003630226   chr6-13486638-13487662   chr6-13526432-13527329    38769
+## ENST00000358024 chr1-205227946-205228564 chr1-205227422-205228317        0
 ```
 
 
@@ -306,15 +307,15 @@ CD4 gene.
 pbmc <- SortIdents(pbmc)
 
 # find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), 
-                                      LookupGeneCoords(pbmc, "CD4"))
+regions_highlight <- subsetByOverlaps(StringToGRanges(open_bcellprog), 
+                                      LookupGeneCoords(pbmc, "TRAM2"))
 
 CoveragePlot(
   object = pbmc,
-  region = "CD4",
+  region = "TRAM2",
   region.highlight = regions_highlight,
-  extend.upstream = 1000,
-  extend.downstream = 1000
+  extend.upstream = 100,
+  extend.downstream = 100
 )
 ```
 
@@ -322,25 +323,6 @@ CoveragePlot(
 
 It's interesting to play with the parameters for plotting. We can zoom in/out
 chromosomic regions by extending bases up/downstream to the selected
-
-
-
-``` r
-# find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), 
-                                      LookupGeneCoords(pbmc, "CD4"))
-
-CoveragePlot(
-  object = pbmc,
-  region = "CD4",
-  region.highlight = regions_highlight,
-  extend.upstream = 50000,
-  extend.downstream = 50000
-)
-```
-
-<img src="10_integration_rna_atac_seq_files/figure-html/vis_peaks_alt-1.png" style="display: block; margin: auto;" />
-
 
 
 
