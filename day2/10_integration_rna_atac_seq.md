@@ -18,6 +18,7 @@ section. Please, make sure not to skip any step.
 
 
 
+
 ## Gene Activity Analysis
 
 
@@ -170,11 +171,16 @@ Idents(pbmc) <- pbmc$predicted.id
 # change back to working with peaks instead of gene activities
 DefaultAssay(pbmc) <- 'peaks'
 
+## Setting cell types to compare
+cell_type_1 <- "B cell progenitor"
+#cell_type_1 <- "pDC"
+cell_type_2 <- "pre-B cell"
+
 # wilcox is the default option for test.use
 da_peaks <- FindMarkers(
   object = pbmc,
-  ident.1 = "B cell progenitor",
-  ident.2 = "pre-B cell",
+  ident.1 = cell_type_1,
+  ident.2 = cell_type_2,
   test.use = 'wilcox',
   min.pct = 0.1
 )
@@ -200,13 +206,14 @@ plot1 <- VlnPlot(
   object = pbmc,
   features = rownames(da_peaks)[1],
   pt.size = 0.1,
-  idents = c("B cell progenitor", 
-             "pre-B cell")
+  idents = c(cell_type_1, cell_type_2)
 )
 plot2 <- FeaturePlot(
-  object = pbmc,
+  object = subset(pbmc,
+                  predicted.id %in% c(cell_type_1, cell_type_2)
+                  ),
   features = rownames(da_peaks)[1],
-  pt.size = 0.1
+  pt.size = 2
 )
 
 plot1 | plot2
@@ -226,18 +233,18 @@ features in chromosome references.
 
 
 ``` r
-open_bcellprog <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
-open_prebcell <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
+open_cell_type_1 <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
+open_cell_type_2 <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
 
-closest_genes_bcellprog <- ClosestFeature(pbmc, regions = open_bcellprog)
-closest_genes_prebcell <- ClosestFeature(pbmc, regions = open_prebcell)
+closest_genes_cell_type_1 <- ClosestFeature(pbmc, regions = open_cell_type_1)
+closest_genes_cell_type_2 <- ClosestFeature(pbmc, regions = open_cell_type_2)
 ```
 
 
 
 
 ``` r
-head(closest_genes_bcellprog)
+head(closest_genes_cell_type_1)
 ```
 
 ```
@@ -261,7 +268,7 @@ head(closest_genes_bcellprog)
 
 
 ``` r
-head(closest_genes_prebcell)
+head(closest_genes_cell_type_2)
 ```
 
 ```
@@ -307,7 +314,7 @@ CD4 gene.
 pbmc <- SortIdents(pbmc)
 
 # find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_bcellprog), 
+regions_highlight <- subsetByOverlaps(StringToGRanges(open_cell_type_1), 
                                       LookupGeneCoords(pbmc, "TRAM2"))
 
 CoveragePlot(
@@ -315,15 +322,72 @@ CoveragePlot(
   region = "TRAM2",
   region.highlight = regions_highlight,
   extend.upstream = 100,
-  extend.downstream = 100
+  extend.downstream = 100, 
+  idents = c(cell_type_1, cell_type_2),
 )
 ```
 
 <img src="10_integration_rna_atac_seq_files/figure-html/vis_peaks-1.png" style="display: block; margin: auto;" />
 
 It's interesting to play with the parameters for plotting. We can zoom in/out
-chromosomic regions by extending bases up/downstream to the selected
+chromosomic regions by extending bases up/downstream to the selected.
 
+
+
+
+**QUIZ 1**
+
+<br>
+
+<details>
+<summary> How many peaks are differentially open the previous
+comparison.
+TIP: Check at the dimensions of the table of differential peaks
+after taking the statistically significant peaks.
+</summary>
+
+<b>Answer:</b>
+<br>
+<tt> There are 14 differentially open and statistically significant peaks.
+You can check this by running.
+``` 
+da_peaks %>% dplyr::filter(p_val_adj<0.05)
+```
+</tt>
+<br>
+</details> 
+
+<br>
+
+
+**QUIZ 2**
+
+<br>
+
+<details>
+<summary> Check the same comparing now pre-B and pDC cell types.
+TIP: Re-run the Differential peak analysis.
+</summary>
+
+<b>Answer:</b>
+<br>
+<tt> There are 428 differentially open and statistically significant peaks.
+You can check this by running.
+
+``` 
+da_peaks %>% dplyr::filter(p_val_adj<0.05)
+```
+
+<br>
+
+Is this expected? Try visualizing some differential peak in a coverage
+plot as before for those cell types.
+
+</tt>
+<br>
+</details> 
+
+<br>
 
 
 

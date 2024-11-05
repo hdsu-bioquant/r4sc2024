@@ -246,7 +246,3 @@ Do you notice any difference in binding for the TFs shown above.
 sessionInfo()
 ```
 
-
-
-```{r, session_info}
-```

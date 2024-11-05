@@ -89,27 +89,17 @@ object to store the data.
 
 
 ``` r
-#counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
+## Loading the counts matrix
 counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
-#metadata <- read.csv(
-#  file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
-#  header = TRUE,
-#  row.names = 1
-#)
+
+## Loading metadata
 metadata <- read.csv(
   file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_singlecell.csv",
   header = TRUE,
   row.names = 1
 )
 
-#chrom_assay <- CreateChromatinAssay(
-#  counts = counts,
-#  sep = c(":", "-"),
-#  fragments = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz",
-#  min.cells = 10,
-#  min.features = 200
-#)
-
+## Loading reads-fragments
 chrom_assay <- CreateChromatinAssay(
   counts = counts,
   sep = c(":", "-"),
@@ -118,6 +108,7 @@ chrom_assay <- CreateChromatinAssay(
   min.features = 200
 )
 
+## Adding the data to a Seurat object
 pbmc <- CreateSeuratObject(
   counts = chrom_assay,
   assay = "peaks",
@@ -284,8 +275,6 @@ should show a periodicity like the following one.
 
 
 ``` r
-#pbmc$nucleosome_group <- ifelse(pbmc$nucleosome_signal > 4, 'NS > 4', 'NS < 4')
-#FragmentHistogram(object = pbmc, group.by = 'nucleosome_group')
 FragmentHistogram(object = pbmc, 
                   group.by = "orig.ident")
 ```
@@ -307,7 +296,7 @@ VlnPlot(
 )
 ```
 
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/vilin_plots-1.png" style="display: block; margin: auto;" />
 
 We can use this information to filter in/out cells. Filtering usually requires 
 visual inspection in order to set up thresholds. Outliers in the distributions
@@ -358,7 +347,7 @@ in the visualization step by removing this dimensions.
 DepthCor(pbmc)
 ```
 
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/cor_lsi-1.png" style="display: block; margin: auto;" />
 
 
 As in the Gene Expression data we can project our data now in two dimensions
@@ -373,8 +362,54 @@ pbmc <- FindClusters(object = pbmc, verbose = FALSE, algorithm = 3)
 DimPlot(object = pbmc, label = TRUE) + NoLegend()
 ```
 
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/umap-1.png" style="display: block; margin: auto;" />
 
+
+
+**QUIZ 1**
+
+<br>
+
+<details>
+<summary> Is the clustering biased by the sequencing depth? 
+TIP: Evaluate this possibility by plotting a UMAP or violin plot
+by cluster.
+</summary>
+
+<b>Answer:</b>
+<br>
+<tt> 
+``` 
+VlnPlot(object = pbmc, group.by = "seurat.clusters", features = 'nCount_peaks', pt.size = 0.1)
+```
+</tt>
+<br>
+</details> 
+
+<br>
+
+**QUIZ 2**
+
+<br>
+
+<details>
+<summary> What happen if we don't remove the dimension correlated to 
+sequencing depth? 
+TIP: Add the first dimension to the `RunUMAP()` function and run 
+the clustering again.
+</summary>
+
+<b>Answer:</b>
+<br>
+<tt> 
+``` 
+pbmc <- RunUMAP(object = pbmc, reduction = 'lsi', dims = 1:30)
+```
+</tt>
+<br>
+</details> 
+
+<br>
 
 
 ``` r
