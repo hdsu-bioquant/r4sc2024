@@ -60,11 +60,8 @@ Here are the links to the slides
 * Day 1 : [Statistical tests](./r4sc_test.pdf)
 
 * Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
-## Practical parts
 
-### Day 1: General introduction - (almost) first steps in R!                                        
-
-On the first day, we will guide you through the first steps of working with R, from reading data to exploratory analysis and basic statistics.
+## Preliminary: Intro to basic R
 
 * Part 0 : [Objectives](./day1/00_Objectives.md)
 * Part 1 : [Rstudio](./day1/01_rstudio.md)
@@ -73,9 +70,11 @@ On the first day, we will guide you through the first steps of working with R, f
 * Part 4 : [Plotting](./day1/04_plotting.md)
 * Part 5 : [Hypothesis tests](./day1/05_test.md)
 
-### Day 2: a simple single-cell RNA-seq analysis workflow
+## Practical parts
 
-On the second day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
+### Day 1: a simple single-cell RNA-seq analysis workflow
+
+On the first day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
 
 * Part 0 : [Initial steps](./day2/index.md)
 * Part 1 : [Introduction to Seurat](./day2/01-Seurat.md)
@@ -86,4 +85,7 @@ On the second day, we will go through a step by step simple analysis of a small 
 * Part 6 : [Differential expression](./day2/06-Differential_Expression.md)
 * Part 7 : [Profiling cells](./day2/07-Profiling_cells.md)
 * Part 8 : [Diffusion analysis](./day2/08-Intro_to_pseudotime_analysis.md)
+
+### Day 2: analysis of scATAC-seq and integration
+
 
