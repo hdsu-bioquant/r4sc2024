@@ -63,12 +63,12 @@ Here are the links to the slides
 
 ## Preliminary: Intro to basic R
 
-* Part 0 : [Objectives](./day1/00_Objectives.md)
-* Part 1 : [Rstudio](./day1/01_rstudio.md)
-* Part 2 : [Dataframes](./day1/02_dataframe.md)
-* Part 3 : [Data cleanup](./day1/03_cleanup.md)
-* Part 4 : [Plotting](./day1/04_plotting.md)
-* Part 5 : [Hypothesis tests](./day1/05_test.md)
+* Part 0 : [Objectives](./day0/00_Objectives.md)
+* Part 1 : [Rstudio](./day0/01_rstudio.md)
+* Part 2 : [Dataframes](./day0/02_dataframe.md)
+* Part 3 : [Data cleanup](./day0/03_cleanup.md)
+* Part 4 : [Plotting](./day0/04_plotting.md)
+* Part 5 : [Hypothesis tests](./day0/05_test.md)
 
 ## Practical parts
 
@@ -76,15 +76,15 @@ Here are the links to the slides
 
 On the first day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
 
-* Part 0 : [Initial steps](./day2/index.md)
-* Part 1 : [Introduction to Seurat](./day2/01-Seurat.md)
-* Part 2 : [Quality control](./day2/02-Quality_control.md)
-* Part 3 : [Feature selection](./day2/03-Feature_selection.md)
-* Part 4 : [Dimensional reduction](./day2/04-Normalization_and_Dimensional_Reduction.md)
-* Part 5 : [Cluster_visualization - UMAP](./day2/05-Cluster_visualization.md)
-* Part 6 : [Differential expression](./day2/06-Differential_Expression.md)
-* Part 7 : [Profiling cells](./day2/07-Profiling_cells.md)
-* Part 8 : [Diffusion analysis](./day2/08-Intro_to_pseudotime_analysis.md)
+* Part 0 : [Initial steps](./day1/index.md)
+* Part 1 : [Introduction to Seurat](./day1/01-Seurat.md)
+* Part 2 : [Quality control](./day1/02-Quality_control.md)
+* Part 3 : [Feature selection](./day1/03-Feature_selection.md)
+* Part 4 : [Dimensional reduction](./day1/04-Normalization_and_Dimensional_Reduction.md)
+* Part 5 : [Cluster_visualization - UMAP](./day1/05-Cluster_visualization.md)
+* Part 6 : [Differential expression](./day1/06-Differential_Expression.md)
+* Part 7 : [Profiling cells](./day1/07-Profiling_cells.md)
+* Part 8 : [Diffusion analysis](./day1/08-Intro_to_pseudotime_analysis.md)
 
 ### Day 2: analysis of scATAC-seq and integration
 
