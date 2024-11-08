@@ -3,7 +3,7 @@
 
 Welcome to the **R for single-cell analysis** This workshop is meant for individuals with little previous knowledge R. 
 
-The course will run over 2 days **(Thursday, 27.06 and Friday, 28.06)** from 9am - 12am and 2pm - 5pm.
+The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am - 12am and 2pm - 5pm.
 
 
 ******
@@ -17,8 +17,7 @@ The course will run over 2 days **(Thursday, 27.06 and Friday, 28.06)** from 9am
 
 ## Is this course for me?
 
-In this two-day course, we want to give you an **introduction to working with R in simple data analysis tasks**; you will learn the basic principles of reading in a data table, doing some descriptive statistics, making nice plots.
-On the second day, we will focus on a simple single-cell analysis workflow, which will guide you through the first steps of this kind of analysis!
+In this two-day course, we want to give you an **introduction to the analysis of single-cell RNA and ATAC-seq** which will guide you through the first steps of this kind of analysis!
 
 ### IMPORTANT NOTE! 
 
@@ -48,20 +47,18 @@ Here is a list of usefull resources if you want to perform basic analysis with R
 * [Basic plots in R](http://www.sthda.com/english/wiki/r-base-graphs)
 * [Seurat tutorials](https://satijalab.org/seurat/articles/get_started.html)
 
-## Slides
-
-Here are the links to the slides
-
-* Day 1 : [introduction](./r4sc_intro.pdf)
-* Day 1 : [R markdown](./r4sc_markdown.pdf)
-* Day 1 : [Data types](./r4sc_datatypes.pdf)
-* Day 1 : [Cleanup](./r4sc_cleanup.pdf)
-* Day 1 : [Plots](./r4sc_plots.pdf)
-* Day 1 : [Statistical tests](./r4sc_test.pdf)
-
-* Day 2 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
-
 ## Preliminary: Intro to basic R
+
+Here are the links to the slides for the introduction to R
+
+* Day 0 : [introduction](./r4sc_intro.pdf)
+* Day 0 : [R markdown](./r4sc_markdown.pdf)
+* Day 0 : [Data types](./r4sc_datatypes.pdf)
+* Day 0 : [Cleanup](./r4sc_cleanup.pdf)
+* Day 0 : [Plots](./r4sc_plots.pdf)
+* Day 0 : [Statistical tests](./r4sc_test.pdf)
+
+These Markdown files contain some exercises in R
 
 * Part 0 : [Objectives](./day0/00_Objectives.md)
 * Part 1 : [Rstudio](./day0/01_rstudio.md)
@@ -69,6 +66,9 @@ Here are the links to the slides
 * Part 3 : [Data cleanup](./day0/03_cleanup.md)
 * Part 4 : [Plotting](./day0/04_plotting.md)
 * Part 5 : [Hypothesis tests](./day0/05_test.md)
+
+* Day 1 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
+
 
 ## Practical parts
 
@@ -84,8 +84,10 @@ On the first day, we will go through a step by step simple analysis of a small s
 * Part 5 : [Cluster_visualization - UMAP](./day1/05-Cluster_visualization.md)
 * Part 6 : [Differential expression](./day1/06-Differential_Expression.md)
 * Part 7 : [Profiling cells](./day1/07-Profiling_cells.md)
-* Part 8 : [Diffusion analysis](./day1/08-Intro_to_pseudotime_analysis.md)
 
 ### Day 2: analysis of scATAC-seq and integration
 
+* Part 1 : [Preprocessing and QC](./day2/09_single_cell_atac_seq_preprocessing.md)
+* Part 2 : [Integration scRNA/scATAC](./day2/10_integration_rna_atac_seq.md)
+* Part 2 : [Motif analysis](./day2/11_single_cell_atac_seq_footprinting.md)
 
