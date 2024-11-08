@@ -18,8 +18,8 @@ The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am 
 
 The course will take place at the [Institute for Pharmacy and Molecular Biotechnology (IPMB), Im Neuenheimer Feld 364, 69120 Heidelberg](https://maps.app.goo.gl/56pMBgnT7HnGQesT9). The computer room in in the 5th floor.
 
-Monday: 10h - 13h and 14h - 17h
-Tuesday: 9h - 13h and 14h - 16h
+* Monday: 10h - 13h and 14h - 17h
+* Tuesday: 9h - 13h and 14h - 16h
 
 
 ********
@@ -43,7 +43,7 @@ Please install RStudio Desktop prior to the start of the course:
 1. First install R for your operating system; you will find the correct version [on this website](https://cran.rstudio.com/) 
 2. Once R is installed, you can install the RStudio Desktop version, which you find [here](https://www.rstudio.com/products/rstudio/download/#download)
 3. You need to install a couple of R packages; you can download the 
-[following script](./install_packages.R). Load it into RStudio, and then hit the *Run* button at the top to execute it. It should run smoothly!
+[following script](./dependencies.R). Load it into RStudio, and then hit the *Run* button at the top to execute it. It should run smoothly!
 
 Please check that you can open RStudio without error message!
 

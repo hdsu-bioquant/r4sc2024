@@ -1,0 +1,25 @@
+install.packages('hdf5r')         ## More instructions about installing https://github.com/hhoeflin/hdf5r
+install.packages('ggplot2')
+install.packages('patchwork')
+install.packages('Seurat')
+install.packages('Signac')
+install.packages('RColorBrewer')
+install.packages("tidyverse")
+install.packages("pheatmap")
+install.packages("vioplot")
+install.packages('rmarkdown')
+install.packages('ggrepel')
+install.packages('gridExtra')
+
+
+if (!require("BiocManager"))
+  install.packages("BiocManager")
+
+BiocManager::install("GenomicRanges")
+BiocManager::install("AnnotationHub")
+BiocManager::install("motifmatchr")
+BiocManager::install("JASPAR2020")
+BiocManager::install("TFBSTools")
+BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+BiocManager::install("destiny")
+BiocManager::install("Biobase")
