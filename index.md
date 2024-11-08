@@ -76,7 +76,6 @@ These Markdown files contain some exercises in R
 * Part 4 : [Plotting](./day0/04_plotting.md)
 * Part 5 : [Hypothesis tests](./day0/05_test.md)
 
-* Day 1 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
 
 
 ## Practical parts
@@ -84,6 +83,13 @@ These Markdown files contain some exercises in R
 ### Day 1: a simple single-cell RNA-seq analysis workflow
 
 On the first day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
+
+Slides:
+
+* Day 1 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
+
+
+Tutorials:
 
 * Part 0 : [Initial steps](./day1/index.md)
 * Part 1 : [Introduction to Seurat](./day1/01-Seurat.md)
