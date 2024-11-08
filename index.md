@@ -12,6 +12,15 @@ The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am 
 * Carl Herrmann, [Bioinformatics group](https://www.hdsu.org/) IPMB and BioQuant, Heidelberg University (carl.herrmann@uni-heidelberg.de)
 * Carlos Ramirez, [Bioinformatics group](https://www.hdsu.org/) IPMB and BioQuant, Heidelberg University (carlos.ramirez@bioquant.uni-heidelberg.de)
 
+********
+
+## Schedule and practical infos
+
+The course will take place at the [Institute for Pharmacy and Molecular Biotechnology (IPMB), Im Neuenheimer Feld 364, 69120 Heidelberg](https://maps.app.goo.gl/56pMBgnT7HnGQesT9). The computer room in in the 5th floor.
+
+Monday: 10h - 13h and 14h - 17h
+Tuesday: 9h - 13h and 14h - 16h
+
 
 ********
 
