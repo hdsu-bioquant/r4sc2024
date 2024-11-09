@@ -5,7 +5,17 @@ output:
 ---
 
 
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+        warning = FALSE, 
+        message = FALSE,
+        cache = FALSE,
+        fig.align='center'
+)
 
+path2project <- "/home/carlos/Documents/r4sc2024/"
+source(paste0(path2project, '/day1/course_script.R'))
+```
 
 
 # Differential Expression Analysis
@@ -36,8 +46,7 @@ the `seurat_clusters` column) *vs* the rest of cells.
 First, we will set up the column used to define the clusters using the 
 function `Idents()`. 
 
-
-``` r
+```{r, setting_identities}
 Idents(pbmc.filtered) <- pbmc.filtered$seurat_clusters
 ```
 
@@ -51,8 +60,7 @@ parameters will increase the sensibility of the method at the expense of
 increasing computation time.
 
 
-
-``` r
+```{r, dea_calculation}
 pbmc.degs <- FindAllMarkers(pbmc.filtered, 
                             logfc.threshold = 1, 
                             min.pct = 0.05, 
@@ -66,27 +74,15 @@ p-vales, p-adjusted values and log fold change values for each gene as
 we can see next:
 
 
-
-``` r
+```{r, degs_display}
 head(pbmc.degs)
-```
-
-```
-##                 p_val avg_log2FC pct.1 pct.2    p_val_adj cluster     gene
-## HLA-DRA  1.355148e-67  -4.985225 0.300 0.968 1.717379e-63       0  HLA-DRA
-## HLA-DRB1 9.575850e-60  -4.153488 0.148 0.884 1.213547e-55       0 HLA-DRB1
-## CD74     3.415369e-51  -3.268991 0.781 0.974 4.328297e-47       0     CD74
-## HLA-DPB1 1.613117e-46  -3.767549 0.310 0.858 2.044303e-42       0 HLA-DPB1
-## IL32     9.357132e-44   4.489652 0.808 0.110 1.185829e-39       0     IL32
-## HLA-DRB5 2.825316e-43  -4.161331 0.084 0.684 3.580523e-39       0 HLA-DRB5
 ```
 
 
 
 We can make a vulcano plot using `ggplot`:
 
-
-``` r
+```{r, vulcano_plot}
 library(ggplot2)
 library(dplyr)         ## for handling data frames
 library(ggrepel)
@@ -102,8 +98,6 @@ pbmc.degs %>%
       geom_text_repel() +
       theme_bw()
 ```
-
-<img src="06-Differential_Expression_files/figure-html/vulcano_plot-1.png" style="display: block; margin: auto;" />
 
 
 
