@@ -33,14 +33,15 @@ library(AnnotationHub)
 
 ```{r, loading_data,  include=FALSE}
 #counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
-counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
+#counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
+counts <- Read10X_h5(filename = "/home/carlos/Documents/r4sc2024/day2/data/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
 #metadata <- read.csv(
 #  file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
 #  header = TRUE,
 #  row.names = 1
 #)
 metadata <- read.csv(
-  file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_singlecell.csv",
+  file = "/home/carlos/Documents/r4sc2024/day2/data/atac_pbmc_1k_nextgem_singlecell.csv",
   header = TRUE,
   row.names = 1
 )
@@ -56,7 +57,7 @@ metadata <- read.csv(
 chrom_assay <- CreateChromatinAssay(
   counts = counts,
   sep = c(":", "-"),
-  fragments = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_fragments.tsv.gz",
+  fragments = "/home/carlos/Documents/r4sc2024/day2/data/atac_pbmc_1k_nextgem_fragments.tsv.gz",
   min.cells = 10,
   min.features = 200
 )
@@ -67,6 +68,7 @@ pbmc <- CreateSeuratObject(
   meta.data = metadata
 )
 
+rm(counts, chrom_assay)
 
 peaks.keep <- seqnames(granges(pbmc)) %in% standardChromosomes(granges(pbmc))
 pbmc <- pbmc[as.vector(peaks.keep), ]
@@ -136,12 +138,15 @@ The following step performs a normalization of the calculated gene activities.
 ```{r,  include=TRUE}
 # add the gene activity matrix to the Seurat object as a new assay and normalize it
 pbmc[['RNA']] <- CreateAssayObject(counts = gene.activities)
+rm(gene.activities)
 pbmc <- NormalizeData(
   object = pbmc,
   assay = 'RNA',
   normalization.method = 'LogNormalize',
   scale.factor = median(pbmc$nCount_RNA)
 )
+
+
 ```
 
 Then, we can visualize specific gene activity in clusters by inspecting
@@ -175,12 +180,24 @@ annotate cell types in scATAC-seq data even in the absence of direct transcripti
 information, improving the interpretation of chromatin accessibility landscapes 
 and supporting integrative analyses across modalities.
 
-First, we load the reference scRNA-Seq dataset, that we previously worked with.
+First, we load the reference scRNA-Seq dataset, that you can download 
+[here](https://figshare.com/s/5e0afc577026e2e7413a).
+
+
+```{r,  subseting_reference, include=FALSE, eval=FALSE}
+# Load the pre-processed scRNA-seq data for PBMCs
+pbmc_rna <- readRDS("/home/carlos/Documents/r4sc2024/day2/data/pbmc_10k_v3.rds")
+pbmc_rna <- UpdateSeuratObject(pbmc_rna)
+pbmc_subset <- pbmc_rna[, sample(x = 1:ncol(pbmc_rna), 1000)]
+saveRDS(pbmc_subset, file = "/home/carlos/Documents/r4sc2024/day2/data/pbmc_1k_v3.rds", compress = TRUE)
+rm(pbmc_subset)
+```
+
 
 ```{r,  reading_reference, include=TRUE}
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("/Users/cbg-mbp-02/Documents/data/r2sc2024/pbmc_10k_v3.rds")
-pbmc_rna <- UpdateSeuratObject(pbmc_rna)
+pbmc_rna <- readRDS("/home/carlos/Documents/r4sc2024/day2/data/pbmc_1k_v3.rds")
+pbmc_rna
 ```
 
 Using the shared low-dimensional space, algorithms (such as those in Seurat) identify anchors by matching cells in the scRNA-seq dataset to similar cells in the scATAC-seq dataset. Anchors are defined based on the similarity of cell profiles and are typically selected using nearest-neighbor or mutual nearest neighbor (MNN) methods, ensuring each anchor reflects genuine similarity rather than noise.
@@ -370,7 +387,10 @@ chromosomic regions by extending bases up/downstream to the selected.
 da_peaks %>% dplyr::filter(p_val_adj<0.05) %>% dim
 ```
 
-**QUIZ 1**
+
+## Exercises 
+
+**Exercise 1**
 
 <br>
 
@@ -395,7 +415,7 @@ da_peaks %>% dplyr::filter(p_val_adj<0.05)
 <br>
 
 
-**QUIZ 2**
+**Exercise 2**
 
 <br>
 
@@ -420,6 +440,17 @@ plot as before for those cell types.
 
 </tt>
 <br>
+</details> 
+
+<br>
+
+**Exercise 3**
+
+<details>
+<summary> Use the code day 1 to create a vulcano plot of the
+differentially open peaks.
+</summary>
+
 </details> 
 
 <br>

@@ -39,6 +39,7 @@ The following step performs a normalization of the calculated gene activities.
 ``` r
 # add the gene activity matrix to the Seurat object as a new assay and normalize it
 pbmc[['RNA']] <- CreateAssayObject(counts = gene.activities)
+rm(gene.activities)
 pbmc <- NormalizeData(
   object = pbmc,
   assay = 'RNA',
@@ -81,13 +82,26 @@ annotate cell types in scATAC-seq data even in the absence of direct transcripti
 information, improving the interpretation of chromatin accessibility landscapes 
 and supporting integrative analyses across modalities.
 
-First, we load the reference scRNA-Seq dataset, that we previously worked with.
+First, we load the reference scRNA-Seq dataset, that you can download 
+[here](https://figshare.com/s/5e0afc577026e2e7413a).
+
+
+
+
 
 
 ``` r
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("/Users/cbg-mbp-02/Documents/data/r2sc2024/pbmc_10k_v3.rds")
-pbmc_rna <- UpdateSeuratObject(pbmc_rna)
+pbmc_rna <- readRDS("/home/carlos/Documents/r4sc2024/day2/data/pbmc_1k_v3.rds")
+pbmc_rna
+```
+
+```
+## An object of class Seurat 
+## 19089 features across 1000 samples within 1 assay 
+## Active assay: RNA (19089 features, 3000 variable features)
+##  3 layers present: counts, data, scale.data
+##  3 dimensional reductions calculated: pca, tsne, umap
 ```
 
 Using the shared low-dimensional space, algorithms (such as those in Seurat) identify anchors by matching cells in the scRNA-seq dataset to similar cells in the scATAC-seq dataset. Anchors are defined based on the similarity of cell profiles and are typically selected using nearest-neighbor or mutual nearest neighbor (MNN) methods, ensuring each anchor reflects genuine similarity rather than noise.
@@ -189,13 +203,13 @@ tail(da_peaks)
 ```
 
 ```
-##                           p_val avg_log2FC pct.1 pct.2 p_val_adj
-## chr1-208245107-208245847      1  0.2244174 0.114 0.118         1
-## chr10-101835715-101836606     1  0.1896736 0.114 0.118         1
-## chr12-132904475-132905376     1  0.1616110 0.114 0.118         1
-## chr19-46613876-46614775       1  0.1402740 0.114 0.118         1
-## chr8-94904992-94905967        1  0.1656689 0.114 0.118         1
-## chr19-14073184-14074084       1 -0.1317303 0.257 0.255         1
+##                          p_val avg_log2FC pct.1 pct.2 p_val_adj
+## chr8-133209008-133209914     1 -0.2021179 0.111  0.10         1
+## chr9-107340919-107341821     1 -0.3892266 0.111  0.10         1
+## chr9-131178035-131178937     1 -0.4869067 0.111  0.10         1
+## chr11-64449391-64450120      1 -0.1083792 0.167  0.16         1
+## chr3-13548722-13549622       1 -0.1467612 0.167  0.16         1
+## chr10-30455881-30456731      1 -0.1524558 0.139  0.14         1
 ```
 
 Now we can visualize cell type specific peaks as follows.
@@ -252,16 +266,16 @@ head(closest_genes_cell_type_1)
 ## ENSE00001239301 ENST00000576742     TRPV3 ENSG00000167723 protein_coding exon
 ## ENST00000524347 ENST00000524347      SGCD ENSG00000170624 protein_coding  gap
 ## ENST00000672146 ENST00000672146     OPRL1 ENSG00000125510 protein_coding  utr
+## ENST00000492665 ENST00000492665    ZBTB20 ENSG00000181722 protein_coding  gap
 ## ENST00000270162 ENST00000270162      SIK1 ENSG00000142178 protein_coding  utr
-## ENSE00000674098 ENST00000056233    NFE2L3 ENSG00000050344 protein_coding exon
-## ENSE00001811909 ENST00000391984    CAPN10 ENSG00000142330 protein_coding exon
+## ENST00000182527 ENST00000182527     TRAM2 ENSG00000065308 protein_coding  utr
 ##                           closest_region             query_region distance
 ## ENSE00001239301    chr17-3557676-3557995    chr17-3558417-3559246      421
 ## ENST00000524347 chr5-156393866-156508600 chr5-156402205-156403126        0
 ## ENST00000672146  chr20-64098887-64100633  chr20-64099915-64100843        0
+## ENST00000492665 chr3-114389106-114500351 chr3-114427942-114428782        0
 ## ENST00000270162  chr21-43414483-43416741  chr21-43352428-43353343    61139
-## ENSE00000674098   chr7-26152198-26153068   chr7-25968069-25968997   183200
-## ENSE00001811909 chr2-240586734-240587052 chr2-240584285-240585390     1343
+## ENST00000182527   chr6-52497408-52503196   chr6-52497518-52498336        0
 ```
 
 
@@ -274,18 +288,18 @@ head(closest_genes_cell_type_2)
 ```
 ##                           tx_id gene_name         gene_id   gene_biotype type
 ## ENST00000340722 ENST00000340722     TCL1B ENSG00000213231 protein_coding  utr
-## ENST00000652626 ENST00000652626   GUCY1B1 ENSG00000061918 protein_coding  cds
 ## ENSE00003713479 ENST00000517566      OXR1 ENSG00000164830 protein_coding exon
 ## ENST00000395153 ENST00000395153     DACT1 ENSG00000165617 protein_coding  cds
+## ENST00000652626 ENST00000652626   GUCY1B1 ENSG00000061918 protein_coding  cds
 ## ENSE00003630226 ENST00000603223     GFOD1 ENSG00000145990 protein_coding exon
-## ENST00000358024 ENST00000358024     TMCC2 ENSG00000133069 protein_coding  utr
+## ENST00000498049 ENST00000498049   C2orf76 ENSG00000186132 protein_coding  gap
 ##                           closest_region             query_region distance
 ## ENST00000340722  chr14-95691931-95692628  chr14-95695641-95696543     3012
-## ENST00000652626 chr4-155759141-155759143 chr4-155758521-155759415        0
 ## ENSE00003713479 chr8-106359476-106359636 chr8-106269756-106270665    88810
 ## ENST00000395153  chr14-58638203-58638547  chr14-58637398-58638262        0
+## ENST00000652626 chr4-155759141-155759143 chr4-155758521-155759415        0
 ## ENSE00003630226   chr6-13486638-13487662   chr6-13526432-13527329    38769
-## ENST00000358024 chr1-205227946-205228564 chr1-205227422-205228317        0
+## ENST00000498049 chr2-119339972-119366789 chr2-119355536-119356453        0
 ```
 
 
@@ -335,7 +349,10 @@ chromosomic regions by extending bases up/downstream to the selected.
 
 
 
-**QUIZ 1**
+
+## Exercises 
+
+**Exercise 1**
 
 <br>
 
@@ -360,7 +377,7 @@ da_peaks %>% dplyr::filter(p_val_adj<0.05)
 <br>
 
 
-**QUIZ 2**
+**Exercise 2**
 
 <br>
 
@@ -389,6 +406,17 @@ plot as before for those cell types.
 
 <br>
 
+**Exercise 3**
+
+<details>
+<summary> Use the code day 2 to create a vulcano plot of the
+differentially open peaks.
+</summary>
+
+</details> 
+
+<br>
+
 
 
 ``` r
@@ -396,19 +424,24 @@ sessionInfo()
 ```
 
 ```
-## R version 4.4.0 (2024-04-24)
-## Platform: aarch64-apple-darwin20
-## Running under: macOS Sonoma 14.4.1
+## R version 4.4.1 (2024-06-14)
+## Platform: x86_64-pc-linux-gnu
+## Running under: Ubuntu 22.04.4 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
 ## 
 ## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=de_DE.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## time zone: Europe/Berlin
-## tzcode source: internal
+## tzcode source: system (glibc)
 ## 
 ## attached base packages:
 ## [1] stats4    stats     graphics  grDevices utils     datasets  methods  
@@ -419,92 +452,92 @@ sessionInfo()
 ##  [4] AnnotationDbi_1.66.0    Biobase_2.64.0          AnnotationHub_3.12.0   
 ##  [7] BiocFileCache_2.12.0    dbplyr_2.5.0            hdf5r_1.3.11           
 ## [10] patchwork_1.3.0         ggplot2_3.5.1           GenomicRanges_1.56.2   
-## [13] GenomeInfoDb_1.40.1     IRanges_2.38.1          S4Vectors_0.42.1       
+## [13] GenomeInfoDb_1.40.1     IRanges_2.38.0          S4Vectors_0.42.0       
 ## [16] BiocGenerics_0.50.0     Seurat_5.1.0            SeuratObject_5.0.2     
 ## [19] sp_2.1-4                Signac_1.14.0          
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] RcppAnnoy_0.0.22            splines_4.4.0              
+##   [1] RcppAnnoy_0.0.22            splines_4.4.1              
 ##   [3] later_1.3.2                 BiocIO_1.14.0              
-##   [5] bitops_1.0-8                filelock_1.0.3             
+##   [5] bitops_1.0-9                filelock_1.0.3             
 ##   [7] tibble_3.2.1                polyclip_1.10-7            
-##   [9] rpart_4.1.23                XML_3.99-0.17              
-##  [11] fastDummies_1.7.3           lifecycle_1.0.4            
-##  [13] globals_0.16.3              lattice_0.22-6             
-##  [15] MASS_7.3-61                 backports_1.5.0            
+##   [9] rpart_4.1.19                XML_3.99-0.17              
+##  [11] fastDummies_1.7.4           lifecycle_1.0.4            
+##  [13] globals_0.16.3              lattice_0.21-8             
+##  [15] MASS_7.3-60                 backports_1.5.0            
 ##  [17] magrittr_2.0.3              Hmisc_5.2-0                
 ##  [19] plotly_4.10.4               sass_0.4.9                 
-##  [21] rmarkdown_2.27              jquerylib_0.1.4            
-##  [23] yaml_2.3.10                 httpuv_1.6.15              
-##  [25] sctransform_0.4.1           spam_2.10-0                
-##  [27] spatstat.sparse_3.1-0       reticulate_1.38.0          
+##  [21] rmarkdown_2.29              jquerylib_0.1.4            
+##  [23] yaml_2.3.8                  httpuv_1.6.15              
+##  [25] sctransform_0.4.1           spam_2.11-0                
+##  [27] spatstat.sparse_3.1-0       reticulate_1.39.0          
 ##  [29] cowplot_1.1.3               pbapply_1.7-2              
 ##  [31] DBI_1.2.3                   RColorBrewer_1.1-3         
 ##  [33] abind_1.4-5                 zlibbioc_1.50.0            
-##  [35] Rtsne_0.17                  presto_1.0.0               
-##  [37] purrr_1.0.2                 biovizBase_1.52.0          
-##  [39] RCurl_1.98-1.16             nnet_7.3-19                
-##  [41] VariantAnnotation_1.50.0    rappdirs_0.3.3             
-##  [43] GenomeInfoDbData_1.2.12     ggrepel_0.9.5              
-##  [45] irlba_2.3.5.1               listenv_0.9.1              
-##  [47] spatstat.utils_3.0-5        goftest_1.2-3              
-##  [49] RSpectra_0.16-2             spatstat.random_3.3-1      
-##  [51] fitdistrplus_1.2-1          parallelly_1.38.0          
-##  [53] DelayedArray_0.30.1         leiden_0.4.3.1             
-##  [55] codetools_0.2-20            RcppRoll_0.3.1             
-##  [57] tidyselect_1.2.1            UCSC.utils_1.0.0           
-##  [59] farver_2.1.2                base64enc_0.1-3            
-##  [61] matrixStats_1.3.0           spatstat.explore_3.3-1     
-##  [63] GenomicAlignments_1.40.0    jsonlite_1.8.8             
-##  [65] Formula_1.2-5               progressr_0.14.0           
-##  [67] ggridges_0.5.6              survival_3.7-0             
-##  [69] tools_4.4.0                 ica_1.0-3                  
-##  [71] Rcpp_1.0.13                 glue_1.7.0                 
-##  [73] SparseArray_1.4.8           gridExtra_2.3              
-##  [75] xfun_0.46                   MatrixGenerics_1.16.0      
-##  [77] dplyr_1.1.4                 withr_3.0.1                
-##  [79] BiocManager_1.30.23         fastmap_1.2.0              
-##  [81] fansi_1.0.6                 digest_0.6.36              
-##  [83] R6_2.5.1                    mime_0.12                  
-##  [85] colorspace_2.1-1            scattermore_1.2            
-##  [87] tensor_1.5                  dichromat_2.0-0.1          
-##  [89] spatstat.data_3.1-2         RSQLite_2.3.7              
-##  [91] utf8_1.2.4                  tidyr_1.3.1                
-##  [93] generics_0.1.3              data.table_1.15.4          
-##  [95] rtracklayer_1.64.0          S4Arrays_1.4.1             
-##  [97] httr_1.4.7                  htmlwidgets_1.6.4          
-##  [99] uwot_0.2.2                  pkgconfig_2.0.3            
-## [101] gtable_0.3.5                blob_1.2.4                 
-## [103] lmtest_0.9-40               XVector_0.44.0             
-## [105] htmltools_0.5.8.1           dotCall64_1.1-1            
-## [107] ProtGenerics_1.36.0         scales_1.3.0               
-## [109] png_0.1-8                   spatstat.univar_3.0-0      
-## [111] knitr_1.48                  rstudioapi_0.16.0          
-## [113] rjson_0.2.21                reshape2_1.4.4             
-## [115] checkmate_2.3.2             nlme_3.1-165               
-## [117] curl_5.2.1                  cachem_1.1.0               
-## [119] zoo_1.8-12                  stringr_1.5.1              
-## [121] BiocVersion_3.19.1          KernSmooth_2.23-24         
-## [123] parallel_4.4.0              miniUI_0.1.1.1             
-## [125] foreign_0.8-87              restfulr_0.0.15            
-## [127] pillar_1.9.0                grid_4.4.0                 
-## [129] vctrs_0.6.5                 RANN_2.6.1                 
-## [131] promises_1.3.0              xtable_1.8-4               
-## [133] cluster_2.1.6               htmlTable_2.4.3            
-## [135] evaluate_0.24.0             cli_3.6.3                  
-## [137] compiler_4.4.0              Rsamtools_2.20.0           
-## [139] rlang_1.1.4                 crayon_1.5.3               
-## [141] future.apply_1.11.2         labeling_0.4.3             
-## [143] plyr_1.8.9                  stringi_1.8.4              
-## [145] viridisLite_0.4.2           deldir_2.0-4               
-## [147] BiocParallel_1.38.0         munsell_0.5.1              
-## [149] Biostrings_2.72.1           lazyeval_0.2.2             
-## [151] spatstat.geom_3.3-2         Matrix_1.7-0               
-## [153] BSgenome_1.72.0             RcppHNSW_0.6.0             
-## [155] bit64_4.0.5                 future_1.34.0              
-## [157] KEGGREST_1.44.1             shiny_1.9.1                
-## [159] highr_0.11                  SummarizedExperiment_1.34.0
-## [161] ROCR_1.0-11                 igraph_2.0.3               
-## [163] memoise_2.0.1               bslib_0.8.0                
-## [165] fastmatch_1.1-4             bit_4.0.5
+##  [35] Rtsne_0.17                  purrr_1.0.2                
+##  [37] biovizBase_1.52.0           RCurl_1.98-1.16            
+##  [39] nnet_7.3-19                 VariantAnnotation_1.50.0   
+##  [41] rappdirs_0.3.3              GenomeInfoDbData_1.2.12    
+##  [43] ggrepel_0.9.6               irlba_2.3.5.1              
+##  [45] listenv_0.9.1               spatstat.utils_3.1-1       
+##  [47] goftest_1.2-3               RSpectra_0.16-1            
+##  [49] spatstat.random_3.3-2       fitdistrplus_1.2-1         
+##  [51] parallelly_1.39.0           DelayedArray_0.30.1        
+##  [53] leiden_0.4.3.1              codetools_0.2-19           
+##  [55] RcppRoll_0.3.1              tidyselect_1.2.1           
+##  [57] UCSC.utils_1.0.0            farver_2.1.2               
+##  [59] base64enc_0.1-3             matrixStats_1.3.0          
+##  [61] spatstat.explore_3.3-3      GenomicAlignments_1.40.0   
+##  [63] jsonlite_1.8.8              Formula_1.2-5              
+##  [65] progressr_0.15.0            ggridges_0.5.6             
+##  [67] survival_3.5-5              tools_4.4.1                
+##  [69] ica_1.0-3                   Rcpp_1.0.12                
+##  [71] glue_1.7.0                  SparseArray_1.4.8          
+##  [73] gridExtra_2.3               xfun_0.45                  
+##  [75] MatrixGenerics_1.16.0       dplyr_1.1.4                
+##  [77] withr_3.0.0                 BiocManager_1.30.23        
+##  [79] fastmap_1.2.0               fansi_1.0.6                
+##  [81] digest_0.6.34               R6_2.5.1                   
+##  [83] mime_0.12                   colorspace_2.1-0           
+##  [85] scattermore_1.2             tensor_1.5                 
+##  [87] dichromat_2.0-0.1           spatstat.data_3.1-2        
+##  [89] RSQLite_2.3.7               utf8_1.2.4                 
+##  [91] tidyr_1.3.1                 generics_0.1.3             
+##  [93] data.table_1.15.4           rtracklayer_1.64.0         
+##  [95] S4Arrays_1.4.1              httr_1.4.7                 
+##  [97] htmlwidgets_1.6.4           uwot_0.2.2                 
+##  [99] pkgconfig_2.0.3             gtable_0.3.5               
+## [101] blob_1.2.4                  lmtest_0.9-40              
+## [103] XVector_0.44.0              htmltools_0.5.8.1          
+## [105] dotCall64_1.2               ProtGenerics_1.36.0        
+## [107] scales_1.3.0                png_0.1-8                  
+## [109] spatstat.univar_3.1-1       knitr_1.47                 
+## [111] rstudioapi_0.17.1           rjson_0.2.23               
+## [113] reshape2_1.4.4              checkmate_2.3.2            
+## [115] nlme_3.1-162                curl_5.2.1                 
+## [117] cachem_1.1.0                zoo_1.8-12                 
+## [119] stringr_1.5.1               BiocVersion_3.19.1         
+## [121] KernSmooth_2.23-22          parallel_4.4.1             
+## [123] miniUI_0.1.1.1              foreign_0.8-82             
+## [125] restfulr_0.0.15             pillar_1.9.0               
+## [127] grid_4.4.1                  vctrs_0.6.5                
+## [129] RANN_2.6.2                  promises_1.3.0             
+## [131] xtable_1.8-4                cluster_2.1.4              
+## [133] htmlTable_2.4.3             evaluate_0.23              
+## [135] cli_3.6.3                   compiler_4.4.1             
+## [137] Rsamtools_2.20.0            rlang_1.1.4                
+## [139] crayon_1.5.3                future.apply_1.11.3        
+## [141] labeling_0.4.3              plyr_1.8.9                 
+## [143] stringi_1.8.4               viridisLite_0.4.2          
+## [145] deldir_2.0-4                BiocParallel_1.38.0        
+## [147] munsell_0.5.1               Biostrings_2.72.1          
+## [149] lazyeval_0.2.2              spatstat.geom_3.3-3        
+## [151] Matrix_1.7-1                BSgenome_1.72.0            
+## [153] RcppHNSW_0.6.0              bit64_4.5.2                
+## [155] future_1.34.0               KEGGREST_1.44.1            
+## [157] shiny_1.9.1                 highr_0.11                 
+## [159] SummarizedExperiment_1.34.0 ROCR_1.0-11                
+## [161] igraph_2.1.1                memoise_2.0.1              
+## [163] bslib_0.7.0                 fastmatch_1.1-4            
+## [165] bit_4.5.0
 ```
