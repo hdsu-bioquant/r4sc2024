@@ -86,7 +86,7 @@ On the first day, we will go through a step by step simple analysis of a small s
 
 Slides:
 
-* Day 1 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/15N_4US7Z-1RgQmsHEXHQkbQerku00HFuafntAicYLfY/edit?usp=sharing)
+* Day 1 : [Introduction to single-cell analysis](https://docs.google.com/presentation/d/1NI2XDHyUHCa7SV7ktgpwW41V9INUWEr3gBfsIQIaKI4/edit?usp=sharing)
 
 
 Tutorials:
