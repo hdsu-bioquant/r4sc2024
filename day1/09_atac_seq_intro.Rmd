@@ -221,8 +221,7 @@ The red lines represent 5, 10, 90 and 95 percentiles. So, for example most of th
 are in a range of ~ 15k and 45k total reads in peaks (nCount_peaks).
 
 
-Now, we show a nucleosome bad patterning. A healthy good quality ATAC-Seq pattern 
-should show a periodicity like the following one.
+Now, we show a nucleosome band patterning. A healthy good quality ATAC-Seq pattern should show a periodicity like the following one.
 
 
 ```{r,  nucleosome_pattern, include=TRUE}
