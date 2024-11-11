@@ -71,7 +71,6 @@ as follows.
 
 
 ```r
-library(tidyverse)
 pbmc.seurat$nCount_RNA %>% head
 ```
 

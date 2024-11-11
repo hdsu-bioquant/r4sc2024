@@ -93,31 +93,18 @@ object to store the data.
 
 
 ```{r, loading_data,  include=TRUE}
-#counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
-counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
-#metadata <- read.csv(
-#  file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
-#  header = TRUE,
-#  row.names = 1
-#)
+path='/Users/carlherrmann/Dropbox/00_MBP_Carl/Teaching/OtherCourses/oct2024/data/'
+counts <- Read10X_h5(file.path(path,'atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5'))
 metadata <- read.csv(
-  file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_singlecell.csv",
+  file = file.path(path,'atac_pbmc_1k_nextgem_singlecell.csv'),
   header = TRUE,
   row.names = 1
 )
 
-#chrom_assay <- CreateChromatinAssay(
-#  counts = counts,
-#  sep = c(":", "-"),
-#  fragments = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz",
-#  min.cells = 10,
-#  min.features = 200
-#)
-
 chrom_assay <- CreateChromatinAssay(
   counts = counts,
   sep = c(":", "-"),
-  fragments = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_fragments.tsv.gz",
+  fragments = file.path(path,'atac_pbmc_1k_nextgem_fragments.tsv.gz'),
   min.cells = 10,
   min.features = 200
 )
@@ -170,6 +157,23 @@ genome(annotations) <- "hg38"
 # add the gene information to the object
 Annotation(pbmc) <- annotations
 ```
+
+## Annotating peaks to genomic regions
+
+```{r}
+library(ChIPseeker)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+peakAnno <- annotatePeak(pbmc@assays$peaks@ranges, 
+                         tssRegion=c(-3000, 3000),
+                         TxDb=txdb, annoDb="org.Hs.eg.db")
+```
+```{r}
+plotAnnoPie(peakAnno)
+```
+
+Most peaks are in the promoter region of genes, then in intronic regions and in intergenic regions!
 
 
 ## Quality control
