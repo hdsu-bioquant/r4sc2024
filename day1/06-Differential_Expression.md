@@ -91,7 +91,10 @@ library(ggplot2)
 library(dplyr)         ## for handling data frames
 library(ggrepel)
 
-pbmc.degs %>%
+pbmc.degs.cluster <- pbmc.degs %>% filter(cluster=="3")
+
+
+pbmc.degs.cluster %>%
   arrange(desc(abs(avg_log2FC))) %>%       ## Arranging genes by FC
   mutate(highlight=ifelse(-log10(p_val_adj)>40, TRUE, FALSE)) %>% ## highlighting top FC markers
   mutate(gene_label=ifelse(highlight==TRUE, gene, '')) %>% ## Adding labels for top markers
