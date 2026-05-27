@@ -1,10 +1,12 @@
-# Course R for single-cell analysis (R4SC 2024)
+# Course R for single-cell analysis (R4SC 2026)
 
+Freiburg, MOTI-VATE, June 2026
 
 Welcome to the **R for single-cell analysis** This workshop is meant for individuals with little previous knowledge R. 
 
-The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am - 12am and 2pm - 5pm.
+The course will run over 2 days **(Thursday, 11.06.2026 and Friday, 12.06.2026)** 
 
+We will cover scRNA-seq and scATAC-seq data analysis in R, covering QC, pre-processing, differential gene expression, cell type annotation, pseudotime and regulatory motif finding for scATAC-seq.
 
 ******
 ## Tutors
@@ -16,10 +18,10 @@ The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am 
 
 ## Schedule and practical infos
 
-The course will take place at the [Institute for Pharmacy and Molecular Biotechnology (IPMB), Im Neuenheimer Feld 364, 69120 Heidelberg](https://maps.app.goo.gl/56pMBgnT7HnGQesT9). The computer room in in the 5th floor.
+The course will take place at the [Medizinischen Lehrgebäude, Elsässer Str. 4e, 79110 Freiburg](https://maps.app.goo.gl/ufFrxMPdre218n7y8). 
 
-* Monday: 10h - 13h and 14h - 17h
-* Tuesday: 9h - 13h and 14h - 16h
+* Thursday 11.06: 10am - 1pm and 2pm - 5pm
+* Friday 12.06 : 9am - 12am and 1pm - 4pm.
 
 
 ********
