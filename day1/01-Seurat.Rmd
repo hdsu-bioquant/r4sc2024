@@ -193,7 +193,7 @@ the `subset` function. In the following code we select cells having nFeatures < 
 nCount < 4000 and percentage of reads mapped to mitochondrial genes < 5 percent.
 
 
-```r
+```{r}
 pbmc.filtered <- subset(pbmc.seurat, 
                            nFeature_RNA < 1250 &
                                 nCount_RNA < 4000 & 
@@ -203,7 +203,7 @@ pbmc.filtered <- subset(pbmc.seurat,
 We can check the number of cell that passed the QC.
 
 
-```r
+```{r}
 ncol(pbmc.filtered)
 ```
 
@@ -228,7 +228,7 @@ values are log transformed.
 Log normalization can be implemented by using the `NormalizeData()` function.
 
 
-```r
+```{r}
 pbmc.filtered <- NormalizeData(pbmc.filtered)
 ```
 
@@ -237,7 +237,7 @@ values are scaled in a way that the media is equal to zero and the variance
 is equal to 1 as follows:
 
 
-```r
+```{r}
 pbmc.filtered <- ScaleData(pbmc.filtered)
 ```
 
