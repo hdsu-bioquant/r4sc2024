@@ -1,0 +1,274 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
+
+
+```{r, done_in_previous_section, include=FALSE}
+library(Seurat)
+library(tidyverse)
+library(Matrix)
+
+ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
+# Read matrix
+counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
+counts <- as.matrix(counts)
+#counts <- t(counts)
+
+# Read cell and gene names
+cells <- read.delim(
+  file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+#head(cells)
+
+genes <- read.delim(
+  file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
+  header = FALSE,
+  stringsAsFactors = FALSE
+)
+#head(genes)
+
+# Assign row and column names
+rownames(counts) <- genes$V1
+colnames(counts) <- cells$cell_id
+
+
+ad_medula_seurat <- CreateSeuratObject(
+  counts = counts, 
+  project = 'human_ad_medulla', 
+  assay = 'RNA', 
+  min.cells = 1, 
+  min.features = 1
+)
+Idents(ad_medula_seurat) <- 'human_ad_medulla'
+
+ad_medula_seurat[["percent.mt"]] <- PercentageFeatureSet(ad_medula_seurat, pattern = '^MT-')
+
+ad_medula_filtered <- subset(ad_medula_seurat, 
+                           nFeature_RNA < 4000 &
+                                nCount_RNA < 4000 & 
+                                    percent.mt < 5)
+
+ad_medula_filtered <- NormalizeData(ad_medula_filtered)
+
+ad_medula_filtered <- ScaleData(ad_medula_filtered)
+
+ad_medula_filtered <- FindVariableFeatures(ad_medula_filtered, nfeatures = 1000)
+
+ad_medula_filtered <- RunPCA(ad_medula_filtered, 
+                        features = VariableFeatures(ad_medula_filtered))
+
+
+ad_medula_filtered <- FindNeighbors(ad_medula_filtered)
+ad_medula_filtered <- FindClusters(ad_medula_filtered, 
+                            resolution = 0.1, 
+                            verbose = FALSE)
+
+ad_medula_filtered <- RunUMAP(ad_medula_filtered, 
+                       dims = 1:7, 
+                       verbose = FALSE)
+
+ad_medula.degs <- FindAllMarkers(ad_medula_filtered, 
+                            logfc.threshold = 1, 
+                            min.pct = 0.05, 
+                            min.cells.feature = 10, 
+                            verbose = FALSE)
+```
+
+
+# Profiling cells
+
+
+First, we will take top 10 ranked genes based in Log FC and visualize their
+expression in clusters using a heatmap representation.
+
+
+
+```{r, message=FALSE, warning=FALSE, fig.height=9, fig.width=6}
+top10 <- ad_medula.degs %>% 
+             group_by(cluster) %>% 
+             top_n(n = 10, wt = avg_log2FC)
+DoHeatmap(ad_medula_filtered, 
+          features = top10$gene) + NoLegend()
+```
+
+
+We can visualize additional known canonical markers as used in Janski S et al, 2021 
+in order to assign cell categories. 
+
+
+```{r, message=FALSE, warning=FALSE}
+canonical_markers <- c(
+  "PLP1",
+  "MPZ",
+  "SOX10",
+  "CDX19",
+  "ERBB3",
+  "ERBB4",
+  "CDH9",
+  "CTTNBP2",
+  "ASCL1",
+  "DBH",
+  "TH",
+  "CHGA",
+  "DDC",
+  "PNMT",
+  "TOP2A",
+  "NEFM",
+  "GAP43",
+  "SMTN2",
+  "ISL1",
+  "ALK",
+  "SYN3",
+  "IL7"
+)
+```
+
+
+## Visualization of gene expression levels of markers in clusters
+
+We can visualize the expression of the different markers in clusters
+using violin plots using the `VlnPlot()` function as follows:
+
+
+
+```{r, message=TRUE, warning=TRUE, fig.width=6, fig.height=4}
+DotPlot(ad_medula_filtered, 
+            features = canonical_markers) +
+      coord_flip()
+```
+
+Because of the signal dropout it's hard to say what is the proportion of cells that are actually
+expressing a marker. Dotplots are commonly used to visualize both gene expression levels alongside 
+with the frequency of cells expressing the marker. The `DotPlot()` function comes at handy.
+
+
+## Cell type labelling
+
+
+The genes CHGA, DBH and TH are markers of Chromaffin cells while IL7 and
+SYN3 are expressed in Late Neuroblasts. CDH9 and CTTNBP2 are mostly 
+expressed in Bridge cells and ERBBP3 and ERBBP4 are present in SCPs cells.
+
+Now, we will annotate the cells with their identified identities in the seurat 
+object. We will map the cluster names as follows:
+
+**Beware: your UMAP might look slightly different! So please adapt the cluster<>cell type mapping according to your results! For example, you might have more/less clusters!**
+
+```{r, message=FALSE, warning=FALSE}
+mapping <- data.frame(seurat_cluster=c('0', 
+                                       '1', 
+                                       '2',
+                                       '3'),
+                      cell_type=c('Chromaffin cells', 
+                                  'Late neuroblasts', 
+                                  'Bridge',
+                                  'SCP'))
+mapping
+```
+
+To assign the new labels we can use the map function from the plyr R package
+as follows:
+
+
+
+```{r, message=FALSE, warning=FALSE}
+ad_medula_filtered$'cell_type' <- plyr::mapvalues(
+  x = ad_medula_filtered$seurat_clusters,
+  from = mapping$seurat_cluster,
+  to = mapping$cell_type
+)
+```
+
+
+Now, we can plot the clusters with the assigned cell types.
+
+
+
+```{r, message=FALSE, warning=FALSE}
+DimPlot(ad_medula_filtered, 
+        group.by = 'cell_type',   ## set the column to use as category
+        label = TRUE, reduction = 'umap')  +          ## label clusters
+        NoLegend()                ## remove legends
+```
+
+
+
+## Cell profiling automation
+
+There are several tools for the automation of cell type identification, for example,
+sctype, singleR, CellAssign, etc. In general, they use a reference in the form of a previously 
+curated dataset and transfer information to a query dataset. Here, we will quickly
+exemplified the sctype R library. 
+
+
+
+```{r, message=TRUE, warning=TRUE}
+invisible({
+  library(openxlsx)
+  library(HGNChelper)
+})
+
+source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_wrapper.R") 
+
+ad_medula_filtered <- FindClusters(ad_medula_filtered, 
+                            resolution = 1, 
+                            verbose = FALSE)
+
+sample <- run_sctype(ad_medula_filtered, 
+                     assay = "RNA", 
+                     scaled = TRUE, 
+                     known_tissue_type="Brain",
+                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx", 
+                     name="sctype_classification")
+```
+
+
+
+Let's inspect again the metadata.
+
+
+```{r, message=TRUE, warning=TRUE}
+head(sample@meta.data)
+```
+
+
+Now we see a new column called `sctype_classification` which contains the labels 
+annotated to each cell type. Let's plot now this annotations in a UMAP.
+
+
+```{r, message=TRUE, warning=TRUE}
+DimPlot(sample, 
+        group.by = 'sctype_classification', 
+        label = TRUE) + NoLegend()
+```
+
+
+
+
+Does it look similar to our previous conclusions?
+
+
+## Final Report
+
+## Exercise 
+
+
+> Using the scRNA-Seq workflow in this pipeline, process a data regarding PBMC cells 
+stimulated with IFN beta
+> Load the seurat object containing the data to a variable named `ifnb` using the following commands:
+
+```
+url_ifn <- 'https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true'
+ifnb <- readRDS(url(url_ifn))
+```
+
+> This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042). Provide a report in a Rmd file.   
+
+
+[Previous Chapter (Differential expression)](./06-Differential_Expression.md)|
+[Next Chapter (Pseudotime analysis)](./08-Intro_to_pseudotime_analysis.md)
+

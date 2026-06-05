@@ -1,0 +1,162 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
+
+
+
+```{r, done_in_previous_section, include=FALSE}
+library(Seurat)
+library(tidyverse)
+library(Matrix)
+
+ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
+# Read matrix
+counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
+counts <- as.matrix(counts)
+#counts <- t(counts)
+
+# Read cell and gene names
+cells <- read.delim(
+  file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+#head(cells)
+
+genes <- read.delim(
+  file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
+  header = FALSE,
+  stringsAsFactors = FALSE
+)
+#head(genes)
+
+# Assign row and column names
+rownames(counts) <- genes$V1
+colnames(counts) <- cells$cell_id
+
+
+ad_medula_seurat <- CreateSeuratObject(
+  counts = counts, 
+  project = 'human_ad_medulla', 
+  assay = 'RNA', 
+  min.cells = 1, 
+  min.features = 1
+)
+Idents(ad_medula_seurat) <- 'human_ad_medulla'
+
+ad_medula_seurat[["percent.mt"]] <- PercentageFeatureSet(ad_medula_seurat, pattern = '^MT-')
+
+ad_medula_filtered <- subset(ad_medula_seurat, 
+                           nFeature_RNA < 4000 &
+                                nCount_RNA < 4000 & 
+                                    percent.mt < 5)
+
+ad_medula_filtered <- NormalizeData(ad_medula_filtered)
+
+ad_medula_filtered <- ScaleData(ad_medula_filtered)
+
+ad_medula_filtered <- FindVariableFeatures(ad_medula_filtered, nfeatures = 1000)
+
+ad_medula_filtered <- RunPCA(ad_medula_filtered, 
+                        features = VariableFeatures(ad_medula_filtered))
+
+ad_medula_filtered <- FindNeighbors(ad_medula_filtered)
+ad_medula_filtered <- FindClusters(ad_medula_filtered, 
+                            resolution = 0.1, 
+                            verbose = FALSE)
+```
+
+
+# Differential Expression Analysis
+
+The main advantage of using scRNA-Seq technologies is the possibility of 
+assessing cell type specificity and heterogeneity, which is not possible while
+using bulk assays. 
+
+We should expect that some of the identified clusters in the UMAP might correspond
+to distinct cell types. The assignation of cell types identities is not always
+straightforward, some clusters might still contain some variability, and 
+additionally, different clusters might correspond to the same cell type at a
+different functional, metabolic or cycling point. 
+
+Cell type profiling is generally done by assessing the expression of markers. 
+This task can be done manually by inspecting markers in dimensional reduced data
+projected in UMAP or tSNE. It can also be done in a automatic manner scoring 
+cells using gene signatures, which are lists of marker genes. Scores are generally
+based in the median expression of all the markers. Using scores has the advantage
+or reducing bias due to the arbitrary selection of markers.
+
+Finding differential expressed markers is important for cluster profiling and
+identification. We will use the `FindAllMarkers()` function, which performs
+a statistical test comparing the distribution of gene expression values for 
+each gene separately comparing one assigned cell type cluster (in this case 
+the `seurat_clusters` column) *vs* the rest of cells. 
+
+First, we will set up the column used to define the clusters using the 
+function `Idents()`. 
+
+```{r, setting_identities}
+Idents(ad_medula_filtered) <- ad_medula_filtered$seurat_clusters
+```
+
+Now we can calculate the DEGs. 
+There are several parameters for `FindAllMarkers()`, we will discuss
+`logfc.threshold`, `min.pct` and `min.cells.feature` that corresponds to the threshold of gene
+expression fold change, the minimum percentage of cells expressing the marker 
+and the minimum of cells expressing (counts > 0) the feature. These parameters 
+are used to filter out genes prior calculating DEGs. Lowering the values of these
+parameters will increase the sensibility of the method at the expense of 
+increasing computation time.
+
+
+```{r, dea_calculation}
+ad_medula.degs <- FindAllMarkers(ad_medula_filtered, 
+                            logfc.threshold = 1, 
+                            min.pct = 0.05, 
+                            min.cells.feature = 10, 
+                            verbose = FALSE)
+```
+
+
+The output `pbmc.degs` consist of a data frame contanning the DEGs with
+p-vales, p-adjusted values and log fold change values for each gene as 
+we can see next:
+
+
+```{r, degs_display}
+head(ad_medula.degs)
+```
+
+
+
+We can make a vulcano plot using `ggplot`:
+
+```{r, vulcano_plot}
+library(ggplot2)
+library(dplyr)         ## for handling data frames
+library(ggrepel)
+
+ad_medula.degs %>%
+  filter(cluster=='0') %>%
+  filter(p_val_adj > 0) %>%
+  arrange(desc(abs(avg_log2FC))) %>%       ## Arranging genes by FC
+  mutate(highlight=ifelse(-log10(p_val_adj)>280, TRUE, FALSE)) %>% ## highlighting top FC markers
+  mutate(gene_label=ifelse(highlight==TRUE, gene, '')) %>% ## Adding labels for top markers
+  ggplot(aes(x=avg_log2FC, y=-log10(p_val_adj),
+             colour=highlight,
+             label=gene_label)) +         ## adding labels for top markers
+      geom_point() +
+      geom_text_repel() +
+      theme_bw()
+```
+
+
+## Exercises
+
+> What does this plot represent? Can you make the equivalent volcano plot for the other clusters?
+
+
+[Previous Chapter (Cluster Visualization)](./05-Cluster_visualization.md)|
+[Next Chapter (Profiling cells)](./06-Profiling_cells.md)

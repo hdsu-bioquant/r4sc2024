@@ -1,0 +1,235 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
+
+
+# Introduction
+
+This analysis reconstructs developmental trajectories in the adrenal medulla
+using the Jansky et al. (2021) single-cell RNA-seq dataset.
+
+Trajectory inference is performed using Slingshot. Existing UMAP coordinates
+provided by the original study are used directly. No cell filtering or
+subsetting is performed.
+
+Slingshot is a trajectory inference method that reconstructs developmental paths from single-cell RNA sequencing data. It starts by representing cells in a low-dimensional space, such as UMAP or PCA, where cells with similar gene expression profiles are located close together. Slingshot then connects groups of cells (clusters or annotated cell types) using a minimum spanning tree, which provides a framework for identifying possible developmental relationships. Next, it fits smooth curves through the cells to represent one or more biological trajectories. Finally, each cell is assigned a pseudotime value, which reflects its relative position along a trajectory. Pseudotime does not correspond to real chronological time, but rather to a cell's progression through a biological process such as differentiation, allowing researchers to study how gene expression changes as cells transition between states.
+
+The starting population is defined as Schwann Cell Precursors (SCPs).
+
+# Load libraries
+
+```{r setup, message=FALSE, warning=FALSE}
+library(Seurat)
+library(SingleCellExperiment)
+library(slingshot)
+library(Matrix)
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+library(patchwork)
+
+set.seed(1234)
+```
+
+# Load data
+
+First, we load the already pre-processed data from Jansky et al 2021.
+
+
+```{r}
+seurat_obj <- readRDS("/Users/cbg-mbp-02/Documents/data/janski_2021/janski_2021_seurat_subset_2400_cells.rds")
+
+seurat_obj
+```
+
+# Inspect metadata
+
+We will implement a pseudotime analysis along the already annotated cell types. The calculation
+is guided on cluster or cell type information. 
+
+
+```{r}
+str(seurat_obj@meta.data)
+```
+
+
+# Data normalization
+
+Slingshot does not directly require normalized expression values when
+operating on existing embeddings, but normalization is useful for
+downstream analyses.
+
+
+```{r, message=FALSE, warning=FALSE}
+seurat_obj <- NormalizeData(seurat_obj)
+
+seurat_obj <- FindVariableFeatures(
+  seurat_obj,
+  selection.method = "vst",
+  nfeatures = 2000
+)
+
+seurat_obj <- ScaleData(
+  seurat_obj,
+  features = VariableFeatures(seurat_obj)
+)
+
+seurat_obj <- RunPCA(
+  seurat_obj,
+  features = VariableFeatures(seurat_obj), 
+  verbose = FALSE
+)
+```
+
+# Create SingleCellExperiment object
+
+Slingshot uses a different object also used for scRNA-Seq analysis 
+from the SingleCellExperiment library.
+
+```{r}
+sce <- as.SingleCellExperiment(seurat_obj)
+
+sce
+```
+
+As in seurat, the SingleCellExperiment object contains the gene expression
+data along with metadata. We will use this object to calculate the trajectories
+based in already calculated UMAP coordinates.
+
+# Add existing UMAP coordinates
+
+The dataset already contains UMAP coordinates in the metadata.
+
+```{r}
+umap_coords <- as.matrix(
+  seurat_obj@meta.data[, c("UMAP_1", "UMAP_2")]
+)
+
+head(umap_coords)
+
+reducedDims(sce)$UMAP <- umap_coords
+```
+
+# Visualize annotated cell types
+
+
+```{r, fig.width=8, fig.height=6}
+ggplot(
+  seurat_obj@meta.data,
+  aes(
+    x = UMAP_1,
+    y = UMAP_2,
+    color = celltype
+  )
+) +
+  geom_point(size = 0.5) +
+  theme_classic()
+```
+
+# Run Slingshot
+
+The slingshot() function performs trajectory inference using the cell annotations and low-dimensional representation of the data. In this example, Slingshot uses the celltype labels to define groups of biologically similar cells and the existing UMAP coordinates (reducedDim = "UMAP") to determine how these groups are arranged in the developmental landscape. The argument start.clus = "SCPs" specifies Schwann Cell Precursors (SCPs) as the starting population, allowing Slingshot to infer trajectories that originate from this early cell state and progress toward more differentiated cell types. The resulting object contains the inferred lineages as well as pseudotime values for each cell.
+
+```{r, warning=FALSE, message=FALSE}
+sce <- slingshot(
+  sce,
+  clusterLabels = "celltype",  # use annotated cell types as groups
+  reducedDim = "UMAP",         # use existing UMAP coordinates
+  start.clus = "SCPs"          # define SCPs as the starting population
+)
+```
+
+# Visualize inferred trajectories
+
+```{r, fig.width=8, fig.height=6, warning=FALSE, message=FALSE}
+celltype_factor <- as.factor(colData(sce)$celltype)
+
+plot(
+  reducedDims(sce)$UMAP,
+  col = brewer.pal(
+    min(length(levels(celltype_factor)), 12),
+    "Set3"
+  )[as.numeric(celltype_factor)],
+  pch = 16,
+  asp = 1,
+  xlab = "UMAP_1",
+  ylab = "UMAP_2",
+  main = "Slingshot trajectory",
+  xlim = c(-15, 15),
+  ylim = c(-15, 15)
+)
+
+lines(
+  SlingshotDataSet(sce),
+  lwd = 3,
+  col = "black",
+  xlim = c(-15, 15),
+)
+```
+
+## Inspecting and subsetting trajectories
+
+```{r}
+slingLineages(sce)
+```
+
+## Extracting pseudotime 
+
+seudotime <- slingPseudotime(sce) extracts the inferred developmental ordering of each cell from a Slingshot trajectory, assigning a numeric value that reflects where each cell sits along a lineage path from early to late states.
+
+```{r}
+pseudotime_df <- slingPseudotime(sce) %>% as.data.frame()
+
+seurat_obj$pt_lineage1 <- pseudotime_df$Lineage1
+```
+
+The NA points in pt_lineage1 are cells for which Slingshot (or whatever generated pseudotime) did not assign a pseudotime value for that specific lineage.
+
+In practice, that usually means one of two things:
+
+the cell is not part of the inferred trajectory/lineage 2 (it belongs to another branch), or
+the algorithm couldn’t place it along that lineage because it lies outside the fitted path or isn’t connected to it.
+
+
+```{r}
+seurat_obj@meta.data %>%
+    ggplot(aes(UMAP_1, UMAP_2, colour = pt_lineage1)) +
+      geom_point() +
+      viridis::scale_color_viridis() +
+      theme_classic()
+```
+
+We can visualize the smooth fitted trajectory as follows.
+
+```{r}
+plot(
+  reducedDims(sce)$UMAP,
+  col = "grey80",
+  pch = 16
+)
+
+lines(
+    slingCurves(sce)[["Lineage1"]],
+    lwd = 4,
+    col = "red"
+)
+```
+
+
+# Saving results
+
+
+```{r}
+pseudo_time_analysis <- seurat_obj@meta.data 
+
+write.csv(
+  pseudo_time_analysis,
+  file = "slingshot_pseudotime.csv",
+  row.names = FALSE
+)
+```
+
+
+[Previous Chapter (Profiling cells)](./07-Profiling_cells.md)|
