@@ -41,7 +41,13 @@ First, we load the already pre-processed data from Jansky et al 2021.
 
 
 ``` r
-seurat_obj <- readRDS("/Users/cbg-mbp-02/Documents/data/janski_2021/janski_2021_seurat_subset_2400_cells.rds")
+## If url connection doesn't work you can work locally
+#seurat_obj <- readRDS("/Users/cbg-mbp-02/Documents/data/janski_2021/janski_2021_seurat_subset_2400_cells.rds")
+
+url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/janski_2021_seurat_subset_2400_cells.rds"
+con <- url(url, open = "rb")
+seurat_obj <- readRDS(con)
+close(con)
 
 seurat_obj
 ```
@@ -109,6 +115,16 @@ seurat_obj <- RunPCA(
   features = VariableFeatures(seurat_obj), 
   verbose = FALSE
 )
+
+umap_coords <- as.matrix(seurat_obj@meta.data[, c("UMAP_1", "UMAP_2")])
+colnames(umap_coords) <- c("UMAP_1", "UMAP_2")
+rownames(umap_coords) <- colnames(seurat_obj)
+
+seurat_obj[["umap"]] <- CreateDimReducObject(
+  embeddings = umap_coords,
+  key = "UMAP_",
+  assay = DefaultAssay(seurat_obj)
+)
 ```
 
 # Create SingleCellExperiment object
@@ -133,7 +149,7 @@ sce
 ## colnames(2400): AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 ...
 ##   TTCCGGTTCGGTAGGA_17 TTGTTGTCAGAAATCA_17
 ## colData names(14): cell_id orig.ident ... UMAP_2 ident
-## reducedDimNames(1): PCA
+## reducedDimNames(2): PCA UMAP
 ## mainExpName: RNA
 ## altExpNames(0):
 ```
@@ -152,20 +168,6 @@ umap_coords <- as.matrix(
   seurat_obj@meta.data[, c("UMAP_1", "UMAP_2")]
 )
 
-head(umap_coords)
-```
-
-```
-##                       UMAP_1     UMAP_2
-## AAACGCTGTCAAAGTA_1  5.574948 -3.4768778
-## AAAGGATCAGATCACT_1  4.800121 -2.1926302
-## AAAGGATCAGCAGAAC_1  4.037976 -0.1445995
-## AACAACCAGTCCTACA_1  4.479241  0.9133858
-## AACAAGAAGGACTTCT_1  4.515640  0.5770715
-## AACAAGATCTGCGTCT_1 -8.895806  1.5624598
-```
-
-``` r
 reducedDims(sce)$UMAP <- umap_coords
 ```
 
@@ -305,19 +307,91 @@ lines(
 ![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 
-# Saving results
+Identify genes associated with pseudotime
+
+We next identify genes whose expression changes continuously along the inferred developmental trajectory. To do this, we calculate the Spearman correlation between gene expression and pseudotime values. Spearman correlation is a rank-based measure that is robust to non-linear relationships and is therefore commonly used in pseudotime analyses.
+
+Only cells with assigned pseudotime values are included in the analysis.
+
 
 
 
 ``` r
-pseudo_time_analysis <- seurat_obj@meta.data 
+# Extract normalized expression values
+expr_mat <- GetAssayData(
+  seurat_obj,
+  assay = "RNA",
+  slot = "data"
+)
 
-write.csv(
-  pseudo_time_analysis,
-  file = "slingshot_pseudotime.csv",
-  row.names = FALSE
+# Keep only cells with pseudotime values
+valid_cells <- !is.na(seurat_obj$pt_lineage1)
+
+expr_mat <- expr_mat[, valid_cells]
+
+pseudotime <- seurat_obj$pt_lineage1[valid_cells]
+```
+
+
+
+
+``` r
+gene_correlations <- apply(
+  expr_mat,
+  1,
+  function(x) {
+    cor(
+      x,
+      pseudotime,
+      method = "spearman"
+    )
+  }
+)
+
+correlation_df <- data.frame(
+  gene = names(gene_correlations),
+  correlation = gene_correlations
+)
+
+correlation_df <- correlation_df %>%
+  arrange(desc(abs(correlation)))
+
+head(correlation_df)
+```
+
+```
+##            gene correlation
+## CCSER1   CCSER1   0.8218033
+## AGBL4     AGBL4   0.8057172
+## FAM155A FAM155A   0.8054655
+## DPP6       DPP6   0.7742003
+## CDH6       CDH6  -0.7574722
+## MEG3       MEG3   0.7427033
+```
+
+
+The genes with the largest absolute correlation coefficients exhibit the strongest monotonic changes along pseudotime.
+
+## Visualize the top correlated genes
+
+We will visualize the six genes with the strongest associations with pseudotime on the UMAP embedding.
+
+
+``` r
+top_genes <- correlation_df$gene[1:6]
+
+FeaturePlot(
+  seurat_obj,
+  features = top_genes,
+  reduction = "umap",
+  ncol = 3,
+  pt.size = 0.5
 )
 ```
+
+![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+These visualizations reveal where pseudotime-associated genes are expressed within the developmental landscape. Genes positively correlated with pseudotime tend to be enriched in later cellular states, whereas negatively correlated genes are often associated with earlier stages of the trajectory.
 
 
 [Previous Chapter (Profiling cells)](./07-Profiling_cells.md)|
