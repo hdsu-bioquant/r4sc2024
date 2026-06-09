@@ -401,22 +401,28 @@ cell. The count matrix usually has genes as rows and cells in
 columns.</p>
 <p>In the next lines we will load the matrix of UMI counts into a
 variable called <code>counts</code>.</p>
-<pre class="r"><code>ad_medula_path &lt;- &quot;/Users/cbg-mbp-02/Documents/data/janski_2021/&quot;
+<pre class="r"><code>## If the url/internet doesn&#39;t work you can use a local copy
+## of the data, just set the local path here
+#ad_medula_path &lt;- &quot;/Users/cbg-mbp-02/Documents/data/janski_2021/&quot;
 # Read matrix
-counts &lt;- readMM(file.path(ad_medula_path, &quot;counts_subset_2400_cells.mtx&quot;))
+#counts &lt;- readMM(file.path(ad_medula_path, &quot;counts_subset_2400_cells.mtx&quot;))
+
+url &lt;- &quot;https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/counts_subset_2400_cells.mtx&quot;
+counts &lt;- readMM(url(url))
 counts &lt;- as.matrix(counts)
-#counts &lt;- t(counts)
 
 # Read cell and gene names
 cells &lt;- read.delim(
-  file.path(ad_medula_path, &quot;cells_subset_2400_cells.tsv&quot;),
+  #file.path(ad_medula_path, &quot;cells_subset_2400_cells.tsv&quot;),   ## if it doesn&#39;t work, define a local path
+  &quot;https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv&quot;,
   header = TRUE,
   stringsAsFactors = FALSE
 )
 #head(cells)
 
 genes &lt;- read.delim(
-  file.path(ad_medula_path, &quot;genes_subset_2400_cells.tsv&quot;),
+  #file.path(ad_medula_path, &quot;genes_subset_2400_cells.tsv&quot;),
+  &quot;https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv&quot;,
   header = FALSE,
   stringsAsFactors = FALSE
 )
