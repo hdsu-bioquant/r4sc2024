@@ -10,6 +10,19 @@ output:
 
 # Profiling cells
 
+In the context of single-cell RNA-seq (scRNA-seq), cell profiling refers to the process of characterizing individual cells based on their gene expression patterns to understand their identity, functional state, and potential biological roles.
+
+Briefly, cell profiling aims to answer questions such as:
+
+* What cell types are present in the sample?
+For example, neurons, T cells, macrophages, or epithelial cells.
+What is the state of each cell?
+
+* Cells of the same type may differ in activation status, cell cycle phase, differentiation stage, or response to stimuli such as infection or treatment.
+How heterogeneous is the population?
+Cell profiling reveals subpopulations that would be masked in bulk RNA-seq experiments.
+
+## Markers visualization
 
 First, we will take top 10 ranked genes based in Log FC and visualize their
 expression in clusters using a heatmap representation.
@@ -63,9 +76,9 @@ canonical_markers <- c(
 
 ## Visualization of gene expression levels of markers in clusters
 
-We can visualize the expression of the different markers in clusters
-using violin plots using the `VlnPlot()` function as follows:
-
+Because of the signal dropout it's hard to say what is the proportion of cells that are actually
+expressing a marker. Dotplots are commonly used to visualize both gene expression levels alongside 
+with the frequency of cells expressing the marker. The `DotPlot()` function comes at handy.
 
 
 
@@ -75,20 +88,9 @@ DotPlot(ad_medula_filtered,
       coord_flip()
 ```
 
-```
-## Warning: The following requested variables were not found: CDX19, SMTN2
-```
-
-```
-## Warning: Scaling data with a low number of groups may produce misleading
-## results
-```
-
 ![](07-Profiling_cells_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-Because of the signal dropout it's hard to say what is the proportion of cells that are actually
-expressing a marker. Dotplots are commonly used to visualize both gene expression levels alongside 
-with the frequency of cells expressing the marker. The `DotPlot()` function comes at handy.
+
 
 
 ## Cell type labelling
@@ -170,17 +172,7 @@ invisible({
   library(openxlsx)
   library(HGNChelper)
 })
-```
 
-```
-## Please cite our software :) 
-##  
-##  Sehyun Oh et al. HGNChelper: identification and correction of invalid gene symbols for human and mouse. F1000Research 2020, 9:1493. DOI: https://doi.org/10.12688/f1000research.28033.1 
-##  
-##  Type `citation('HGNChelper')` for a BibTeX entry.
-```
-
-``` r
 source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_wrapper.R") 
 
 ad_medula_filtered <- FindClusters(ad_medula_filtered, 
@@ -193,31 +185,6 @@ sample <- run_sctype(ad_medula_filtered,
                      known_tissue_type="Brain",
                      custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx", 
                      name="sctype_classification")
-```
-
-```
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
-## Warning in checkGeneSymbols(markers_all): x contains non-approved gene symbols
 ```
 
 ```
@@ -274,9 +241,11 @@ DimPlot(sample,
 ![](07-Profiling_cells_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 
-
-
-Does it look similar to our previous conclusions?
+Does it look similar to our previous conclusions? Cell assignation depends
+on the definition of cell type signatures, which corresponds to a list
+of cell type markers. The library scType depends on [this](https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx) list of
+defined signatures. Please, download and inspect the database of signatures.
+Are there all human cell types represented in this list?
 
 
 ## Final Report

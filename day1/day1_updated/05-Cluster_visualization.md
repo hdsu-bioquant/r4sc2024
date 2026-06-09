@@ -85,7 +85,7 @@ Transformations like PCA, tSNE or UMAP are used to project multidimensional
 data into 2D or 3D representations that can be visualized at the expense
 of the lose of information. tSNE and UMAP transformations aims to preserve
 global relations between sample points. We will use UMAPs to visualize the
-scRNA-Seq data from PBMC.
+scRNA-Seq data.
 
 
 ## UMAP

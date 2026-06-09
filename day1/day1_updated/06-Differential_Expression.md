@@ -54,7 +54,7 @@ increasing computation time.
 
 
 ``` r
-hbrain.degs <- FindAllMarkers(ad_medula_filtered, 
+ad_medula.degs <- FindAllMarkers(ad_medula_filtered, 
                             logfc.threshold = 1, 
                             min.pct = 0.05, 
                             min.cells.feature = 10, 
@@ -62,14 +62,14 @@ hbrain.degs <- FindAllMarkers(ad_medula_filtered,
 ```
 
 
-The output `pbmc.degs` consist of a data frame contanning the DEGs with
+The output `ad_medula.degs` consist of a data frame contanning the DEGs with
 p-vales, p-adjusted values and log fold change values for each gene as 
 we can see next:
 
 
 
 ``` r
-head(hbrain.degs)
+head(ad_medula.degs)
 ```
 
 ```
@@ -92,7 +92,7 @@ library(ggplot2)
 library(dplyr)         ## for handling data frames
 library(ggrepel)
 
-hbrain.degs %>%
+ad_medula.degs %>%
   filter(cluster=='0') %>%
   filter(p_val_adj > 0) %>%
   arrange(desc(abs(avg_log2FC))) %>%       ## Arranging genes by FC

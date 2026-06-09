@@ -388,15 +388,15 @@ marker and the minimum of cells expressing (counts &gt; 0) the feature.
 These parameters are used to filter out genes prior calculating DEGs.
 Lowering the values of these parameters will increase the sensibility of
 the method at the expense of increasing computation time.</p>
-<pre class="r"><code>hbrain.degs &lt;- FindAllMarkers(ad_medula_filtered, 
+<pre class="r"><code>ad_medula.degs &lt;- FindAllMarkers(ad_medula_filtered, 
                             logfc.threshold = 1, 
                             min.pct = 0.05, 
                             min.cells.feature = 10, 
                             verbose = FALSE)</code></pre>
-<p>The output <code>pbmc.degs</code> consist of a data frame contanning
-the DEGs with p-vales, p-adjusted values and log fold change values for
-each gene as we can see next:</p>
-<pre class="r"><code>head(hbrain.degs)</code></pre>
+<p>The output <code>ad_medula.degs</code> consist of a data frame
+contanning the DEGs with p-vales, p-adjusted values and log fold change
+values for each gene as we can see next:</p>
+<pre class="r"><code>head(ad_medula.degs)</code></pre>
 <pre><code>##                  p_val avg_log2FC pct.1 pct.2     p_val_adj cluster     gene
 ## SLC24A2  1.103268e-232   4.983958 0.631 0.031 2.765231e-228       0  SLC24A2
 ## CCSER1   3.469903e-223   1.702038 0.990 0.488 8.696964e-219       0   CCSER1
@@ -409,7 +409,7 @@ each gene as we can see next:</p>
 library(dplyr)         ## for handling data frames
 library(ggrepel)
 
-hbrain.degs %&gt;%
+ad_medula.degs %&gt;%
   filter(cluster==&#39;0&#39;) %&gt;%
   filter(p_val_adj &gt; 0) %&gt;%
   arrange(desc(abs(avg_log2FC))) %&gt;%       ## Arranging genes by FC
