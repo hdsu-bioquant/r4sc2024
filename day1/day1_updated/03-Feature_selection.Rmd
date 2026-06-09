@@ -11,22 +11,28 @@ library(Seurat)
 library(tidyverse)
 library(Matrix)
 
-ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
+## If the url/internet doesn't work you can use a local copy
+## of the data, just set the local path here
+#ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
 # Read matrix
-counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
+#counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
+
+url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/counts_subset_2400_cells.mtx"
+counts <- readMM(url(url))
 counts <- as.matrix(counts)
-#counts <- t(counts)
 
 # Read cell and gene names
 cells <- read.delim(
-  file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),
+  #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
+  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
   header = TRUE,
   stringsAsFactors = FALSE
 )
 #head(cells)
 
 genes <- read.delim(
-  file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
+  #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
+  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
   header = FALSE,
   stringsAsFactors = FALSE
 )
