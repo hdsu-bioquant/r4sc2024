@@ -11,9 +11,16 @@ output:
 # 0. First steps in scRNA-Seq analysis 
 
 
-We will use available data from adrenal medulla [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1). In order
-to speed up the process only a subset of 2400 cells are going to be processed here. Here, we will
-perform the following tasks:
+We will use available data from adrenal medulla [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1). 
+
+In order to speed up the process only a subset of 2400 cells are going to be processed here.
+This tutorial can be run by copy-pasting the code in a Rstudio or R console.
+The datasets are retrieved from repositories. In case of no internet conection
+you can download the files from [Figshare](https://figshare.com/s/5e0afc577026e2e7413a) or
+[G drive](https://drive.google.com/drive/folders/13cPh4uFLZgCJ8BEfhHcduRmyiKcx5dA_?usp=sharing)
+
+
+We will perform the following tasks:
 
 * Definition of a Seurat object from a matrix of counts
 * Quality Control (QC) of the cell samples
