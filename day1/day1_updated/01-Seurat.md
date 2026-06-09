@@ -303,6 +303,7 @@ What is the mean and median values of the percentage of mitochondrial reads?
 <code>
 summary(ad_medula_seu_filtered@meta.data$percent.mt)</code>
 <code>
+<br>
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 <br>
 0.00000 0.05833 0.11719 0.14005 0.19174 1.06252 
