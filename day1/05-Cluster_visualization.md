@@ -130,5 +130,5 @@ DimPlot(ad_medula_filtered)
 of parameters.
 
 
-[Previous Chapter (Normalization & Dim. reduction)](./04-Dimensional_Reduction.md)|
+[Previous Chapter (Normalization & Dim. reduction)](./04-Dimensional_reduction.md)|
 [Next Chapter (Differential expression)](./06-Differential_Expression.md)

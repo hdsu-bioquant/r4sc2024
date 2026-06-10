@@ -102,4 +102,4 @@ norm.exp <- GetAssayData(ad_medula_filtered, slot = 'data')
 <br> 
 
 [Previous Chapter (Quality control)](./02-Quality_control.md)|
-[Next Chapter (Normalization & Dim. reduction)](./04-Dimensional_Reduction.md)
+[Next Chapter (Normalization & Dim. reduction)](./04-Dimensional_reduction.md)

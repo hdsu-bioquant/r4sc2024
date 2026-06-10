@@ -95,7 +95,7 @@ Tutorials:
 * Part 1 : [Introduction to Seurat](./day1/01-Seurat.md)
 * Part 2 : [Quality control](./day1/02-Quality_control.md)
 * Part 3 : [Feature selection](./day1/03-Feature_selection.md)
-* Part 4 : [Dimensional reduction](./day1/04-Dimensional_Reduction.md)
+* Part 4 : [Dimensional reduction](./day1/04-Dimensional_reduction.md)
 * Part 5 : [Cluster_visualization - UMAP](./day1/05-Cluster_visualization.md)
 * Part 6 : [Differential expression](./day1/06-Differential_Expression.md)
 * Part 7 : [Profiling cells](./day1/07-Profiling_cells.md)
