@@ -232,7 +232,7 @@ lines(
 ```
 
 
-Identify genes associated with pseudotime
+# Identifying genes associated with pseudotime
 
 We next identify genes whose expression changes continuously along the inferred developmental trajectory. To do this, we calculate the Spearman correlation between gene expression and pseudotime values. Spearman correlation is a rank-based measure that is robust to non-linear relationships and is therefore commonly used in pseudotime analyses.
 

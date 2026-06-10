@@ -5,11 +5,12 @@ output:
 ---
 
 
-# 8. Pseudotime analysis
+# Introduction
 
-From the gene expression profile, we can determine a *pseudotime* for each cell, which represents it developmental state along a developmental trajectory from progenitor cells to differentiated cells. Each cell is assigned a pseudotime, and cells can then be ordered along this time axis.
+This analysis reconstructs developmental trajectories in the adrenal medulla
+using the Jansky et al. (2021) single-cell RNA-seq dataset.
 
-There are many computational approaches for pseudotime inference. Here, trajectory inference is performed using **Slingshot**. Existing UMAP coordinates
+Trajectory inference is performed using Slingshot. Existing UMAP coordinates
 provided by the original study are used directly. No cell filtering or
 subsetting is performed.
 
@@ -17,9 +18,12 @@ Slingshot is a trajectory inference method that reconstructs developmental paths
 
 The starting population is defined as Schwann Cell Precursors (SCPs).
 
-We start by loading the required libraries
+# Load libraries
+
 
 ``` r
+library(Seurat)
+library(SingleCellExperiment)
 library(slingshot)
 library(Matrix)
 library(ggplot2)
@@ -303,7 +307,7 @@ lines(
 ![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 
-Identify genes associated with pseudotime
+# Identifying genes associated with pseudotime
 
 We next identify genes whose expression changes continuously along the inferred developmental trajectory. To do this, we calculate the Spearman correlation between gene expression and pseudotime values. Spearman correlation is a rank-based measure that is robust to non-linear relationships and is therefore commonly used in pseudotime analyses.
 
