@@ -147,7 +147,7 @@ ad_medula.degs %>%
   filter(cluster=='0') %>%
   filter(p_val_adj > 0) %>%
   arrange(desc(abs(avg_log2FC))) %>%       ## Arranging genes by FC
-  mutate(highlight=ifelse(-log10(p_val_adj)>280, TRUE, FALSE)) %>% ## highlighting top FC markers
+  mutate(highlight=ifelse(-log10(p_val_adj)>125, TRUE, FALSE)) %>% ## highlighting top FC markers
   mutate(gene_label=ifelse(highlight==TRUE, gene, '')) %>% ## Adding labels for top markers
   ggplot(aes(x=avg_log2FC, y=-log10(p_val_adj),
              colour=highlight,
