@@ -10,14 +10,13 @@ output:
 
 # 0. First steps in scRNA-Seq analysis 
 
-
-We will use available data from adrenal medulla [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1). 
+Welcome to this introductory course on single cell RNA-seq (scRNA-Seq) data analysis. In this course we will cover the main steps of a typical scRNA-Seq analysis workflow, using the R package Seurat as a framework for the analysis. We will use a dataset of human embryonic adrenal medulla, which is a tissue that gives rise to the neuroblastoma tumor. The dataset is taken from [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1).
 
 In this dataset, tissue from embryonic adrenal medulla was sequenced to understand the developmental process, leading from progenitor cell populations to differentiated lineages. This is crucial to understand tumoregenesis of neuroblatoma, a pediatric solid tumor originating along this developmental trajectory.
-
 In order to speed up the process only a subset of 2400 cells are going to be processed here.
+
 This tutorial can be run by copy-pasting the code in a Rstudio or R console.
-The datasets are retrieved from repositories. In case of no internet connection
+The datasets are retrieved from repositories. In case of no internet conection
 you can download the files from [Figshare](https://figshare.com/s/5e0afc577026e2e7413a) or
 [G drive](https://drive.google.com/drive/folders/13cPh4uFLZgCJ8BEfhHcduRmyiKcx5dA_?usp=sharing)
 
@@ -36,7 +35,7 @@ We will perform the following tasks:
 ## Single Cell Sequencing
 
 Single cell sequencing (scRNA-Seq) technologies arise from bulk counterparts with 
-the aim of refining gene expression profiles. Previous bulk sequencing offered 
+the aim of refining gene expression profiles. Previous bulk Sequencing offered 
 averaged quantifications of gene expression in samples. In some contexts, for 
 example, when studying cell type specificity or the heterogeneity in tumours is 
 important to dissect patterns in cell subpopulations.
@@ -82,7 +81,7 @@ counts <- as.matrix(counts)
 # Read cell and gene names
 cells <- read.delim(
   #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv",
   header = TRUE,
   stringsAsFactors = FALSE
 )
@@ -90,7 +89,7 @@ cells <- read.delim(
 
 genes <- read.delim(
   #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/genes_subset_2400_cells.tsv",
   header = FALSE,
   stringsAsFactors = FALSE
 )
