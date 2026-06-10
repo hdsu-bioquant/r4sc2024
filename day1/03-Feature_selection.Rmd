@@ -4,7 +4,7 @@ output:
     keep_md: yes
 ---
 
-```{r, dependencies, warning=FALSE, message=FALSE, include=FALSE}
+```{r dependencies, eval=TRUE, message=FALSE, warning=FALSE, include=FALSE}
 library(Seurat)
 library(tidyverse)
 library(Matrix)

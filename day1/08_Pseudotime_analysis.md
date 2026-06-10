@@ -1,7 +1,7 @@
 ---
 output:
-  html_document:
-    keep_md: yes
+  html_document: 
+    keep_md: true
 ---
 
 
@@ -49,7 +49,7 @@ is guided on cluster or cell type information.
 
 
 ``` r
-str(seurat_obj@meta.data)
+str(ad_medula_filtered@meta.data)
 ```
 
 ```
@@ -80,7 +80,7 @@ from the SingleCellExperiment library.
 
 
 ``` r
-sce <- as.SingleCellExperiment(seurat_obj)
+sce <- as.SingleCellExperiment(ad_medula_filtered)
 
 sce
 ```
@@ -111,7 +111,7 @@ The dataset already contains UMAP coordinates in the metadata.
 
 ``` r
 umap_coords <- as.matrix(
-  Embeddings(seurat_obj, "umap")
+  Embeddings(ad_medula_filtered, "umap")
 )
 
 reducedDims(sce)$UMAP <- umap_coords
@@ -122,7 +122,7 @@ reducedDims(sce)$UMAP <- umap_coords
 
 
 ``` r
-DimPlot(seurat_obj, group.by = 'cell_type') 
+DimPlot(ad_medula_filtered, group.by = 'cell_type') 
 ```
 
 ![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
@@ -195,7 +195,7 @@ seudotime <- slingPseudotime(sce) extracts the inferred developmental ordering o
 ``` r
 pseudotime_df <- slingPseudotime(sce) %>% as.data.frame()
 
-seurat_obj$pt_lineage1 <- pseudotime_df$Lineage1
+ad_medula_filtered$pt_lineage1 <- pseudotime_df$Lineage1
 ```
 
 The NA points in pt_lineage1 are cells for which Slingshot (or whatever generated pseudotime) did not assign a pseudotime value for that specific lineage.
@@ -209,11 +209,11 @@ the algorithm couldn’t place it along that lineage because it lies outside the
 
 ``` r
 ## Extracting UMAP coordinates
-umap_coords <- Embeddings(seurat_obj, "umap") %>%
+umap_coords <- Embeddings(ad_medula_filtered, "umap") %>%
                   as.data.frame()
 
 ## Extracting pseudotime coordinates
-pseudotime_df <- seurat_obj@meta.data
+pseudotime_df <- ad_medula_filtered@meta.data
 
 ## Checkin cells order
 all(rownames(umap_coords) == rownames(pseudotime_df))
@@ -256,7 +256,7 @@ lines(
 ![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 
-Identify genes associated with pseudotime
+## Identify genes associated with pseudotime
 
 We next identify genes whose expression changes continuously along the inferred developmental trajectory. To do this, we calculate the Spearman correlation between gene expression and pseudotime values. Spearman correlation is a rank-based measure that is robust to non-linear relationships and is therefore commonly used in pseudotime analyses.
 
@@ -268,17 +268,17 @@ Only cells with assigned pseudotime values are included in the analysis.
 ``` r
 # Extract normalized expression values
 expr_mat <- GetAssayData(
-  seurat_obj,
+  ad_medula_filtered,
   assay = "RNA",
-  slot = "data"
+  layer = "data"
 )
 
 # Keep only cells with pseudotime values
-valid_cells <- !is.na(seurat_obj$pt_lineage1)
+valid_cells <- !is.na(ad_medula_filtered$pt_lineage1)
 
 expr_mat <- expr_mat[, valid_cells]
 
-pseudotime <- seurat_obj$pt_lineage1[valid_cells]
+pseudotime <- ad_medula_filtered$pt_lineage1[valid_cells]
 ```
 
 
@@ -310,12 +310,12 @@ head(correlation_df)
 
 ```
 ##              gene correlation
-## RBFOX1     RBFOX1   0.8385368
-## CACNA2D3 CACNA2D3   0.8076741
-## KCNQ5       KCNQ5   0.7817430
-## NRG1         NRG1   0.7757867
-## DPP6         DPP6   0.7476792
-## SLC35F1   SLC35F1  -0.7367129
+## RBFOX1     RBFOX1   0.8383317
+## CACNA2D3 CACNA2D3   0.8056306
+## KCNQ5       KCNQ5   0.7822124
+## NRG1         NRG1   0.7753561
+## DPP6         DPP6   0.7478843
+## SLC35F1   SLC35F1  -0.7356375
 ```
 
 
@@ -330,7 +330,7 @@ We will visualize the six genes with the strongest associations with pseudotime 
 top_genes <- correlation_df$gene[1:6]
 
 FeaturePlot(
-  seurat_obj,
+  ad_medula_filtered,
   features = top_genes,
   reduction = "umap",
   ncol = 3,

@@ -19,6 +19,12 @@ The Seurat object is a special data structure, which contains multiple type of i
 
 ## Creating Seurat object
 
+
+```{r}
+library(Seurat)
+library(dplyr)
+```
+
 We create a Seurat object using the `CreateSeuratObject` function as follows. Use the `?function` helper
 in R to get information about the parameters that are need to be provided to the function.
 
@@ -144,7 +150,7 @@ contains 250 cells downsampled from the 10x PBMC data and stored in tsv format
 
 
 [Previous Chapter (Seurat)](./01-Seurat.md)|
-[Next Chapter (Feature selection)](./03-Feature_selection.md)
+[Next Chapter (Feature selection)](./02-Quality_control.md)
 
 
 
