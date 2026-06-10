@@ -7,22 +7,28 @@ output:
 
 
 
-# Cell clustering
 
 
-Detection of groups or cluster of cells is an important task in scRNA-Seq 
-analysis. Seurat implements a clustering method based in KNN graphs and 
+# 5. Cell clustering
+
+
+Detection of groups or cluster of cells is an important task in scRNA-seq 
+analysis. These groups could represent different cell states or cell types. 
+
+## Defining clusters
+
+Seurat implements a clustering method based in KNN graphs and 
 community detection using the Louvain algorithm. An important parameter
-for clustering is the resolution which can be set to increase/reduce the
-granularity of the clusters.
+for clustering is the *resolution* which can be set to increase/reduce the granularity of the clusters.
 
 This method can be implemented by using the functions `FindNeighbors()` and
 `FindClusters()` as follows:
 
 
-```r
-pbmc.filtered <- FindNeighbors(pbmc.filtered)
-pbmc.filtered <- FindClusters(pbmc.filtered, 
+
+``` r
+ad_medula_filtered <- FindNeighbors(ad_medula_filtered)
+ad_medula_filtered <- FindClusters(ad_medula_filtered, 
                             resolution = 0.1, 
                             verbose = FALSE)
 ```
@@ -34,17 +40,20 @@ containing each cluster for each cell is name `seurat_cluster` as shown next:
 
 
 
-```r
-head(pbmc.filtered$seurat_clusters)
+
+``` r
+head(ad_medula_filtered$seurat_clusters)
 ```
 
 ```
-## AAAGAGACGGACTT-1 AAAGTTTGATCACG-1 AAATGTTGTGGCAT-1 AAATTCGAGCTGAT-1 
-##                0                2                1                1 
-## AAATTGACTCGCTC-1 AACAAACTCATTTC-1 
-##                0                0 
-## Levels: 0 1 2
+## AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 AAAGGATCAGCAGAAC_1 AACAACCAGTCCTACA_1 
+##                  1                  1                  2                  2 
+## AACAAGAAGGACTTCT_1 AACAAGATCTGCGTCT_1 
+##                  2                  3 
+## Levels: 0 1 2 3
 ```
+
+
 
 
 There are 3 different clusters, labeled from 0 to 2 and stored like a factor.
@@ -53,15 +62,17 @@ by the algorithm.
 
 
 
-```r
-table(pbmc.filtered$seurat_clusters) 
+
+``` r
+table(ad_medula_filtered$seurat_clusters) 
 ```
 
 ```
 ## 
-##   0   1   2 
-## 297  95  60
+##   0   1   2   3 
+## 624 570 557 536
 ```
+
 
 So, 297 cells were assigned to the cluster 0.
 
@@ -70,17 +81,17 @@ So, 297 cells were assigned to the cluster 0.
 > Try different different parameters for the clustering. For example, `k.param` in the *FindNeighbors()* function and higher levels of resolution. How do these 2 parameters influence the number of clusters?
 
 
-# Cluster visualization
+## Cluster visualization
 
 
 Transformations like PCA, tSNE or UMAP are used to project multidimensional
 data into 2D or 3D representations that can be visualized at the expense
 of the lose of information. tSNE and UMAP transformations aims to preserve
 global relations between sample points. We will use UMAPs to visualize the
-scRNA-Seq data from PBMC.
+scRNA-Seq data.
 
 
-## UMAP
+### UMAP
 
 We can use the `RunUMAP` function to calculate the UMAP transformation. The 
 calculation of a UMAP projection can intensive computationally and is 
@@ -91,8 +102,9 @@ we saw we can use 7 PCs which are the ones in which there is more variability.
 
 
 
-```r
-pbmc.filtered <- RunUMAP(pbmc.filtered, 
+
+``` r
+ad_medula_filtered <- RunUMAP(ad_medula_filtered, 
                        dims = 1:7, 
                        verbose = FALSE)
 ```
@@ -102,21 +114,21 @@ After the calculation of the UMAP we can visualize it using the function
 
 
 
-```r
-DimPlot(pbmc.filtered)
+
+``` r
+DimPlot(ad_medula_filtered)
 ```
 
-<img src="05-Cluster_visualization_files/figure-html/umap_plot-1.png" style="display: block; margin: auto;" />
+![](05-Cluster_visualization_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
 
 
 ## Exercise
 
 
-> Perform a UMAP visualization with the 10x PBMC 200 cells defined in the previous sections using your own set
+> Perform a UMAP visualization using different sets
 of parameters.
-<br>
-> Verify how subsampling and parameters selection affects clustering. How
-many clusters can you observe by using your own selected parameters?
+
 
 [Previous Chapter (Normalization & Dim. reduction)](./04-Normalization_and_Dimensional_Reduction.md)|
 [Next Chapter (Differential expression)](./06-Differential_Expression.md)

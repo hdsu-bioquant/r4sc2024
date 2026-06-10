@@ -8,68 +8,143 @@ output:
 
 
 
-# Profiling cells
+# 7. Profiling cells
 
+In the context of single-cell RNA-seq (scRNA-seq), cell profiling refers to the process of characterizing individual cells based on their gene expression patterns to understand their identity, functional state, and potential biological roles.
+
+Briefly, cell profiling aims to answer questions such as:
+
+* What cell types are present in the sample?
+For example, neurons, T cells, macrophages, or epithelial cells.
+What is the state of each cell?
+
+* Cells of the same type may differ in activation status, cell cycle phase, differentiation stage, or response to stimuli such as infection or treatment.
+How heterogeneous is the population?
+Cell profiling reveals subpopulations that would be masked in bulk RNA-seq experiments.
+
+## Markers visualization
 
 First, we will take top 10 ranked genes based in Log FC and visualize their
 expression in clusters using a heatmap representation.
 
 
 
+
 ``` r
-top10 <- pbmc.degs %>% 
+top10 <- ad_medula.degs %>% 
              group_by(cluster) %>% 
              top_n(n = 10, wt = avg_log2FC)
-DoHeatmap(pbmc.filtered, 
+DoHeatmap(ad_medula_filtered, 
           features = top10$gene) + NoLegend()
 ```
 
-<img src="07-Profiling_cells_files/figure-html/heatmap-1.png" style="display: block; margin: auto;" />
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
-IL-7 is a marker for naive CD4+ T cells, while GZMB is a marker for CD8 T cells.
-Then, we can tentatively consider cluster 0 and 2 as CD4 and CD8 T cells,
-respectively. 
 
-We can visualize additional known canonical markers in order to assign cell
-categories. 
+We can visualize additional known canonical markers as used in Janski S et al, 2021 
+in order to assign cell categories. 
+
 
 
 ``` r
-canonical_markers <- c('IL7R',     ## CD4+ cell
-                       'CCR7',     ## Naive CD4+ T cell
-                       'CD8A',     ## CD8+
-                       'NKG7',     ## NK
-                       'MS4A1',    ## B cell marker
-                       'FCGR3A',   ## Mono
-                       'FCER1A',   ## DC
-                       'CD14'     ## Mono
-                       )
-
-FeaturePlot(pbmc.filtered, 
-            features = canonical_markers,
-            ncol = 2)
+canonical_markers <- c(
+  "PLP1",
+  "MPZ",
+  "SOX10",
+  "CDX19",
+  "ERBB3",
+  "ERBB4",
+  "CDH9",
+  "CTTNBP2",
+  "ASCL1",
+  "DBH",
+  "TH",
+  "CHGA",
+  "DDC",
+  "PNMT",
+  "TOP2A",
+  "NEFM",
+  "GAP43",
+  "SMTN2",
+  "ISL1",
+  "ALK",
+  "SYN3",
+  "IL7"
+)
 ```
 
-<img src="07-Profiling_cells_files/figure-html/umap_markers_vis-1.png" style="display: block; margin: auto;" />
+
+## Visualization of gene expression levels of markers in clusters
+
+Because of the signal dropout it's hard to say what is the proportion of cells that are actually
+expressing a marker. Dotplots are commonly used to visualize both gene expression levels alongside 
+with the frequency of cells expressing the marker. The `DotPlot()` function comes at handy.
+
+
+
+``` r
+DotPlot(ad_medula_filtered, 
+            features = canonical_markers) +
+      coord_flip()
+```
+
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+## UMAP visualization
+
+The markers can also be visualized in UMAPs. UMAPs are useful for visualizing possible heterogeneity
+in gene expression which could reveal possible subclusters of cells with
+particular phenotypes.
+
+
+
+``` r
+FeaturePlot(ad_medula_filtered, 
+            features = c("CHGA",
+                         "IL7",
+                         "CDH9", 
+                         "MPZ"), 
+            order = TRUE)
+```
+
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+
+For example, MPZ is expressed very specifically in the left branch
+but some heterogeneity can be observed.
+
+
+## Cell type labelling
+
+
+The genes CHGA, DBH and TH are markers of Chromaffin cells while IL7 and
+SYN3 are expressed in Late Neuroblasts. CDH9 and CTTNBP2 are mostly 
+expressed in Bridge cells and ERBBP3 and ERBBP4 are present in SCPs cells.
 
 Now, we will annotate the cells with their identified identities in the seurat 
 object. We will map the cluster names as follows:
 
 **Beware: your UMAP might look slightly different! So please adapt the cluster<>cell type mapping according to your results! For example, you might have more/less clusters!**
 
+
 ``` r
-mapping <- data.frame(seurat_cluster=c('0', '1', '2'),
-                      cell_type=c('Lymphocyte', 
-                                  'Monocyte', 
-                                  'B cell'))
+mapping <- data.frame(seurat_cluster=c('0', 
+                                       '1', 
+                                       '2',
+                                       '3'),
+                      cell_type=c('Chromaffin cells', 
+                                  'Late neuroblasts', 
+                                  'Bridge',
+                                  'SCP'))
 mapping
 ```
 
 ```
-##   seurat_cluster  cell_type
-## 1              0 Lymphocyte
-## 2              1   Monocyte
-## 3              2     B cell
+##   seurat_cluster        cell_type
+## 1              0 Chromaffin cells
+## 2              1 Late neuroblasts
+## 3              2           Bridge
+## 4              3              SCP
 ```
 
 To assign the new labels we can use the map function from the plyr R package
@@ -77,9 +152,10 @@ as follows:
 
 
 
+
 ``` r
-pbmc.filtered$'cell_type' <- plyr::mapvalues(
-  x = pbmc.filtered$seurat_clusters,
+ad_medula_filtered$'cell_type' <- plyr::mapvalues(
+  x = ad_medula_filtered$seurat_clusters,
   from = mapping$seurat_cluster,
   to = mapping$cell_type
 )
@@ -90,45 +166,16 @@ Now, we can plot the clusters with the assigned cell types.
 
 
 
+
 ``` r
-DimPlot(pbmc.filtered, 
+DimPlot(ad_medula_filtered, 
         group.by = 'cell_type',   ## set the column to use as category
-        label = TRUE)  +          ## label clusters
+        label = TRUE, reduction = 'umap')  +          ## label clusters
         NoLegend()                ## remove legends
 ```
 
-<img src="07-Profiling_cells_files/figure-html/cell_types-1.png" style="display: block; margin: auto;" />
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
-
-## Visualization of gene expression levels of markers in clusters
-
-We can visualize the expression of the different markers across identified clusters
-using violin plots using the `VlnPlot()` function as follows:
-
-
-``` r
-VlnPlot(pbmc.filtered, 
-        features = canonical_markers,
-        group.by = 'cell_type')
-```
-
-<img src="07-Profiling_cells_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
-
-
-Because of the signal dropout it's hard to say what is the proportion of cells that are actually
-expressing a marker. Dotplots are commonly used to visualize both gene expression levels alongside 
-with the frequency of cells expressing the marker. The `DotPlot()` function comes at handy.
-
-
-
-``` r
-DotPlot(pbmc.filtered, 
-        features = canonical_markers, 
-        group.by = 'cell_type', 
-        dot.scale = 12)
-```
-
-<img src="07-Profiling_cells_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 
 ## Cell profiling automation
@@ -140,15 +187,24 @@ exemplified the sctype R library.
 
 
 
+
 ``` r
-library(openxlsx)
-library(HGNChelper)
+invisible({
+  library(openxlsx)
+  library(HGNChelper)
+})
+
 source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_wrapper.R") 
-sample <- run_sctype(pbmc.filtered, 
+
+ad_medula_filtered <- FindClusters(ad_medula_filtered, 
+                            resolution = 1, 
+                            verbose = FALSE)
+
+sample <- run_sctype(ad_medula_filtered, 
                      assay = "RNA", 
                      scaled = TRUE, 
-                     known_tissue_type="Immune system",
-                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx", 
+                     known_tissue_type="Adrenal",
+                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx", 
                      name="sctype_classification")
 ```
 
@@ -157,7 +213,10 @@ sample <- run_sctype(pbmc.filtered,
 ## [1] "New metadata added:  sctype_classification"
 ```
 
+
+
 Let's inspect again the metadata.
+
 
 
 ``` r
@@ -165,24 +224,33 @@ head(sample@meta.data)
 ```
 
 ```
-##                  orig.ident nCount_RNA nFeature_RNA percent.mt RNA_snn_res.0.1
-## AAAGAGACGGACTT-1       PBMC       1151          457   2.345786               0
-## AAAGTTTGATCACG-1       PBMC       1268          444   3.470032               2
-## AAATGTTGTGGCAT-1       PBMC       2761         1017   1.919594               1
-## AAATTCGAGCTGAT-1       PBMC       2969          980   2.189289               1
-## AAATTGACTCGCTC-1       PBMC       3411         1013   1.495163               0
-## AACAAACTCATTTC-1       PBMC       2178          731   1.423324               0
-##                  seurat_clusters  cell_type   sctype_classification
-## AAAGAGACGGACTT-1               0 Lymphocyte      Naive CD8+ T cells
-## AAAGTTTGATCACG-1               2     B cell           Naive B cells
-## AAATGTTGTGGCAT-1               1   Monocyte Non-classical monocytes
-## AAATTCGAGCTGAT-1               1   Monocyte Non-classical monocytes
-## AAATTGACTCGCTC-1               0 Lymphocyte      Naive CD8+ T cells
-## AACAAACTCATTTC-1               0 Lymphocyte      Naive CD8+ T cells
+##                          orig.ident nCount_RNA nFeature_RNA percent.mt
+## AAACGCTGTCAAAGTA_1 human_ad_medulla   2673.072         1347 0.22453995
+## AAAGGATCAGATCACT_1 human_ad_medulla   2563.070         1226 0.07635909
+## AAAGGATCAGCAGAAC_1 human_ad_medulla   2593.677         1254 0.00000000
+## AACAACCAGTCCTACA_1 human_ad_medulla   3183.051         1871 0.14112372
+## AACAAGAAGGACTTCT_1 human_ad_medulla   2718.732         1391 0.06546350
+## AACAAGATCTGCGTCT_1 human_ad_medulla   3705.433         2811 0.08209384
+##                    RNA_snn_res.0.1 seurat_clusters        cell_type
+## AAACGCTGTCAAAGTA_1               1               0 Late neuroblasts
+## AAAGGATCAGATCACT_1               1               0 Late neuroblasts
+## AAAGGATCAGCAGAAC_1               2               1           Bridge
+## AACAACCAGTCCTACA_1               2               1           Bridge
+## AACAAGAAGGACTTCT_1               2               1           Bridge
+## AACAAGATCTGCGTCT_1               3               4              SCP
+##                    RNA_snn_res.1 sctype_classification
+## AAACGCTGTCAAAGTA_1             0      Chromaffin cells
+## AAAGGATCAGATCACT_1             0      Chromaffin cells
+## AAAGGATCAGCAGAAC_1             1               Unknown
+## AACAACCAGTCCTACA_1             1               Unknown
+## AACAAGAAGGACTTCT_1             1               Unknown
+## AACAAGATCTGCGTCT_1             4         Schwann cells
 ```
+
 
 Now we see a new column called `sctype_classification` which contains the labels 
 annotated to each cell type. Let's plot now this annotations in a UMAP.
+
 
 
 ``` r
@@ -191,27 +259,21 @@ DimPlot(sample,
         label = TRUE) + NoLegend()
 ```
 
-<img src="07-Profiling_cells_files/figure-html/sctype_annotations-1.png" style="display: block; margin: auto;" />
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 
-Does it look similar to our conclusions?
+Does it look similar to our previous conclusions? Cell assignation depends
+on the definition of cell type signatures, which corresponds to a list
+of cell type markers. The library scType depends on [this](https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx) list of
+defined signatures. Please, download and inspect the database of signatures.
+Are there all human cell types represented in this list?
 
 
-## Final Report
 
 ## Exercise 
 
 
-> Using the scRNA-Seq workflow in this pipeline, process the provided dataset of PBMC cells 
-stimulated with IFN beta
-> Load the seurat object containing the data to a variable named `ifnb` using the following commands:
-
-```
-url_ifn <- 'https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true'
-ifnb <- readRDS(url(url_ifn))
-```
-
-> This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042). Provide a report in a Rmd file.   
+> Do the heatmap showing the expression of the marker genes in all cells. 
 
 
 

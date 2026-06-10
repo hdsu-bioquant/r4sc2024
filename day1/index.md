@@ -1,12 +1,28 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
+
+
 
 
 
 # 0. First steps in scRNA-Seq analysis 
 
 
-We will use available data from 10X genomics of Peripheral Blood Mononuclear cells (PBMC). In order
-to speed up the process only a subset of 500 cells are going to be processed here. Here, we will
-perform the following tasks:
+We will use available data from adrenal medulla [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1). 
+
+In this dataset, tissue from embryonic adrenal medulla was sequenced to understand the developmental process, leading from progenitor cell populations to differentiated lineages. This is crucial to understand tumoregenesis of neuroblatoma, a pediatric solid tumor originating along this developmental trajectory.
+
+In order to speed up the process only a subset of 2400 cells are going to be processed here.
+This tutorial can be run by copy-pasting the code in a Rstudio or R console.
+The datasets are retrieved from repositories. In case of no internet connection
+you can download the files from [Figshare](https://figshare.com/s/5e0afc577026e2e7413a) or
+[G drive](https://drive.google.com/drive/folders/13cPh4uFLZgCJ8BEfhHcduRmyiKcx5dA_?usp=sharing)
+
+
+We will perform the following tasks:
 
 * Definition of a Seurat object from a matrix of counts
 * Quality Control (QC) of the cell samples
@@ -20,7 +36,7 @@ perform the following tasks:
 ## Single Cell Sequencing
 
 Single cell sequencing (scRNA-Seq) technologies arise from bulk counterparts with 
-the aim of refining gene expression profiles. Previous bulk Sequencing offered 
+the aim of refining gene expression profiles. Previous bulk sequencing offered 
 averaged quantifications of gene expression in samples. In some contexts, for 
 example, when studying cell type specificity or the heterogeneity in tumours is 
 important to dissect patterns in cell subpopulations.
@@ -33,7 +49,7 @@ of scRNA-Seq data. However, the analysis that we show next are applied downstrea
 to libraries construction or sequencing, and are therefore platform agnostic.
 
 
-![**Single Cell Sequencing Platforms**: Date of development *vs* number of cells analyzed by each technology.](figures/moores-law.png)
+![**Single Cell Sequencing Platforms**: Date of development *vs* number of cells analyzed by each technology.](../figures/moores-law.png)
 
 The image is taken from [Svensson V et al, 2017](https://arxiv.org/abs/1704.01379).
 
@@ -47,28 +63,59 @@ outcome of this process is a count matrix, which is a discrete matrix of integer
 to the number of RNA molecules associated to each gene and cell. The count matrix usually has 
 genes as rows and cells in columns. 
 
-In the next lines we will load the matrix of UMI counts into a variable called `pbmc.mtx`. 
+In the next lines we will load the matrix of UMI counts into a variable called `counts`. 
 
 
 
-```r
-## Loading example data
-pbmc_url  <- 'https://github.com/caramirezal/caramirezal.github.io/raw/master/bookdown-minimal/data/pbmc_10X_500_cells.mtx.rds'
-pbmc.mtx <- readRDS(url(pbmc_url))
+
+``` r
+## If the url/internet doesn't work you can use a local copy
+## of the data, just set the local path here
+#ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
+# Read matrix
+#counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
+
+url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/counts_subset_2400_cells.mtx"
+counts <- readMM(url(url))
+counts <- as.matrix(counts)
+
+# Read cell and gene names
+cells <- read.delim(
+  #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
+  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+#head(cells)
+
+genes <- read.delim(
+  #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
+  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
+  header = FALSE,
+  stringsAsFactors = FALSE
+)
+#head(genes)
+
+# Assign row and column names
+rownames(counts) <- genes$V1
+colnames(counts) <- cells$cell_id
 ```
 
 
-As can be seen from the output of the function `dim(pbmc.mtx)` the matrix contains 13,714 rows (genes) and  columns (cells). 
+As can be seen from the output of the function `dim(counts)` the matrix contains 13,714 rows (genes) and  columns (cells). 
 
 
 
-```r
-dim(pbmc.mtx)
+
+``` r
+dim(counts)
 ```
 
 ```
-## [1] 13714   500
+## [1] 28422  2400
 ```
+
+
 
 
 To have a glimpse of the appearance of this matrix we print the first 5 rows and first 5 columns. It can
@@ -78,25 +125,26 @@ for single cell count matrices data.
 
 
 
-```r
-pbmc.mtx[1:5, 1:5]
+
+``` r
+counts[1:5, 1:5]
 ```
 
 ```
-## 5 x 5 sparse Matrix of class "dgCMatrix"
-##               AAAGAGACGGACTT-1 AAAGATCTGGGCAA-1 AAAGCAGATATCGG-1
-## AL627309.1                   .                .                .
-## AP006222.2                   .                .                .
-## RP11-206L10.2                .                .                .
-## RP11-206L10.9                .                .                .
-## LINC00115                    .                .                .
-##               AAAGTTTGATCACG-1 AAATCAACCCTATT-1
-## AL627309.1                   .                .
-## AP006222.2                   .                .
-## RP11-206L10.2                .                .
-## RP11-206L10.9                .                .
-## LINC00115                    .                .
+##               AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 AAAGGATCAGCAGAAC_1
+## RP11-34P13.7                   0                  0                  0
+## AL627309.1                     0                  0                  0
+## AP006222.2                     0                  0                  0
+## RP4-669L17.10                  0                  0                  0
+## RP5-857K21.15                  0                  0                  0
+##               AACAACCAGTCCTACA_1 AACAAGAAGGACTTCT_1
+## RP11-34P13.7                   0                  0
+## AL627309.1                     0                  0
+## AP006222.2                     0                  0
+## RP4-669L17.10                  0                  0
+## RP5-857K21.15                  0                  0
 ```
+
 
 We can start from different types of arrays apart from sparse matrices as data frames or hd5 
 objects, just to give some examples. The format in which the matrix is provided might also vary from 
@@ -109,8 +157,6 @@ here.
 
 > Manipulation of count matrices
 
-
-
 <!-- Quizz 1-->
 **QUIZ 1**
 
@@ -119,19 +165,19 @@ here.
 <br>
  a) median = 301, mean = 343
 <br>
- b) median = 11304, mean = 10432
+ b) median = 3130, mean = 3056
 <br>
  c) median = 2216, mean = 2354
 </summary>
 <br>
 <b>Answer:</b>
 <br>
-umi.sum <- apply(pbmc.mtx, 2, sum)
+umi.sum <- apply(counts, 2, sum)
 <br>
 summary(umi.sum)
 
 `Min. 1st Qu.  Median    Mean 3rd Qu.    Max.` <br>
-`561      1741      2216      2354      2746      7928`  
+`191    2215    3754    5520    6588   48150`  
 </details> 
 
 
@@ -144,13 +190,17 @@ summary(umi.sum)
 <details>
 <summary> What are the top genes with the highest number of UMI counts in decreasing order?
 <br>
- a) MALAT1, B2M, TMSB4X, RPL10, RPL13, RPL13A
+ a) MALAT1, PCDH9, CADM2, NRXN1, LSAMP, IL1RAPL1
 <br>
- b) RPL13, MALAT1, B2M, TMSB4X, RPL10, RPL13A
+ b) MALAT1, MEG3, BAI3, AUTS2, RBMS3, FAM155A
 <br>
  c) B2M, TMSB4X, RPL13A, RPL10, RPL13, MALAT1
 </summary>
 TIP: You can use the same approach from the previous quizz but now using rows.
+<br>
+umi.sum <- apply(counts, 1, sum)
+<br>
+sort(umi.sum, decreasing = TRUE) %>% head()
 <br>
 </details>
 
@@ -164,15 +214,15 @@ TIP: You can use the same approach from the previous quizz but now using rows.
 <br>
  a) 0.3105930
 <br>
- b) 0.9385724
+ b) 0.9296397
 <br>
  c) 0.7485923
  </summary>
-TIP: Calculate the number of entries that are zero as follows: `sum(pbmc.mtx==0)`.
+TIP: Calculate the number of entries that are zero as follows: `sum(counts==0)`.
 And then divide by the total number of entries in the matrix.
 
-`sum(pbmc.mtx==0)/prod(dim(pbmc.mtx))`
-`0.9385724`
+`sum(counts==0)/prod(dim(counts))`
+`0.9296397`
 </details>
 
 

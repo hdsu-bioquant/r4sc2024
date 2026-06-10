@@ -7,14 +7,14 @@ output:
 
 
 
-# Standard Preprocessing using Seurat
+# 1. Standard Preprocessing using Seurat
 
 
-Some standard steps are usually carried out in scRNA-Seq prior to further analysis as QC, dimensional
+Some standard steps are usually carried out in scRNA-Seq prior to further analysis, such as quality control (QC), dimensional
 reduction and marker visualization. Here, we will use the Seurat R package to perform these steps which
-is increasingly becoming the most popular tool, however, there are some other options as SingleCellExperiment
-in R and scanpy available for python. First, we need to define a Seurat object.
+is increasingly becoming the most popular tool. However, there are  other options such as scanpy which is available for python. First, we need to define a **Seurat object**.
 
+The Seurat object is a special data structure, which contains multiple type of information: the raw counts, the feature names (here genes), the cell identifiers, if available some processed data and additional metadata information. As we process through the analysis, we will keep on filling the Seurat object with new pieces of information (variable genes, principle components, etc...)
 
 ## Creating Seurat object
 
@@ -31,38 +31,42 @@ in R to get information about the parameters that are need to be provided to the
  
 
 
-```r
-library(Seurat)
 
-pbmc.seurat <- CreateSeuratObject(
-  counts = pbmc.mtx, 
-  project = 'PBMC', 
+``` r
+ad_medula_seurat <- CreateSeuratObject(
+  counts = counts, 
+  project = 'human_ad_medulla', 
   assay = 'RNA', 
   min.cells = 1, 
   min.features = 1
 )
+Idents(ad_medula_seurat) <- 'human_ad_medulla'
 ```
 
-The variable `pbmc.seurat` now contains the Seurat object that we can feed into the package.
+The variable `ad_medula_seurat` now contains the Seurat object that we can feed into the package.
 If we print the variable we get information about the number of genes and cells.
 
 
-```r
-pbmc.seurat
+
+``` r
+ad_medula_seurat
 ```
 
 ```
 ## An object of class Seurat 
-## 12673 features across 500 samples within 1 assay 
-## Active assay: RNA (12673 features, 0 variable features)
+## 25064 features across 2400 samples within 1 assay 
+## Active assay: RNA (25064 features, 0 variable features)
+##  1 layer present: counts
 ```
+
+
 
 ## Exploring the Seurat object
 
 
 Seurat objects can be seen as a container of different features. At this step it contains
 our gene expression matrix, but in addition it can store metadata, processed data,
-information from different assays, for example, scATACSeq, scCITESeq or unspliced transcripts.
+information from different assays, for example, scATAC-seq, scCITE-seq or unspliced transcripts.
 
 We can explore the seurat object using the `$` to explore its *metadata* in combination with the tab 
 key. For example, during the creation of the seurat object the number of counts quality metric
@@ -70,41 +74,43 @@ is calculated and added to the metadata. We can explore this metric by accessing
 as follows.
 
 
-```r
-library(tidyverse)
-pbmc.seurat$nCount_RNA %>% head
+
+``` r
+ad_medula_seurat$nCount_RNA %>% head
 ```
 
 ```
-## AAAGAGACGGACTT-1 AAAGATCTGGGCAA-1 AAAGCAGATATCGG-1 AAAGTTTGATCACG-1 
-##             1151             1347             4584             1268 
-## AAATCAACCCTATT-1 AAATGTTGTGGCAT-1 
-##             5676             2761
+## AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 AAAGGATCAGCAGAAC_1 AACAACCAGTCCTACA_1 
+##           2673.072           2563.070           2593.677           3183.051 
+## AACAAGAAGGACTTCT_1 AACAAGATCTGCGTCT_1 
+##           2718.732           3705.433
 ```
+
 
  We can do the same with the `@` operator to explore the different *slots*. For example,
  we can extract the original count matrix that we used to create the seurat object as follows:
  
  
 
-```r
-pbmc.seurat@assays$RNA$counts[1:5, 1:5]
+
+``` r
+ad_medula_seurat@assays$RNA$counts[1:5, 1:5]
 ```
 
 ```
 ## 5 x 5 sparse Matrix of class "dgCMatrix"
-##            AAAGAGACGGACTT-1 AAAGATCTGGGCAA-1 AAAGCAGATATCGG-1 AAAGTTTGATCACG-1
-## AL627309.1                .                .                .                .
-## AP006222.2                .                .                .                .
-## LINC00115                 .                .                .                .
-## NOC2L                     .                .                .                .
-## PLEKHN1                   .                .                .                .
-##            AAATCAACCCTATT-1
-## AL627309.1                .
-## AP006222.2                .
-## LINC00115                 .
-## NOC2L                     .
-## PLEKHN1                   .
+##               AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 AAAGGATCAGCAGAAC_1
+## RP11-34P13.7                   .                  .                  .
+## AL627309.1                     .                  .                  .
+## AP006222.2                     .                  .                  .
+## RP4-669L17.10                  .                  .                  .
+## RP5-857K21.2                   .                  .                  .
+##               AACAACCAGTCCTACA_1 AACAAGAAGGACTTCT_1
+## RP11-34P13.7                   .                  .
+## AL627309.1                     .                  .
+## AP006222.2                     .                  .
+## RP4-669L17.10                  .                  .
+## RP5-857K21.2                   .                  .
 ```
 
 
@@ -118,91 +124,63 @@ object and then plot it using an histogram.
 
 
 
-```r
-actin <- FetchData(pbmc.seurat, vars = 'ACTB')
+
+``` r
+actin <- FetchData(ad_medula_seurat, vars = 'ACTB')
 hist(actin$ACTB)
 ```
 
-<img src="01-Seurat_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+![](01-Seurat_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 
 
-## Quizzes
 
 
-
-**QUIZ 1**
-
-<br>
+## Quiz
 
 <details>
-<summary> Find and display the metadata in the seurat object: which command would you use?
+<summary> How can you find and display the metadata in the seurat object?
 <br>
-a) <tt>pbmc.seurat@meta.data %>% head</tt>
-<br>
-b) <tt>pbmc.seurat@metadata %>% head</tt>
-<br>
-c) <tt>pbmc[[ ]] %>% head</tt>
-<br>
-TIP: You can have 
-a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#object-information) 
-of the seurat objects from the GitHub Wiki. Two options are correct.
+<i>TIP: You can have 
+a look at the <a href="https://github.com/satijalab/seurat/wiki/Seurat#object-information">documentation</a>
+of the seurat objects from the GitHub Wiki.</i>
 </summary>
-
+<br>
 <b>Answer:</b>
 <br>
-<tt>pbmc.seurat@meta.data %>% head</tt>
-<br>
-<tt>pbmc.seurat[[ ]] %>% head</tt>
+
+```r
+ad_medula_seu_filtered@meta.data %>% head
+```
+
 </details> 
 
 
-**QUIZ 2**
 
+## Exercise
 
-<summary>
-<i>Extract and print the first 5 rows and columns of the count matrix from the seurat object</i>
-<br>
-a) <tt>GetAssayData(pbmc.seurat, slot='count')[1:5, 1:5]</tt>
-<br>
-b) <tt>pbmc.seurat@assays$RNA@counts[,1:5] %>% head(n=5)</tt>
-<br>
-c) <tt>pbmc.seurat[1:5, 1:5]</tt>
-<br>
-TIP: Two options are correct.
-</summary>
+<blockquote>
+Create a Seurat object 
 
-
-
-**QUIZ 3**
-
-The file in the following URL:
+The file in the follwing URL:
 
 `https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv` 
 
-contains 200 cells down-sampled from the 10x PBMC data and stored in tsv format. Load the count matrix 
-in tsv format using the following command.
+contains 250 cells downsampled from the 10x PBMC data and stored in tsv format
 
-```
-pbmc200.mtx <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv', sep = '\t')
-```
-                           
+ * Load the count matrix in tsv format
+ 
+ * Create a Seurat object using the count matrix
+ 
+ * How many features and cells are present in the count matrix?
 
-
-<details>
-<summary>
-* Create a Seurat object <code>pbmc200.seurat</code> using the count matrix.
-* How many features and cells are present in the count matrix?
-
-  1. 300 features and 250 samples
-  2. 12673 features and 200 samples
-  3. 11167 features and 200 samples
-</summary>
-<code>dim(pbmc200.mtx)</code>
-</details>
+</blockquote>
 
 
-[Next Chapter (Quality control)](./02-Quality_control.md)
+
+[Previous Chapter (Seurat)](./01-Seurat.md)|
+[Next Chapter (Quality Control)](./02-Quality_control.md)
+
 
 
 

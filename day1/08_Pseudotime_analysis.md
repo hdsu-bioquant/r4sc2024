@@ -5,7 +5,7 @@ output:
 ---
 
 
-# Introduction
+# 8. Pseudotime
 
 This analysis reconstructs developmental trajectories in the adrenal medulla
 using the Jansky et al. (2021) single-cell RNA-seq dataset.
@@ -18,11 +18,10 @@ Slingshot is a trajectory inference method that reconstructs developmental paths
 
 The starting population is defined as Schwann Cell Precursors (SCPs).
 
-# Load libraries
+## Load libraries
 
 
 ``` r
-library(Seurat)
 library(SingleCellExperiment)
 library(slingshot)
 library(Matrix)
@@ -34,7 +33,7 @@ library(patchwork)
 set.seed(1234)
 ```
 
-# Load data
+## Load data
 
 First, we load the already pre-processed data from Jansky et al 2021.
 
@@ -59,7 +58,7 @@ seurat_obj
 ##  1 layer present: counts
 ```
 
-# Inspect metadata
+## Inspect metadata
 
 We will implement a pseudotime analysis along the already annotated cell types. The calculation
 is guided on cluster or cell type information. 

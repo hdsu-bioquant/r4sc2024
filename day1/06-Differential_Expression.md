@@ -8,7 +8,8 @@ output:
 
 
 
-# Differential Expression Analysis
+
+# 6. Differential Expression Analysis
 
 The main advantage of using scRNA-Seq technologies is the possibility of 
 assessing cell type specificity and heterogeneity, which is not possible while
@@ -38,7 +39,7 @@ function `Idents()`.
 
 
 ``` r
-Idents(pbmc.filtered) <- pbmc.filtered$seurat_clusters
+Idents(ad_medula_filtered) <- ad_medula_filtered$seurat_clusters
 ```
 
 Now we can calculate the DEGs. 
@@ -53,7 +54,7 @@ increasing computation time.
 
 
 ``` r
-pbmc.degs <- FindAllMarkers(pbmc.filtered, 
+ad_medula.degs <- FindAllMarkers(ad_medula_filtered, 
                             logfc.threshold = 1, 
                             min.pct = 0.05, 
                             min.cells.feature = 10, 
@@ -61,24 +62,24 @@ pbmc.degs <- FindAllMarkers(pbmc.filtered,
 ```
 
 
-The output `pbmc.degs` consist of a data frame contanning the DEGs with
+The output `ad_medula.degs` consist of a data frame contanning the DEGs with
 p-vales, p-adjusted values and log fold change values for each gene as 
 we can see next:
 
 
 
 ``` r
-head(pbmc.degs)
+head(ad_medula.degs)
 ```
 
 ```
-##                 p_val avg_log2FC pct.1 pct.2    p_val_adj cluster     gene
-## HLA-DRA  1.355148e-67  -4.985225 0.300 0.968 1.717379e-63       0  HLA-DRA
-## HLA-DRB1 9.575850e-60  -4.153488 0.148 0.884 1.213547e-55       0 HLA-DRB1
-## CD74     3.415369e-51  -3.268991 0.781 0.974 4.328297e-47       0     CD74
-## HLA-DPB1 1.613117e-46  -3.767549 0.310 0.858 2.044303e-42       0 HLA-DPB1
-## IL32     9.357132e-44   4.489652 0.808 0.110 1.185829e-39       0     IL32
-## HLA-DRB5 2.825316e-43  -4.161331 0.084 0.684 3.580523e-39       0 HLA-DRB5
+##                  p_val avg_log2FC pct.1 pct.2     p_val_adj cluster     gene
+## SLC24A2  1.103268e-232   4.983958 0.631 0.031 2.765231e-228       0  SLC24A2
+## CCSER1   3.469903e-223   1.702038 0.990 0.488 8.696964e-219       0   CCSER1
+## AGBL4    1.053599e-189   1.610500 0.963 0.476 2.640739e-185       0    AGBL4
+## TH       1.021532e-184   2.278201 0.854 0.281 2.560368e-180       0       TH
+## ST18     7.427605e-146   2.297766 0.739 0.212 1.861655e-141       0     ST18
+## KIAA1244 8.635505e-144   2.750580 0.646 0.143 2.164403e-139       0 KIAA1244
 ```
 
 
@@ -91,12 +92,11 @@ library(ggplot2)
 library(dplyr)         ## for handling data frames
 library(ggrepel)
 
-pbmc.degs.cluster <- pbmc.degs %>% filter(cluster=="3")
-
-
-pbmc.degs.cluster %>%
+ad_medula.degs %>%
+  filter(cluster=='0') %>%
+  filter(p_val_adj > 0) %>%
   arrange(desc(abs(avg_log2FC))) %>%       ## Arranging genes by FC
-  mutate(highlight=ifelse(-log10(p_val_adj)>40, TRUE, FALSE)) %>% ## highlighting top FC markers
+  mutate(highlight=ifelse(-log10(p_val_adj)>125, TRUE, FALSE)) %>% ## highlighting top FC markers
   mutate(gene_label=ifelse(highlight==TRUE, gene, '')) %>% ## Adding labels for top markers
   ggplot(aes(x=avg_log2FC, y=-log10(p_val_adj),
              colour=highlight,
@@ -106,24 +106,13 @@ pbmc.degs.cluster %>%
       theme_bw()
 ```
 
-<img src="06-Differential_Expression_files/figure-html/vulcano_plot-1.png" style="display: block; margin: auto;" />
-
+![](06-Differential_Expression_files/figure-html/vulcano_plot-1.png)<!-- -->
 
 
 ## Exercises
 
-
-### Exercise 1
-
 > What does this plot represent? Can you make the equivalent volcano plot for the other clusters?
 
 
-### Exercise 2
-
-> What does this plot represent? Can you make the equivalent volcano plot for the other clusters?
- 
-Compare the DEGs from the above shown results with that calculated using the pbmc200.seurat object defined in the previous exercises Intersect both lists of genes. Use the following chunk to load the table of DEGs calculated for the example above.
-
-```
-degs <- read.table('https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/degs_10x_pbmc.tsv')
-```
+[Previous Chapter (Cluster Visualization)](./05-Cluster_visualization.md)|
+[Next Chapter (Profiling cells)](./06-Profiling_cells.md)

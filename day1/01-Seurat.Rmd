@@ -15,16 +15,47 @@ reduction and marker visualization. Here, we will use the Seurat R package to pe
 is increasingly becoming the most popular tool, however, there are some other options as SingleCellExperiment
 in R and scanpy available for python. First, we need to define a Seurat object.
 
-```{r}
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+invisible({
 library(Seurat)
+library(Matrix)
+library(tidyverse)
+})
 ```
 
 
-Loading datasets
 
-```{r}
-pbmc_url  <- 'https://github.com/caramirezal/caramirezal.github.io/raw/master/bookdown-minimal/data/pbmc_10X_500_cells.mtx.rds'
-pbmc.mtx <- readRDS(url(pbmc_url))
+```{r, include=FALSE}
+## If the url/internet doesn't work you can use a local copy
+## of the data, just set the local path here
+#ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
+# Read matrix
+#counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
+
+url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/counts_subset_2400_cells.mtx"
+counts <- readMM(url(url))
+counts <- as.matrix(counts)
+
+# Read cell and gene names
+cells <- read.delim(
+  #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
+  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+#head(cells)
+
+genes <- read.delim(
+  #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
+  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
+  header = FALSE,
+  stringsAsFactors = FALSE
+)
+#head(genes)
+
+# Assign row and column names
+rownames(counts) <- genes$V1
+colnames(counts) <- cells$cell_id
 ```
 
 
@@ -43,31 +74,26 @@ in R to get information about the parameters that are need to be provided to the
  
 
 
-```{r}
-library(Seurat)
-
-pbmc.seurat <- CreateSeuratObject(
-  counts = pbmc.mtx, 
-  project = 'PBMC', 
+```{r, message=FALSE, warning=FALSE}
+ad_medula_seurat <- CreateSeuratObject(
+  counts = counts, 
+  project = 'human_ad_medulla', 
   assay = 'RNA', 
   min.cells = 1, 
   min.features = 1
 )
+Idents(ad_medula_seurat) <- 'human_ad_medulla'
 ```
 
-The variable `pbmc.seurat` now contains the Seurat object that we can feed into the package.
+The variable `ad_medula_seurat` now contains the Seurat object that we can feed into the package.
 If we print the variable we get information about the number of genes and cells.
 
 
 ```{r}
-pbmc.seurat
+ad_medula_seurat
 ```
 
-```
-## An object of class Seurat 
-## 12673 features across 500 samples within 1 assay 
-## Active assay: RNA (12673 features, 0 variable features)
-```
+
 
 ## Exploring the Seurat object
 
@@ -82,17 +108,10 @@ is calculated and added to the metadata. We can explore this metric by accessing
 as follows.
 
 
-```{r}
-library(tidyverse)
-pbmc.seurat$nCount_RNA %>% head
+```{r, warning=FALSE, message=FALSE}
+ad_medula_seurat$nCount_RNA %>% head
 ```
 
-```
-## AAAGAGACGGACTT-1 AAAGATCTGGGCAA-1 AAAGCAGATATCGG-1 AAAGTTTGATCACG-1 
-##             1151             1347             4584             1268 
-## AAATCAACCCTATT-1 AAATGTTGTGGCAT-1 
-##             5676             2761
-```
 
  We can do the same with the `@` operator to explore the different *slots*. For example,
  we can extract the original count matrix that we used to create the seurat object as follows:
@@ -100,23 +119,7 @@ pbmc.seurat$nCount_RNA %>% head
  
 
 ```{r}
-pbmc.seurat@assays$RNA$counts[1:5, 1:5]
-```
-
-```
-## 5 x 5 sparse Matrix of class "dgCMatrix"
-##            AAAGAGACGGACTT-1 AAAGATCTGGGCAA-1 AAAGCAGATATCGG-1 AAAGTTTGATCACG-1
-## AL627309.1                .                .                .                .
-## AP006222.2                .                .                .                .
-## LINC00115                 .                .                .                .
-## NOC2L                     .                .                .                .
-## PLEKHN1                   .                .                .                .
-##            AAATCAACCCTATT-1
-## AL627309.1                .
-## AP006222.2                .
-## LINC00115                 .
-## NOC2L                     .
-## PLEKHN1                   .
+ad_medula_seurat@assays$RNA$counts[1:5, 1:5]
 ```
 
 
@@ -130,172 +133,55 @@ object and then plot it using an histogram.
 
 
 
-```{r}
-actin <- FetchData(pbmc.seurat, vars = 'ACTB')
+```{r, message=FALSE, warning=FALSE}
+actin <- FetchData(ad_medula_seurat, vars = 'ACTB')
 hist(actin$ACTB)
 ```
 
-# 2. Quality control
 
-# Quality control
-
-
-Filtering cells with low sequencing quality is a very important step since it can greatly
-impact in further analysis. Quality check and control often requires to visualize and inspect
-samples in order to determine appropiate thresholds. Threshold values might vary from one 
-dataset to another, so no hard threshold rule can be applied equally to every case.
-
-We will examine the number of UMI counts, the number of RNA features and the percentage of reads 
-of mitochondrial genes.
-
-We will first calculate the percentage of UMI counts of reads mapped to mitochondrial genes. This
-step most be manually done since is based on a *priori knowledge* of which genes corresponds to
-mitochondrial genes. 
-In this case, genes are annotated using human ensembl gene symbol annotations mitochondrial 
-genes are annotated starting with a `MT-` string.
-
-
-
-```{r}
-pbmc.seurat[["percent.mt"]] <- PercentageFeatureSet(pbmc.seurat, pattern = "^MT-")
-```
-
-Then, we can visualize the following metrics.
-
- * Number of features - Correspond to the number of different mapped genomic features. For example, in the
- case of scRNA-Seq features corresponds to genes, in ATAC-Seq to genomic ranges, etc. High number of features
- can indicate doublets and empty cells. Usually between 1 and 30000.
- 
- * Number of counts - Number of mapped reads. It can also indicate the presence of doublets and empty 
-droplet. It's generally correlated to the number of features. Usually between 1 and 20000.
- 
- * Percentage of mitochondrial genes - Percentage of mapped reads that are annotated to mitochondrial
- genes. The presence of high levels of % of mitochondrial genes can suggest that a cell have lost
- its membrane integrity or that the cytoplasm has been leaked off and only the mitochondria was retained.
-Usually a range from 0 to 10 is aceptable.
-
-
-We can plot these metrics using the function `VlnPlot()` as follows:
-
-
-
-```{r}
-VlnPlot(pbmc.seurat, features = c('nFeature_RNA', 'nCount_RNA', 'percent.mt'))
-```
-
-The violin plots show the values of the metrics for each cell along with an adjusted violin 
-distribution.
-
-## Filtering out cells
-
-Based on the previous violin plots we can define some thresholds and filter out cells using
-the `subset` function. In the following code we select cells having nFeatures < 1250, 
-nCount < 4000 and percentage of reads mapped to mitochondrial genes < 5 percent.
-
-
-```{r}
-pbmc.filtered <- subset(pbmc.seurat, 
-                           nFeature_RNA < 1250 &
-                                nCount_RNA < 4000 & 
-                                    percent.mt < 5)
-```
-
-We can check the number of cell that passed the QC.
-
-
-```{r}
-ncol(pbmc.filtered)
-```
-
-```
-## [1] 452
-```
-
-
-
-
-
-
-
-## Normalization
-
-There are several methods for normalization of scRNA-Seq data. A commonly
-used strategy is the log normalization which basically corrects sequencing
-deep in cells by dividing each feature by the total number of counts and
-then multiplied the result by a factor, usually 10000, and finally the
-values are log transformed.
-
-Log normalization can be implemented by using the `NormalizeData()` function.
-
-
-```{r}
-pbmc.filtered <- NormalizeData(pbmc.filtered)
-```
-
-Then, in order to make genes measurements more comparable log transformed
-values are scaled in a way that the media is equal to zero and the variance
-is equal to 1 as follows:
-
-
-```{r}
-pbmc.filtered <- ScaleData(pbmc.filtered)
-```
 
 
 
 ## Quizzes
 
-
-**QUIZ 1**
-
+<br>
 <details>
-<summary> How are the number of features and UMI counts related?
+<summary> Find and display the metadata in the seurat object
 <br>
-a) They are not related and randomly distributed in a scatter plot
-<br>
-b) They are related in a non-linear way
-<br>
-c) They are linearly related
-<br>
-TIP: Use the function FeatureScatter, inspect the manual using ?function.
+TIP: You can have 
+a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#object-information) 
+of the seurat objects from the GitHub Wiki.
 </summary>
 <br>
 <b>Answer:</b>
 <br>
-<code>FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")</code>
 
-We observe as expected a linear relation between the number of UMI counts and the 
-features recorded.
+```r
+ad_medula_seu_filtered@meta.data %>% head
+```
 
 </details> 
 
 
-**QUIZ 2**
 
+## Exercises
 
-Repeat the analysis for the content in mitochondrial reads on the `pbmc200.seurat` object you created in the previous section. 
+<blockquote>
+Create a Seurat object 
 
+The file in the follwing URL:
 
-<details>
-<summary>
-What is the mean and median values of the percentage of mitochondrial reads?
+`https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/bookdown-minimal/data/pbmc_10X_250_cells.tsv` 
 
-1. mean=2.2133 and median=2.0532
-2. mean=2.2246 and median=2.0639
-3. mean=0.0102. and median=1.1743
-</summary>
+contains 250 cells downsampled from the 10x PBMC data and stored in tsv format
 
-<code>pbmc_v2.seurat[["percent.mt"]] <- PercentageFeatureSet(pbmc_v2.seurat, pattern = "^MT-")</code>
-<code>summary(pbmc_v2.seurat@meta.data$percent.mt)</code>
+ * Load the count matrix in tsv format
+ 
+ * Create a Seurat object using the count matrix
+ 
+ * How many features and cells are present in the count matrix?
 
-<code>
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </code>
-<code> 0.1667  1.4922  2.0639  2.2246  2.7384 10.4478 
- </code>
-
-</details>
-
-**Apply the same filtering rules on the `pbmc200.seurat` object!**
+</blockquote>
 
 
 
