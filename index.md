@@ -1,9 +1,9 @@
-# Course R for single-cell analysis (R4SC 2024)
+# Course R for single-cell analysis (R4SC 2026)
 
 
 Welcome to the **R for single-cell analysis** This workshop is meant for individuals with little previous knowledge R. 
 
-The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am - 12am and 2pm - 5pm.
+The course will run over 2 days **(Thursday, 11.06 and Friday, 12.06)** 
 
 
 ******
@@ -16,9 +16,9 @@ The course will run over 2 days **(Monday, 11.11 and Tuesday, 12.11)** from 9am 
 
 ## Schedule and practical infos
 
-The course will take place at the [Institute for Pharmacy and Molecular Biotechnology (IPMB), Im Neuenheimer Feld 364, 69120 Heidelberg](https://maps.app.goo.gl/56pMBgnT7HnGQesT9). The computer room in in the 5th floor.
+The course will take place at the Medizinisches Lehrgebäude. 
 
-* Monday: 10h - 13h and 14h - 17h
+* Thursday: 10h - 13h and 14h - 17h
 * Tuesday: 9h - 13h and 14h - 16h
 
 
@@ -95,10 +95,12 @@ Tutorials:
 * Part 1 : [Introduction to Seurat](./day1/01-Seurat.md)
 * Part 2 : [Quality control](./day1/02-Quality_control.md)
 * Part 3 : [Feature selection](./day1/03-Feature_selection.md)
-* Part 4 : [Dimensional reduction](./day1/04-Normalization_and_Dimensional_Reduction.md)
+* Part 4 : [Dimensional reduction](./day1/04-Dimensional_Reduction.md)
 * Part 5 : [Cluster_visualization - UMAP](./day1/05-Cluster_visualization.md)
 * Part 6 : [Differential expression](./day1/06-Differential_Expression.md)
 * Part 7 : [Profiling cells](./day1/07-Profiling_cells.md)
+* Part 8 : [Pseudotime analysis](./day1/08_Pseudotime_analysis.md)
+
 
 ### Day 2: analysis of scATAC-seq and integration
 
