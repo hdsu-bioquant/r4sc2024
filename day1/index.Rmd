@@ -83,7 +83,7 @@ counts <- as.matrix(counts)
 # Read cell and gene names
 cells <- read.delim(
   #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/data/cells_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv",
   header = TRUE,
   stringsAsFactors = FALSE
 )
@@ -91,7 +91,7 @@ cells <- read.delim(
 
 genes <- read.delim(
   #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/data/genes_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/genes_subset_2400_cells.tsv",
   header = FALSE,
   stringsAsFactors = FALSE
 )

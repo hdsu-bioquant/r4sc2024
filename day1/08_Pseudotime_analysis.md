@@ -5,12 +5,14 @@ output:
 ---
 
 
-# 8. Pseudotime
 
-This analysis reconstructs developmental trajectories in the adrenal medulla
-using the Jansky et al. (2021) single-cell RNA-seq dataset.
 
-Trajectory inference is performed using Slingshot. Existing UMAP coordinates
+
+# 8. Introduction
+
+From the gene expression profile, we can determine a *pseudotime* for each cell, which represents it developmental state along a developmental trajectory from progenitor cells to differentiated cells. Each cell is assigned a pseudotime, and cells can then be ordered along this time axis.
+
+There are many computational approaches for pseudotime inference. Here, trajectory inference is performed using **Slingshot**. Existing UMAP coordinates
 provided by the original study are used directly. No cell filtering or
 subsetting is performed.
 
@@ -18,7 +20,9 @@ Slingshot is a trajectory inference method that reconstructs developmental paths
 
 The starting population is defined as Schwann Cell Precursors (SCPs).
 
-## Load libraries
+We start by loading the required libraries
+
+# Load libraries
 
 
 ``` r
@@ -33,32 +37,11 @@ library(patchwork)
 set.seed(1234)
 ```
 
-## Load data
-
-First, we load the already pre-processed data from Jansky et al 2021.
 
 
 
-``` r
-## If url connection doesn't work you can work locally
-#seurat_obj <- readRDS("/Users/cbg-mbp-02/Documents/data/janski_2021/janski_2021_seurat_subset_2400_cells.rds")
 
-url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/janski_2021_seurat_subset_2400_cells.rds"
-con <- url(url, open = "rb")
-seurat_obj <- readRDS(con)
-close(con)
-
-seurat_obj
-```
-
-```
-## An object of class Seurat 
-## 28422 features across 2400 samples within 1 assay 
-## Active assay: RNA (28422 features, 0 variable features)
-##  1 layer present: counts
-```
-
-## Inspect metadata
+# Inspect metadata
 
 We will implement a pseudotime analysis along the already annotated cell types. The calculation
 is guided on cluster or cell type information. 
@@ -70,20 +53,14 @@ str(seurat_obj@meta.data)
 ```
 
 ```
-## 'data.frame':	2400 obs. of  13 variables:
-##  $ cell_id     : chr  "AAACGCTGTCAAAGTA_1" "AAAGGATCAGATCACT_1" "AAAGGATCAGCAGAAC_1" "AACAACCAGTCCTACA_1" ...
-##  $ orig.ident  : int  14607 14607 14607 14607 14607 14607 14607 14607 14607 14607 ...
-##  $ nCount_RNA  : num  1984 1645 1715 2882 2029 ...
-##  $ nFeature_RNA: int  1347 1226 1254 1871 1391 2811 1899 2200 1192 2690 ...
-##  $ percent.mt  : num  0.2016 0.0608 0 0.1041 0.0493 ...
-##  $ S.Score     : num  0.0879 -0.0594 -0.0209 -0.1035 0.0835 ...
-##  $ Phase       : chr  "S" "G1" "G1" "G2M" ...
-##  $ cytotrace   : num  0.353 0.203 0.314 0.601 0.317 ...
-##  $ pseudotime  : num  17.8 15.6 14 12.9 13.2 ...
-##  $ celltype    : chr  "Neuroblasts" "Neuroblasts" "Connecting progenitor cells" "Connecting progenitor cells" ...
-##  $ X           : chr  "AAACGCTGTCAAAGTA_1" "AAAGGATCAGATCACT_1" "AAAGGATCAGCAGAAC_1" "AACAACCAGTCCTACA_1" ...
-##  $ UMAP_1      : num  5.57 4.8 4.04 4.48 4.52 ...
-##  $ UMAP_2      : num  -3.477 -2.193 -0.145 0.913 0.577 ...
+## 'data.frame':	2287 obs. of  7 variables:
+##  $ orig.ident     : Factor w/ 1 level "human_ad_medulla": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ nCount_RNA     : num  2673 2563 2594 3183 2719 ...
+##  $ nFeature_RNA   : int  1347 1226 1254 1871 1391 2811 1899 2200 1192 2690 ...
+##  $ percent.mt     : num  0.2245 0.0764 0 0.1411 0.0655 ...
+##  $ RNA_snn_res.0.1: Factor w/ 4 levels "0","1","2","3": 2 2 3 3 3 4 2 4 3 3 ...
+##  $ seurat_clusters: Factor w/ 4 levels "0","1","2","3": 2 2 3 3 3 4 2 4 3 3 ...
+##  $ cell_type      : Factor w/ 4 levels "Chromaffin cells",..: 2 2 3 3 3 4 2 4 3 3 ...
 ```
 
 
@@ -95,36 +72,6 @@ downstream analyses.
 
 
 
-``` r
-seurat_obj <- NormalizeData(seurat_obj)
-
-seurat_obj <- FindVariableFeatures(
-  seurat_obj,
-  selection.method = "vst",
-  nfeatures = 2000
-)
-
-seurat_obj <- ScaleData(
-  seurat_obj,
-  features = VariableFeatures(seurat_obj)
-)
-
-seurat_obj <- RunPCA(
-  seurat_obj,
-  features = VariableFeatures(seurat_obj), 
-  verbose = FALSE
-)
-
-umap_coords <- as.matrix(seurat_obj@meta.data[, c("UMAP_1", "UMAP_2")])
-colnames(umap_coords) <- c("UMAP_1", "UMAP_2")
-rownames(umap_coords) <- colnames(seurat_obj)
-
-seurat_obj[["umap"]] <- CreateDimReducObject(
-  embeddings = umap_coords,
-  key = "UMAP_",
-  assay = DefaultAssay(seurat_obj)
-)
-```
 
 # Create SingleCellExperiment object
 
@@ -140,14 +87,14 @@ sce
 
 ```
 ## class: SingleCellExperiment 
-## dim: 28422 2400 
+## dim: 25064 2287 
 ## metadata(0):
-## assays(2): counts logcounts
-## rownames(28422): RP11-34P13.7 AL627309.1 ... RLN3 AC067969.1
+## assays(3): counts logcounts scaledata
+## rownames(25064): RP11-34P13.7 AL627309.1 ... LINGO4 RP11-612A1.1
 ## rowData names(0):
-## colnames(2400): AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 ...
+## colnames(2287): AAACGCTGTCAAAGTA_1 AAAGGATCAGATCACT_1 ...
 ##   TTCCGGTTCGGTAGGA_17 TTGTTGTCAGAAATCA_17
-## colData names(14): cell_id orig.ident ... UMAP_2 ident
+## colData names(8): orig.ident nCount_RNA ... cell_type ident
 ## reducedDimNames(2): PCA UMAP
 ## mainExpName: RNA
 ## altExpNames(0):
@@ -164,7 +111,7 @@ The dataset already contains UMAP coordinates in the metadata.
 
 ``` r
 umap_coords <- as.matrix(
-  seurat_obj@meta.data[, c("UMAP_1", "UMAP_2")]
+  Embeddings(seurat_obj, "umap")
 )
 
 reducedDims(sce)$UMAP <- umap_coords
@@ -175,19 +122,10 @@ reducedDims(sce)$UMAP <- umap_coords
 
 
 ``` r
-ggplot(
-  seurat_obj@meta.data,
-  aes(
-    x = UMAP_1,
-    y = UMAP_2,
-    color = celltype
-  )
-) +
-  geom_point(size = 0.5) +
-  theme_classic()
+DimPlot(seurat_obj, group.by = 'cell_type') 
 ```
 
-![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 # Run Slingshot
 
@@ -197,9 +135,9 @@ The slingshot() function performs trajectory inference using the cell annotation
 ``` r
 sce <- slingshot(
   sce,
-  clusterLabels = "celltype",  # use annotated cell types as groups
+  clusterLabels = "cell_type",  # use annotated cell types as groups
   reducedDim = "UMAP",         # use existing UMAP coordinates
-  start.clus = "SCPs"          # define SCPs as the starting population
+  start.clus = "SCP"          # define SCPs as the starting population
 )
 ```
 
@@ -207,7 +145,7 @@ sce <- slingshot(
 
 
 ``` r
-celltype_factor <- as.factor(colData(sce)$celltype)
+celltype_factor <- as.factor(colData(sce)$cell_type)
 
 plot(
   reducedDims(sce)$UMAP,
@@ -232,7 +170,7 @@ lines(
 )
 ```
 
-![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 ## Inspecting and subsetting trajectories
 
@@ -243,17 +181,10 @@ slingLineages(sce)
 
 ```
 ## $Lineage1
-## [1] "SCPs"                        "Bridge"                     
-## [3] "Connecting progenitor cells" "Chromaffin cells"           
-## [5] "Late chromaffin cells"      
+## [1] "SCP"              "Bridge"           "Late neuroblasts"
 ## 
 ## $Lineage2
-## [1] "SCPs"                        "Bridge"                     
-## [3] "Connecting progenitor cells" "Neuroblasts"                
-## [5] "Late neuroblasts"           
-## 
-## $Lineage3
-## [1] "SCPs"      "Late SCPs"
+## [1] "SCP"              "Bridge"           "Chromaffin cells"
 ```
 
 ## Extracting pseudotime 
@@ -277,14 +208,33 @@ the algorithm couldn’t place it along that lineage because it lies outside the
 
 
 ``` r
-seurat_obj@meta.data %>%
-    ggplot(aes(UMAP_1, UMAP_2, colour = pt_lineage1)) +
+## Extracting UMAP coordinates
+umap_coords <- Embeddings(seurat_obj, "umap") %>%
+                  as.data.frame()
+
+## Extracting pseudotime coordinates
+pseudotime_df <- seurat_obj@meta.data
+
+## Checkin cells order
+all(rownames(umap_coords) == rownames(pseudotime_df))
+```
+
+```
+## [1] TRUE
+```
+
+``` r
+## Merging datafarmes
+pseudotime_df <- cbind(umap_coords, pseudotime_df)
+
+pseudotime_df %>%
+    ggplot(aes(umap_1, umap_2, colour = pt_lineage1)) +
       geom_point() +
       viridis::scale_color_viridis() +
       theme_classic()
 ```
 
-![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 We can visualize the smooth fitted trajectory as follows.
 
@@ -303,10 +253,10 @@ lines(
 )
 ```
 
-![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 
-# Identifying genes associated with pseudotime
+Identify genes associated with pseudotime
 
 We next identify genes whose expression changes continuously along the inferred developmental trajectory. To do this, we calculate the Spearman correlation between gene expression and pseudotime values. Spearman correlation is a rank-based measure that is robust to non-linear relationships and is therefore commonly used in pseudotime analyses.
 
@@ -359,13 +309,13 @@ head(correlation_df)
 ```
 
 ```
-##            gene correlation
-## CCSER1   CCSER1   0.8218033
-## AGBL4     AGBL4   0.8057172
-## FAM155A FAM155A   0.8054655
-## DPP6       DPP6   0.7742003
-## CDH6       CDH6  -0.7574722
-## MEG3       MEG3   0.7427033
+##              gene correlation
+## RBFOX1     RBFOX1   0.8385368
+## CACNA2D3 CACNA2D3   0.8076741
+## KCNQ5       KCNQ5   0.7817430
+## NRG1         NRG1   0.7757867
+## DPP6         DPP6   0.7476792
+## SLC35F1   SLC35F1  -0.7367129
 ```
 
 
@@ -388,7 +338,7 @@ FeaturePlot(
 )
 ```
 
-![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](08_Pseudotime_analysis_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 These visualizations reveal where pseudotime-associated genes are expressed within the developmental landscape. Genes positively correlated with pseudotime tend to be enriched in later cellular states, whereas negatively correlated genes are often associated with earlier stages of the trajectory.
 
