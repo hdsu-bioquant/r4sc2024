@@ -8,6 +8,7 @@ output:
 
 
 
+
 # 7. Profiling cells
 
 In the context of single-cell RNA-seq (scRNA-seq), cell profiling refers to the process of characterizing individual cells based on their gene expression patterns to understand their identity, functional state, and potential biological roles.
@@ -268,15 +269,23 @@ of cell type markers. The library scType depends on [this](https://raw.githubuse
 defined signatures. Please, download and inspect the database of signatures.
 Are there all human cell types represented in this list?
 
+## Quiz
 
+> Compare your cell profiling to the ground truth from the publication.
+Load the cell annotations as follows:
 
-## Exercise 
+```
+cells <- read.delim(
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv",
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+```
 
-
-> Do the heatmap showing the expression of the marker genes in all cells. 
-
+Then, compare the cells annotations stored in the the data frame with the
+annotations from the processed seurat object.
 
 
 [Previous Chapter (Differential expression)](./06-Differential_Expression.md)|
-[Next Chapter (Pseudotime analysis)](./08-Intro_to_pseudotime_analysis.md)
+[Next Chapter (Pseudotime analysis)](./08-Pseudotime_analysis.md)
 

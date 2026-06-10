@@ -353,7 +353,7 @@ display: none;
 
 
 <div id="profiling-cells" class="section level1">
-<h1>Profiling cells</h1>
+<h1>7. Profiling cells</h1>
 <p>In the context of single-cell RNA-seq (scRNA-seq), cell profiling
 refers to the process of characterizing individual cells based on their
 gene expression patterns to understand their identity, functional state,
@@ -534,25 +534,21 @@ a list of cell type markers. The library scType depends on <a href="https://raw.
 list of defined signatures. Please, download and inspect the database of
 signatures. Are there all human cell types represented in this list?</p>
 </div>
-<div id="final-report" class="section level2">
-<h2>Final Report</h2>
-</div>
-<div id="exercise" class="section level2">
-<h2>Exercise</h2>
+<div id="quiz" class="section level2">
+<h2>Quiz</h2>
 <blockquote>
-<p>Using the scRNA-Seq workflow in this pipeline, process a data
-regarding PBMC cells stimulated with IFN beta Load the seurat object
-containing the data to a variable named <code>ifnb</code> using the
-following commands:</p>
+<p>Compare your cell profiling to the ground truth from the publication.
+Load the cell annotations as follows:</p>
 </blockquote>
-<pre><code>url_ifn &lt;- &#39;https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true&#39;
-ifnb &lt;- readRDS(url(url_ifn))</code></pre>
-<blockquote>
-<p>This data is downsampled from the <a href="https://www.nature.com/articles/nbt.4042">Kang HM et al, 2017
-data</a>. Provide a report in a Rmd file.</p>
-</blockquote>
+<pre><code>cells &lt;- read.delim(
+  &quot;https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv&quot;,
+  header = TRUE,
+  stringsAsFactors = FALSE
+)</code></pre>
+<p>Then, compare the cells annotations stored in the the data frame with
+the annotations from the processed seurat object.</p>
 <p><a href="./06-Differential_Expression.md">Previous Chapter
-(Differential expression)</a>| <a href="./08-Intro_to_pseudotime_analysis.md">Next Chapter (Pseudotime
+(Differential expression)</a>| <a href="./08-Pseudotime_analysis.md">Next Chapter (Pseudotime
 analysis)</a></p>
 </div>
 </div>

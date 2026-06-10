@@ -5,6 +5,7 @@ output:
 ---
 
 
+
 ```{r, done_in_previous_section, include=FALSE}
 library(Seurat)
 library(tidyverse)
@@ -23,7 +24,7 @@ counts <- as.matrix(counts)
 # Read cell and gene names
 cells <- read.delim(
   #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv",
   header = TRUE,
   stringsAsFactors = FALSE
 )
@@ -31,7 +32,7 @@ cells <- read.delim(
 
 genes <- read.delim(
   #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/genes_subset_2400_cells.tsv",
   header = FALSE,
   stringsAsFactors = FALSE
 )
@@ -287,6 +288,21 @@ of cell type markers. The library scType depends on [this](https://raw.githubuse
 defined signatures. Please, download and inspect the database of signatures.
 Are there all human cell types represented in this list?
 
+## Quiz
+
+> Compare your cell profiling to the ground truth from the publication.
+Load the cell annotations as follows:
+
+```
+cells <- read.delim(
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv",
+  header = TRUE,
+  stringsAsFactors = FALSE
+)
+```
+
+Then, compare the cells annotations stored in the the data frame with the
+annotations from the processed seurat object.
 
 
 [Previous Chapter (Differential expression)](./06-Differential_Expression.md)|
