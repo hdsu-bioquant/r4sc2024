@@ -159,7 +159,25 @@ DotPlot(ad_medula_filtered,
       coord_flip()
 ```
 
+## UMAP visualization
 
+The markers can also be visualized in UMAPs. UMAPs are useful for visualizing possible heterogeneity
+in gene expression which could reveal possible subclusters of cells with
+particular phenotypes.
+
+
+```{r}
+FeaturePlot(ad_medula_filtered, 
+            features = c("CHGA",
+                         "IL7",
+                         "CDH9", 
+                         "MPZ"), 
+            order = TRUE)
+```
+
+
+For example, MPZ is expressed very specifically in the left branch
+but some heterogeneity can be observed.
 
 
 ## Cell type labelling

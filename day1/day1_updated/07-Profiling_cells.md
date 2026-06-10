@@ -90,7 +90,28 @@ DotPlot(ad_medula_filtered,
 
 ![](07-Profiling_cells_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
+## UMAP visualization
 
+The markers can also be visualized in UMAPs. UMAPs are useful for visualizing possible heterogeneity
+in gene expression which could reveal possible subclusters of cells with
+particular phenotypes.
+
+
+
+``` r
+FeaturePlot(ad_medula_filtered, 
+            features = c("CHGA",
+                         "IL7",
+                         "CDH9", 
+                         "MPZ"), 
+            order = TRUE)
+```
+
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+
+For example, MPZ is expressed very specifically in the left branch
+but some heterogeneity can be observed.
 
 
 ## Cell type labelling
@@ -155,7 +176,7 @@ DimPlot(ad_medula_filtered,
         NoLegend()                ## remove legends
 ```
 
-![](07-Profiling_cells_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 
 
@@ -240,7 +261,7 @@ DimPlot(sample,
         label = TRUE) + NoLegend()
 ```
 
-![](07-Profiling_cells_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](07-Profiling_cells_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 
 Does it look similar to our previous conclusions? Cell assignation depends
