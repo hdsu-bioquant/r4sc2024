@@ -48,7 +48,7 @@ of scRNA-Seq data. However, the analysis that we show next are applied downstrea
 to libraries construction or sequencing, and are therefore platform agnostic.
 
 
-![**Single Cell Sequencing Platforms**: Date of development *vs* number of cells analyzed by each technology.](../figures/moores-law.png)
+![**Single Cell Sequencing Platforms**: Date of development *vs* number of cells analyzed by each technology.](../moores-law.png)
 
 The image is taken from [Svensson V et al, 2017](https://arxiv.org/abs/1704.01379).
 
