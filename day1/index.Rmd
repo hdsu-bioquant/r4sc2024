@@ -12,10 +12,11 @@ library(Matrix)
 
 # 0. First steps in scRNA-Seq analysis 
 
+Welcome to this introductory course on single cell RNA-seq (scRNA-Seq) data analysis. In this course we will cover the main steps of a typical scRNA-Seq analysis workflow, using the R package Seurat as a framework for the analysis. We will use a dataset of human embryonic adrenal medulla, which is a tissue that gives rise to the neuroblastoma tumor. The dataset is taken from [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1).
 
-We will use available data from adrenal medulla [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1). 
-
+In this dataset, tissue from embryonic adrenal medulla was sequenced to understand the developmental process, leading from progenitor cell populations to differentiated lineages. This is crucial to understand tumoregenesis of neuroblatoma, a pediatric solid tumor originating along this developmental trajectory.
 In order to speed up the process only a subset of 2400 cells are going to be processed here.
+
 This tutorial can be run by copy-pasting the code in a Rstudio or R console.
 The datasets are retrieved from repositories. In case of no internet conection
 you can download the files from [Figshare](https://figshare.com/s/5e0afc577026e2e7413a) or

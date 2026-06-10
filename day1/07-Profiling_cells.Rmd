@@ -84,7 +84,7 @@ ad_medula.degs <- FindAllMarkers(ad_medula_filtered,
 ```
 
 
-# Profiling cells
+# 7. Profiling cells
 
 In the context of single-cell RNA-seq (scRNA-seq), cell profiling refers to the process of characterizing individual cells based on their gene expression patterns to understand their identity, functional state, and potential biological roles.
 
@@ -288,23 +288,7 @@ defined signatures. Please, download and inspect the database of signatures.
 Are there all human cell types represented in this list?
 
 
-## Final Report
-
-## Exercise 
-
-
-> Using the scRNA-Seq workflow in this pipeline, process a data regarding PBMC cells 
-stimulated with IFN beta
-> Load the seurat object containing the data to a variable named `ifnb` using the following commands:
-
-```
-url_ifn <- 'https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true'
-ifnb <- readRDS(url(url_ifn))
-```
-
-> This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042). Provide a report in a Rmd file.   
-
 
 [Previous Chapter (Differential expression)](./06-Differential_Expression.md)|
-[Next Chapter (Pseudotime analysis)](./08-Intro_to_pseudotime_analysis.md)
+[Next Chapter (Pseudotime analysis)](./08-Pseudotime_analysis.md)
 

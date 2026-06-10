@@ -4,9 +4,7 @@ output:
     keep_md: yes
 ---
 
-
-
-```{r, done_in_previous_section, include=FALSE}
+```{r, dependencies, warning=FALSE, message=FALSE, include=FALSE}
 library(Seurat)
 library(tidyverse)
 library(Matrix)
@@ -65,7 +63,9 @@ ad_medula_filtered <- ScaleData(ad_medula_filtered)
 ```
 
 
-# Feature selection
+
+
+# 3. Feature selection
 
 
 Because of the sparsity in the sequencing data many genes or features are almost no expressed.

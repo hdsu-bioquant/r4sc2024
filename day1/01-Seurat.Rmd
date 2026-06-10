@@ -10,53 +10,11 @@ output:
 # 1. Standard Preprocessing using Seurat
 
 
-Some standard steps are usually carried out in scRNA-Seq prior to further analysis as QC, dimensional
+Some standard steps are usually carried out in scRNA-Seq prior to further analysis, such as quality control (QC), dimensional
 reduction and marker visualization. Here, we will use the Seurat R package to perform these steps which
-is increasingly becoming the most popular tool, however, there are some other options as SingleCellExperiment
-in R and scanpy available for python. First, we need to define a Seurat object.
+is increasingly becoming the most popular tool. However, there are  other options such as scanpy which is available for python. First, we need to define a **Seurat object**.
 
-```{r, message=FALSE, warning=FALSE, include=FALSE}
-invisible({
-library(Seurat)
-library(Matrix)
-library(tidyverse)
-})
-```
-
-
-
-```{r, include=FALSE}
-## If the url/internet doesn't work you can use a local copy
-## of the data, just set the local path here
-#ad_medula_path <- "/Users/cbg-mbp-02/Documents/data/janski_2021/"
-# Read matrix
-#counts <- readMM(file.path(ad_medula_path, "counts_subset_2400_cells.mtx"))
-
-url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/counts_subset_2400_cells.mtx"
-counts <- readMM(url(url))
-counts <- as.matrix(counts)
-
-# Read cell and gene names
-cells <- read.delim(
-  #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
-  header = TRUE,
-  stringsAsFactors = FALSE
-)
-#head(cells)
-
-genes <- read.delim(
-  #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
-  header = FALSE,
-  stringsAsFactors = FALSE
-)
-#head(genes)
-
-# Assign row and column names
-rownames(counts) <- genes$V1
-colnames(counts) <- cells$cell_id
-```
+The Seurat object is a special data structure, which contains multiple type of information: the raw counts, the feature names (here genes), the cell identifiers, if available some processed data and additional metadata information. As we process through the analysis, we will keep on filling the Seurat object with new pieces of information (variable genes, principle components, etc...)
 
 
 ## Creating Seurat object
@@ -142,15 +100,14 @@ hist(actin$ACTB)
 
 
 
-## Quizzes
+## Quiz
 
-<br>
 <details>
-<summary> Find and display the metadata in the seurat object
+<summary> How can you find and display the metadata in the seurat object?
 <br>
-TIP: You can have 
-a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#object-information) 
-of the seurat objects from the GitHub Wiki.
+<i>TIP: You can have 
+a look at the <a href="https://github.com/satijalab/seurat/wiki/Seurat#object-information">documentation</a>
+of the seurat objects from the GitHub Wiki.</i>
 </summary>
 <br>
 <b>Answer:</b>
@@ -164,7 +121,7 @@ ad_medula_seu_filtered@meta.data %>% head
 
 
 
-## Exercises
+## Exercise
 
 <blockquote>
 Create a Seurat object 
@@ -182,6 +139,7 @@ contains 250 cells downsampled from the 10x PBMC data and stored in tsv format
  * How many features and cells are present in the count matrix?
 
 </blockquote>
+
 
 
 
