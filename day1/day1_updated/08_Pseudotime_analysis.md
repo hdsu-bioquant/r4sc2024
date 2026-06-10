@@ -30,6 +30,87 @@ library(patchwork)
 set.seed(1234)
 ```
 
+# Load data
+
+First, we load the already pre-processed data from Jansky et al 2021.
+
+
+
+``` r
+## If url connection doesn't work you can work locally
+#seurat_obj <- readRDS("/Users/cbg-mbp-02/Documents/data/janski_2021/janski_2021_seurat_subset_2400_cells.rds")
+
+url <- "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/janski_2021_seurat_subset_2400_cells.rds"
+con <- url(url, open = "rb")
+seurat_obj <- readRDS(con)
+close(con)
+
+seurat_obj
+```
+
+```
+## An object of class Seurat 
+## 28422 features across 2400 samples within 1 assay 
+## Active assay: RNA (28422 features, 0 variable features)
+##  1 layer present: counts
+```
+
+# Inspect metadata
+
+We will implement a pseudotime analysis along the already annotated cell types. The calculation
+is guided on cluster or cell type information. 
+
+
+
+``` r
+str(seurat_obj@meta.data)
+```
+
+```
+## 'data.frame':	2400 obs. of  13 variables:
+##  $ cell_id     : chr  "AAACGCTGTCAAAGTA_1" "AAAGGATCAGATCACT_1" "AAAGGATCAGCAGAAC_1" "AACAACCAGTCCTACA_1" ...
+##  $ orig.ident  : int  14607 14607 14607 14607 14607 14607 14607 14607 14607 14607 ...
+##  $ nCount_RNA  : num  1984 1645 1715 2882 2029 ...
+##  $ nFeature_RNA: int  1347 1226 1254 1871 1391 2811 1899 2200 1192 2690 ...
+##  $ percent.mt  : num  0.2016 0.0608 0 0.1041 0.0493 ...
+##  $ S.Score     : num  0.0879 -0.0594 -0.0209 -0.1035 0.0835 ...
+##  $ Phase       : chr  "S" "G1" "G1" "G2M" ...
+##  $ cytotrace   : num  0.353 0.203 0.314 0.601 0.317 ...
+##  $ pseudotime  : num  17.8 15.6 14 12.9 13.2 ...
+##  $ celltype    : chr  "Neuroblasts" "Neuroblasts" "Connecting progenitor cells" "Connecting progenitor cells" ...
+##  $ X           : chr  "AAACGCTGTCAAAGTA_1" "AAAGGATCAGATCACT_1" "AAAGGATCAGCAGAAC_1" "AACAACCAGTCCTACA_1" ...
+##  $ UMAP_1      : num  5.57 4.8 4.04 4.48 4.52 ...
+##  $ UMAP_2      : num  -3.477 -2.193 -0.145 0.913 0.577 ...
+```
+
+
+# Data normalization
+
+Slingshot does not directly require normalized expression values when
+operating on existing embeddings, but normalization is useful for
+downstream analyses.
+
+
+
+``` r
+seurat_obj <- NormalizeData(seurat_obj)
+
+seurat_obj <- FindVariableFeatures(
+  seurat_obj,
+  selection.method = "vst",
+  nfeatures = 2000
+)
+
+seurat_obj <- ScaleData(
+  seurat_obj,
+  features = VariableFeatures(seurat_obj)
+)
+
+seurat_obj <- RunPCA(
+  seurat_obj,
+  features = VariableFeatures(seurat_obj), 
+  verbose = FALSE
+)
 
 umap_coords <- as.matrix(seurat_obj@meta.data[, c("UMAP_1", "UMAP_2")])
 colnames(umap_coords) <- c("UMAP_1", "UMAP_2")
