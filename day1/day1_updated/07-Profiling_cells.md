@@ -8,7 +8,7 @@ output:
 
 
 
-# Profiling cells
+# 7. Profiling cells
 
 In the context of single-cell RNA-seq (scRNA-seq), cell profiling refers to the process of characterizing individual cells based on their gene expression patterns to understand their identity, functional state, and potential biological roles.
 
@@ -22,7 +22,7 @@ What is the state of each cell?
 How heterogeneous is the population?
 Cell profiling reveals subpopulations that would be masked in bulk RNA-seq experiments.
 
-## Markers visualization
+## Marker visualization
 
 First, we will take top 10 ranked genes based in Log FC and visualize their
 expression in clusters using a heatmap representation.
@@ -105,6 +105,8 @@ object. We will map the cluster names as follows:
 
 **Beware: your UMAP might look slightly different! So please adapt the cluster<>cell type mapping according to your results! For example, you might have more/less clusters!**
 
+
+We can now name the clusters using the insights we have just gained by looking at marker genes:
 
 ``` r
 mapping <- data.frame(seurat_cluster=c('0', 
@@ -248,21 +250,11 @@ defined signatures. Please, download and inspect the database of signatures.
 Are there all human cell types represented in this list?
 
 
-## Final Report
-
 ## Exercise 
 
 
-> Using the scRNA-Seq workflow in this pipeline, process a data regarding PBMC cells 
-stimulated with IFN beta
-> Load the seurat object containing the data to a variable named `ifnb` using the following commands:
+> Taking the list of marker genes that we provided, do a Heatmap like in the first section of this chapter to verify if they are differentially expressed!
 
-```
-url_ifn <- 'https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true'
-ifnb <- readRDS(url(url_ifn))
-```
-
-> This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042). Provide a report in a Rmd file.   
 
 
 [Previous Chapter (Differential expression)](./06-Differential_Expression.md)|

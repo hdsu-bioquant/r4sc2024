@@ -9,26 +9,23 @@ output:
 
 
 
-# Differential Expression Analysis
+# 6. Differential Expression Analysis
 
-The main advantage of using scRNA-Seq technologies is the possibility of 
-assessing cell type specificity and heterogeneity, which is not possible while
-using bulk assays. 
+The main advantage of using scRNA-seq technologies is the possibility of 
+assessing cell type specificity and heterogeneity, which is not possible using bulk assays. 
 
-We should expect that some of the identified clusters in the UMAP might correspond
-to distinct cell types. The assignation of cell types identities is not always
-straightforward, some clusters might still contain some variability, and 
-additionally, different clusters might correspond to the same cell type at a
-different functional, metabolic or cycling point. 
+We expect that some of the identified clusters in the UMAP might correspond
+to distinct cell types or cell states (for example different metabolic states, etc...). The assignation of cell types identities is not always
+straightforward and is one of the biggest challenge of single-cell analysis. 
 
-Cell type profiling is generally done by assessing the expression of markers. 
-This task can be done manually by inspecting markers in dimensional reduced data
-projected in UMAP or tSNE. It can also be done in a automatic manner scoring 
+Cell type profiling is generally done by assessing the expression of *marker genes*. 
+This task can be done manually by inspecting known markers in dimensional reduced data
+projected in UMAP or tSNE (for example classifical cell type markers such as CD3 for T-cells). It can also be done in a automatic manner scoring 
 cells using gene signatures, which are lists of marker genes. Scores are generally
 based in the median expression of all the markers. Using scores has the advantage
 or reducing bias due to the arbitrary selection of markers.
 
-Finding differential expressed markers is important for cluster profiling and
+Another approach is to determine genes which are differentially expressed between clusters, and then trying to understand what these genes are. Finding differential expressed markers (or differentially expressed genes, DEGs) is important for cluster profiling and
 identification. We will use the `FindAllMarkers()` function, which performs
 a statistical test comparing the distribution of gene expression values for 
 each gene separately comparing one assigned cell type cluster (in this case 
@@ -44,12 +41,8 @@ Idents(ad_medula_filtered) <- ad_medula_filtered$seurat_clusters
 
 Now we can calculate the DEGs. 
 There are several parameters for `FindAllMarkers()`, we will discuss
-`logfc.threshold`, `min.pct` and `min.cells.feature` that corresponds to the threshold of gene
-expression fold change, the minimum percentage of cells expressing the marker 
-and the minimum of cells expressing (counts > 0) the feature. These parameters 
-are used to filter out genes prior calculating DEGs. Lowering the values of these
-parameters will increase the sensibility of the method at the expense of 
-increasing computation time.
+`logfc.threshold`, `min.pct` and `min.cells.feature` that corresponds to the threshold of gene expression fold change, the minimum percentage of cells expressing the marker and the minimum of cells expressing (counts > 0) the feature. These parameters 
+are used to filter out genes prior calculating DEGs. Lowering the values of these parameters will increase the sensibility of the method at the expense of increasing computation time.
 
 
 
@@ -83,8 +76,9 @@ head(ad_medula.degs)
 ```
 
 
+Differential gene expression are usually represented graphically as **volcano plots**, in which each gene is represented using the log-fold change between one cluster and the rest (x-axis) and the statistical significance of this logFC (-log10(Pvalue) in y-axis).
 
-We can make a vulcano plot using `ggplot`:
+We can make a volcano plot using `ggplot`:
 
 
 ``` r
@@ -111,8 +105,8 @@ ad_medula.degs %>%
 
 ## Exercises
 
-> What does this plot represent? Can you make the equivalent volcano plot for the other clusters?
+> What can you learn from this plot, if you look at how the genes are distributed? Can you make the equivalent volcano plot for the other clusters?
 
 
 [Previous Chapter (Cluster Visualization)](./05-Cluster_visualization.md)|
-[Next Chapter (Profiling cells)](./06-Profiling_cells.md)
+[Next Chapter (Profiling cells)](./07-Profiling_cells.md)

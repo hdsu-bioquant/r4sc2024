@@ -9,14 +9,17 @@ output:
 
 
 
-# Cell clustering
+# 5. Cell clustering
 
 
-Detection of groups or cluster of cells is an important task in scRNA-Seq 
-analysis. Seurat implements a clustering method based in KNN graphs and 
+Detection of groups or cluster of cells is an important task in scRNA-seq 
+analysis. These groups could represent different cell states or cell types. 
+
+## Defining clusters
+
+Seurat implements a clustering method based in KNN graphs and 
 community detection using the Louvain algorithm. An important parameter
-for clustering is the resolution which can be set to increase/reduce the
-granularity of the clusters.
+for clustering is the *resolution* which can be set to increase/reduce the granularity of the clusters.
 
 This method can be implemented by using the functions `FindNeighbors()` and
 `FindClusters()` as follows:
@@ -78,7 +81,7 @@ So, 297 cells were assigned to the cluster 0.
 > Try different different parameters for the clustering. For example, `k.param` in the *FindNeighbors()* function and higher levels of resolution. How do these 2 parameters influence the number of clusters?
 
 
-# Cluster visualization
+## Cluster visualization
 
 
 Transformations like PCA, tSNE or UMAP are used to project multidimensional
@@ -88,7 +91,7 @@ global relations between sample points. We will use UMAPs to visualize the
 scRNA-Seq data.
 
 
-## UMAP
+### UMAP
 
 We can use the `RunUMAP` function to calculate the UMAP transformation. The 
 calculation of a UMAP projection can intensive computationally and is 

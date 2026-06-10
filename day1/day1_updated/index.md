@@ -13,9 +13,11 @@ output:
 
 We will use available data from adrenal medulla [Janski, et al 2021](https://www.nature.com/articles/s41588-021-00806-1). 
 
+In this dataset, tissue from embryonic adrenal medulla was sequenced to understand the developmental process, leading from progenitor cell populations to differentiated lineages. This is crucial to understand tumoregenesis of neuroblatoma, a pediatric solid tumor originating along this developmental trajectory.
+
 In order to speed up the process only a subset of 2400 cells are going to be processed here.
 This tutorial can be run by copy-pasting the code in a Rstudio or R console.
-The datasets are retrieved from repositories. In case of no internet conection
+The datasets are retrieved from repositories. In case of no internet connection
 you can download the files from [Figshare](https://figshare.com/s/5e0afc577026e2e7413a) or
 [G drive](https://drive.google.com/drive/folders/13cPh4uFLZgCJ8BEfhHcduRmyiKcx5dA_?usp=sharing)
 
@@ -34,7 +36,7 @@ We will perform the following tasks:
 ## Single Cell Sequencing
 
 Single cell sequencing (scRNA-Seq) technologies arise from bulk counterparts with 
-the aim of refining gene expression profiles. Previous bulk Sequencing offered 
+the aim of refining gene expression profiles. Previous bulk sequencing offered 
 averaged quantifications of gene expression in samples. In some contexts, for 
 example, when studying cell type specificity or the heterogeneity in tumours is 
 important to dissect patterns in cell subpopulations.

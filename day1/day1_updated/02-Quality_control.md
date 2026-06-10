@@ -5,27 +5,10 @@ output:
 ---
 
 
-
-
-
-
-
-
-
-
-
 # 2. Quality control
 
-# Quality control
-
-
 Filtering cells with low sequencing quality is a very important step since it can greatly
-impact in further analysis. Quality check and control often requires to visualize and inspect
-samples in order to determine appropiate thresholds. Threshold values might vary from one 
-dataset to another, so no hard threshold rule can be applied equally to every case.
-
-We will examine the number of UMI counts, the number of RNA features and the percentage of reads 
-of mitochondrial genes.
+impact  further analysis. Quality check and control often requires to visualize and inspect samples in order to determine appropriate thresholds on different quality metrics. Threshold values might vary from one dataset to another, so no hard threshold rule can be applied equally to every case.
 
 We will first calculate the percentage of UMI counts of reads mapped to mitochondrial genes. This
 step most be manually done since it is based on a *priori knowledge* of which genes corresponds to
@@ -33,19 +16,17 @@ mitochondrial genes.
 
 
 
-
 ``` r
 ad_medula_seurat[["percent.mt"]] <- PercentageFeatureSet(ad_medula_seurat, pattern = '^MT-')
 ```
 
-Then, we can visualize the following metrics.
+Then, we can visualize the following metrics for each cell:
 
  * Number of features - Correspond to the number of different mapped genomic features. For example, in the
- case of scRNA-Seq features corresponds to genes, in ATAC-Seq to genomic ranges, etc. High number of features
- can indicate doublets and empty cells. Usually between 1 and 30000.
+ case of scRNA-seq features corresponds to genes, in ATAC-seq to genomic ranges, etc. High number of features
+ can indicate doublets, low numbers can indicate empty droplets. Usually between 1 and 30000.
  
- * Number of counts - Number of mapped reads. It can also indicate the presence of doublets and empty 
-droplet. It's generally correlated to the number of features. Usually between 1 and 20000.
+ * Number of UMI counts - Number of mapped reads with a unique molecular identifier (UMI). It can also indicate the presence of doublets and empty droplet. It's generally correlated to the number of features. Usually between 1 and 20000.
  
  * Percentage of mitochondrial genes - Percentage of mapped reads that are annotated to mitochondrial
  genes. The presence of high levels of % of mitochondrial genes can suggest that a cell have lost
@@ -99,9 +80,8 @@ ncol(ad_medula_filtered)
 
 There are several methods for normalization of scRNA-Seq data. A commonly
 used strategy is the log normalization which basically corrects sequencing
-deep in cells by dividing each feature by the total number of counts and
-then multiplied the result by a factor, usually 10000, and finally the
-values are log transformed.
+depth in cells by dividing the raw count of each feature by the total number of counts and
+then multiplying the result by a factor, usually 10000, and finally taking the logarithm + 1.
 
 Log normalization can be implemented by using the `NormalizeData()` function.
 
@@ -137,7 +117,7 @@ b) They are related in a non-linear way
 <br>
 c) They are linearly related
 <br>
-TIP: Use the function FeatureScatter, inspect the manual using ?function.
+<i>TIP: Use the function FeatureScatter, inspect the manual using ?function.</i>
 </summary>
 <br>
 <b>Answer:</b>
@@ -148,7 +128,7 @@ We observe as expected a linear relation between the number of UMI counts and th
 features recorded.
 
 </details> 
-
+<br>
 
 **QUIZ 2**
 

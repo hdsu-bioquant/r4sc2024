@@ -10,17 +10,11 @@ output:
 # 1. Standard Preprocessing using Seurat
 
 
-Some standard steps are usually carried out in scRNA-Seq prior to further analysis as QC, dimensional
+Some standard steps are usually carried out in scRNA-Seq prior to further analysis, such as quality control (QC), dimensional
 reduction and marker visualization. Here, we will use the Seurat R package to perform these steps which
-is increasingly becoming the most popular tool, however, there are some other options as SingleCellExperiment
-in R and scanpy available for python. First, we need to define a Seurat object.
+is increasingly becoming the most popular tool. However, there are  other options such as scanpy which is available for python. First, we need to define a **Seurat object**.
 
-
-
-
-
-
-
+The Seurat object is a special data structure, which contains multiple type of information: the raw counts, the feature names (here genes), the cell identifiers, if available some processed data and additional metadata information. As we process through the analysis, we will keep on filling the Seurat object with new pieces of information (variable genes, principle components, etc...)
 
 ## Creating Seurat object
 
@@ -72,7 +66,7 @@ ad_medula_seurat
 
 Seurat objects can be seen as a container of different features. At this step it contains
 our gene expression matrix, but in addition it can store metadata, processed data,
-information from different assays, for example, scATACSeq, scCITESeq or unspliced transcripts.
+information from different assays, for example, scATAC-seq, scCITE-seq or unspliced transcripts.
 
 We can explore the seurat object using the `$` to explore its *metadata* in combination with the tab 
 key. For example, during the creation of the seurat object the number of counts quality metric
@@ -142,15 +136,14 @@ hist(actin$ACTB)
 
 
 
-## Quizzes
+## Quiz
 
-<br>
 <details>
-<summary> Find and display the metadata in the seurat object
+<summary> How can you find and display the metadata in the seurat object?
 <br>
-TIP: You can have 
-a look at the [documentation](https://github.com/satijalab/seurat/wiki/Seurat#object-information) 
-of the seurat objects from the GitHub Wiki.
+<i>TIP: You can have 
+a look at the <a href="https://github.com/satijalab/seurat/wiki/Seurat#object-information">documentation</a>
+of the seurat objects from the GitHub Wiki.</i>
 </summary>
 <br>
 <b>Answer:</b>
@@ -164,7 +157,7 @@ ad_medula_seu_filtered@meta.data %>% head
 
 
 
-## Exercises
+## Exercise
 
 <blockquote>
 Create a Seurat object 
@@ -186,7 +179,7 @@ contains 250 cells downsampled from the 10x PBMC data and stored in tsv format
 
 
 [Previous Chapter (Seurat)](./01-Seurat.md)|
-[Next Chapter (Feature selection)](./03-Feature_selection.md)
+[Next Chapter (Quality Control)](./02-Quality_control.md)
 
 
 

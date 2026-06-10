@@ -9,12 +9,11 @@ output:
 
 
 
-# Dimensional Reduction
+# 4. Dimensional Reduction
 
 
-
-The size of scRNA-Seq matrices can be huge and for this reason techniques to reduce the dimensionality
-of this data are used. Here, we will use PCA, a very common techniques for dimension
+The size of scRNA-seq matrices can be huge and for this reason techniques to reduce the dimensionality
+of this data are used. Here, we will use **Principal component analysis (PCA)**, a very common techniques for dimension
 reduction and visualization.
 
 We will run a PCA using the already calculated top 1000 HVGs using the function `RunPCA()`.
@@ -42,8 +41,7 @@ ElbowPlot(ad_medula_filtered)
 ![](04-Dimensional_reduction_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 
-The PC components in a PCA reflects corresponds to the directions in which
-more variability is observed. These PCs are ranked by using the eigenvalues
+The principal components (PC) in a PCA analysis  correspond to the directions in which more variability is observed. These PCs are ranked by using the eigenvalues
 of the covariance matrix. We can the plot a Elbow or joystick plot of the 
 standard deviation and the rank of each PC. Top ranked PCs are expected to 
 have higher values of variability and then to gradually decrease. So, we
@@ -57,7 +55,7 @@ the number of PC equal to 7.
 ### Quizz 1
 
 <details>
-<summary> <b>Which command(s) can be used to extract the PCA matrix from the seurat object?</b>
+<summary> Which command(s) can be used to extract the PCA matrix from the seurat object?
 <br>
 
 1. <code>pca <- Embeddings(ad_medula_filtered, reduction = 'pca')</code>
