@@ -5,6 +5,11 @@ output:
 ---
 
 
+```{r, include=FALSE, echo=FALSE}
+library(Seurat)
+```
+
+
 # 8. Introduction
 
 From the gene expression profile, we can determine a *pseudotime* for each cell, which represents it developmental state along a developmental trajectory from progenitor cells to differentiated cells. Each cell is assigned a pseudotime, and cells can then be ordered along this time axis.
@@ -43,7 +48,7 @@ counts <- as.matrix(counts)
 # Read cell and gene names
 cells <- read.delim(
   #file.path(ad_medula_path, "cells_subset_2400_cells.tsv"),   ## if it doesn't work, define a local path
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/cells_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/cells_subset_2400_cells.tsv",
   header = TRUE,
   stringsAsFactors = FALSE
 )
@@ -51,7 +56,7 @@ cells <- read.delim(
 
 genes <- read.delim(
   #file.path(ad_medula_path, "genes_subset_2400_cells.tsv"),
-  "https://raw.githubusercontent.com/hdsu-bioquant/r4sc2024/r4sc_june2026/day1/day1_updated/data/genes_subset_2400_cells.tsv",
+  "https://raw.githubusercontent.com/caramirezal/caramirezal.github.io/master/courses/data/genes_subset_2400_cells.tsv",
   header = FALSE,
   stringsAsFactors = FALSE
 )
