@@ -8,7 +8,7 @@ output:
 
 
 
-# 7. Profiling cells
+# Profiling cells
 
 In the context of single-cell RNA-seq (scRNA-seq), cell profiling refers to the process of characterizing individual cells based on their gene expression patterns to understand their identity, functional state, and potential biological roles.
 
@@ -22,7 +22,7 @@ What is the state of each cell?
 How heterogeneous is the population?
 Cell profiling reveals subpopulations that would be masked in bulk RNA-seq experiments.
 
-## Marker visualization
+## Markers visualization
 
 First, we will take top 10 ranked genes based in Log FC and visualize their
 expression in clusters using a heatmap representation.
@@ -127,8 +127,6 @@ object. We will map the cluster names as follows:
 **Beware: your UMAP might look slightly different! So please adapt the cluster<>cell type mapping according to your results! For example, you might have more/less clusters!**
 
 
-We can now name the clusters using the insights we have just gained by looking at marker genes:
-
 ``` r
 mapping <- data.frame(seurat_cluster=c('0', 
                                        '1', 
@@ -205,8 +203,8 @@ ad_medula_filtered <- FindClusters(ad_medula_filtered,
 sample <- run_sctype(ad_medula_filtered, 
                      assay = "RNA", 
                      scaled = TRUE, 
-                     known_tissue_type="Brain",
-                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx", 
+                     known_tissue_type="Adrenal",
+                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx", 
                      name="sctype_classification")
 ```
 
@@ -241,12 +239,12 @@ head(sample@meta.data)
 ## AACAAGAAGGACTTCT_1               2               1           Bridge
 ## AACAAGATCTGCGTCT_1               3               4              SCP
 ##                    RNA_snn_res.1 sctype_classification
-## AAACGCTGTCAAAGTA_1             0        Mature neurons
-## AAAGGATCAGATCACT_1             0        Mature neurons
-## AAAGGATCAGCAGAAC_1             1  Dopaminergic neurons
-## AACAACCAGTCCTACA_1             1  Dopaminergic neurons
-## AACAAGAAGGACTTCT_1             1  Dopaminergic neurons
-## AACAAGATCTGCGTCT_1             4             Tanycytes
+## AAACGCTGTCAAAGTA_1             0      Chromaffin cells
+## AAAGGATCAGATCACT_1             0      Chromaffin cells
+## AAAGGATCAGCAGAAC_1             1               Unknown
+## AACAACCAGTCCTACA_1             1               Unknown
+## AACAAGAAGGACTTCT_1             1               Unknown
+## AACAAGATCTGCGTCT_1             4         Schwann cells
 ```
 
 
@@ -266,16 +264,26 @@ DimPlot(sample,
 
 Does it look similar to our previous conclusions? Cell assignation depends
 on the definition of cell type signatures, which corresponds to a list
-of cell type markers. The library scType depends on [this](https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx) list of
+of cell type markers. The library scType depends on [this](https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx) list of
 defined signatures. Please, download and inspect the database of signatures.
 Are there all human cell types represented in this list?
 
 
+## Final Report
+
 ## Exercise 
 
 
-> Taking the list of marker genes that we provided, do a Heatmap like in the first section of this chapter to verify if they are differentially expressed!
+> Using the scRNA-Seq workflow in this pipeline, process a data regarding PBMC cells 
+stimulated with IFN beta
+> Load the seurat object containing the data to a variable named `ifnb` using the following commands:
 
+```
+url_ifn <- 'https://github.com/caramirezal/caramirezal.github.io/blob/master/bookdown-minimal/data/pbmc_ifnb_stimulated.seu.rds?raw=true'
+ifnb <- readRDS(url(url_ifn))
+```
+
+> This data is downsampled from the [Kang HM et al, 2017 data](https://www.nature.com/articles/nbt.4042). Provide a report in a Rmd file.   
 
 
 [Previous Chapter (Differential expression)](./06-Differential_Expression.md)|

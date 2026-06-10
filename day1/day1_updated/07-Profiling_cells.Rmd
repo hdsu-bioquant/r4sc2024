@@ -255,8 +255,8 @@ ad_medula_filtered <- FindClusters(ad_medula_filtered,
 sample <- run_sctype(ad_medula_filtered, 
                      assay = "RNA", 
                      scaled = TRUE, 
-                     known_tissue_type="Brain",
-                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx", 
+                     known_tissue_type="Adrenal",
+                     custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx", 
                      name="sctype_classification")
 ```
 
@@ -283,7 +283,7 @@ DimPlot(sample,
 
 Does it look similar to our previous conclusions? Cell assignation depends
 on the definition of cell type signatures, which corresponds to a list
-of cell type markers. The library scType depends on [this](https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_short.xlsx) list of
+of cell type markers. The library scType depends on [this](https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx) list of
 defined signatures. Please, download and inspect the database of signatures.
 Are there all human cell types represented in this list?
 
