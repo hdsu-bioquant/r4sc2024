@@ -105,6 +105,6 @@ Tutorials:
 ### Day 2: analysis of scATAC-seq and integration
 
 * Part 1 : [Preprocessing and QC](./day2/09_single_cell_atac_seq_preprocessing.md)
-* Part 2 : [Integration scRNA/scATAC](./day2/10_integration_rna_atac_seq.md)
-* Part 2 : [Motif analysis](./day2/11_single_cell_atac_seq_footprinting.md)
+* Part 2 : [Integration scRNA/scATAC](./day2/10_integration.md)
+* Part 3 : [Motif analysis](./day2/11_single_cell_atac_seq_footprinting.md)
 
