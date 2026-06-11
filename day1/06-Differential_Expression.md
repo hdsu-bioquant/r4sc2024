@@ -115,4 +115,4 @@ ad_medula.degs %>%
 
 
 [Previous Chapter (Cluster Visualization)](./05-Cluster_visualization.md)|
-[Next Chapter (Profiling cells)](./06-Profiling_cells.md)
+[Next Chapter (Profiling cells)](./07-Profiling_cells.md)
