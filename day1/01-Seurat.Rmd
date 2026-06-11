@@ -98,8 +98,8 @@ object and then plot it using an histogram.
 
 
 ```{r, message=FALSE, warning=FALSE}
-actin <- FetchData(ad_medula_seurat, vars = 'ACTB')
-hist(actin$ACTB)
+exp <- FetchData(ad_medula_seurat, vars = c('ACTB','MALAT1','PHOX2B'))
+#hist(exp$PHOX2B)
 ```
 
 

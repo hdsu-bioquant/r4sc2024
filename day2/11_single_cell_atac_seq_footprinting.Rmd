@@ -1,0 +1,106 @@
+---
+title: "Single Cell ATAC-Seq Motif Footprinting"
+author: "Ramirez C and Herrmann C"
+date: "2024-06-10"
+output:
+  html_document:
+    keep_md: yes
+---
+
+# 11. Motif analysis and footprinting
+
+In single-cell ATAC-seq (scATAC-seq) footprinting analysis, the goal is to achieve fine-grained identification of transcription factor (TF) binding sites at the single-cell level. In ATAC-seq, footprinting leverages the fact that TFs bound to DNA protect the underlying sequence from transposase insertion, creating “footprints” or regions with reduced accessibility. These footprints help pinpoint active regulatory elements and provide insights into TF binding activity in specific cell types or states.
+
+Using Signac, an R package for single-cell chromatin data, scATAC-seq footprinting can be combined with clustering and motif enrichment analyses to map how chromatin accessibility relates to TF binding across individual cells. This approach helps identify regulatory networks, understand cell identity, and explore mechanisms of differentiation and response. Signac provides streamlined functions to visualize footprints and link them to TF motifs.
+
+---
+
+## Load required libraries
+
+```{r}
+library(Signac)
+library(Seurat)
+library(GenomicRanges)
+library(ggplot2)
+library(patchwork)
+library(hdf5r)
+library(AnnotationHub)
+library(motifmatchr)
+library(JASPAR2020)
+library(TFBSTools)
+library(BSgenome.Hsapiens.UCSC.hg38)
+
+```
+
+Loading motif information
+We retrieve transcription factor motifs from the JASPAR database using getMatrixSet(). These motifs represent sequence patterns that TFs bind in accessible chromatin regions.
+
+We then add motif information to a Seurat object using Signac, which maps motif instances onto accessible regions using motifmatchr.
+
+```{r}
+# Extract position frequency matrices (PFMs)
+pwm <- getMatrixSet(
+  x = JASPAR2020,
+  opts = list(species = 9606, all_versions = FALSE)
+)
+
+# Add motif information to Seurat object
+pbmc <- AddMotifs(
+  object = pbmc,
+  genome = BSgenome.Hsapiens.UCSC.hg38,
+  pfm = pwm
+)
+```
+
+
+
+Footprinting analysis
+Footprinting analysis involves:
+
+Motif matching: locating motif instances across accessible peaks
+
+Footprint detection: measuring Tn5 insertion depletion at motif sites
+
+Aggregation and scoring: combining signal across cells for robust inference
+
+A footprint plot shows reduced Tn5 insertion at TF binding sites, flanked by higher accessibility.
+
+
+
+```{r}
+# Compute footprint signal
+pbmc <- Footprint(
+  object = pbmc,
+  motif.name = c("CEBPA", "EBF1", "SPI1"),
+  genome = BSgenome.Hsapiens.UCSC.hg38
+)
+
+# Plot footprint profiles
+p2 <- PlotFootprint(
+  object = pbmc,
+  features = c("CEBPA", "EBF1", "SPI1"),
+  group.by = "predicted.id",
+  show.expected = FALSE,
+  repel = TRUE,
+  idents = c(
+    "pre-B cell",
+    "CD14+ Monocytes",
+    "CD16+ Monocytes",
+    "pDC",
+    "CD4 Naive"
+  ),
+  label.top = 5
+)
+
+p2 + patchwork::plot_layout(ncol = 1)
+
+```
+Interpretation
+Do you observe differences in TF binding across cell types?
+
+Is CEBPA enriched in mononuclear vs lymphoid populations?
+
+What can be inferred about EBF1 activity?
+
+Does SPI1 show patterns consistent with PBMC maturation?
+

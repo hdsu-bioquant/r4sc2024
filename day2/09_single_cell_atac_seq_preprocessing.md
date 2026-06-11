@@ -10,11 +10,19 @@ output:
 
 
 
+# 9. single-cell ATAC-seq from blood cells
+
 
 In this tutorial we introduce an standard pipeline of Single Cell ATAC-Seq
 analysis. In order to run the steps described below please download the
-files from the following 
-[link](https://figshare.com/articles/dataset/Single_Cell_RNA_ATAC_Seq_integration/27331188).
+following files:
+
+* [fragment files](https://drive.google.com/file/d/1CNkvJQeXwhE44vA_TvNL9rb-HDlFYjlM/view?usp=sharing)
+* [index file](https://drive.google.com/file/d/1fn9HhSDVb7dVVKAzHb8pcWPYkyfFd3xt/view?usp=sharing)
+* [cell information](https://drive.google.com/file/d/1gfJQEb-ybKFHDeJebtWqHTcjUwr-uFiR/view?usp=sharing)
+* [peak count file](https://drive.google.com/file/d/11_yKVraFC4vvMP0b8bJYpbqWHqh9kTZq/view?usp=sharing)
+
+Store them locally in a directory.
 
 In genomics, data integration generally refers to combining different types of biological data to create a more comprehensive understanding of complex biological systems. Integrating multiple data types—such as genomic, transcriptomic, and epigenomic data—allows researchers to capture diverse molecular layers that influence cellular function, uncovering relationships and regulatory mechanisms that might not be evident from a single dataset.
 
@@ -29,12 +37,12 @@ ATAC- and RNA integration is a useful approach than can be used for addressing:
 
 ## Pre-processing workflow
 
-
 ### Installations
 
 For the pipeline, we will use the Signac R library. Please, make sure that
 you have installed the following libraries by running the following commands.
 
+**If you have installed them yesterday, you do not need to redo this!**
 
 
 ``` r
@@ -89,10 +97,10 @@ object to store the data.
 
 
 ``` r
-path='/Users/carlherrmann/Dropbox/00_MBP_Carl/Teaching/OtherCourses/oct2024/data/'
-counts <- Read10X_h5(file.path(path,'atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5'))
+counts <- Read10X_h5("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
+
 metadata <- read.csv(
-  file = file.path(path,'atac_pbmc_1k_nextgem_singlecell.csv'),
+  file = file.path("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/atac_pbmc_1k_nextgem_singlecell.csv"),
   header = TRUE,
   row.names = 1
 )
@@ -100,7 +108,7 @@ metadata <- read.csv(
 chrom_assay <- CreateChromatinAssay(
   counts = counts,
   sep = c(":", "-"),
-  fragments = file.path(path,'atac_pbmc_1k_nextgem_fragments.tsv.gz'),
+  fragments = file.path("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/atac_pbmc_1k_nextgem_fragments.tsv.gz"),
   min.cells = 10,
   min.features = 200
 )
@@ -182,7 +190,7 @@ query(ah, "EnsDb.Hsapiens.v98")
 
 ```
 ## AnnotationHub with 1 record
-## # snapshotDate(): 2024-04-30
+## # snapshotDate(): 2024-10-28
 ## # names(): AH75011
 ## # $dataprovider: Ensembl
 ## # $species: Homo sapiens
@@ -229,22 +237,22 @@ peakAnno <- annotatePeak(pbmc@assays$peaks@ranges,
 ```
 
 ```
-## >> preparing features information...		 2024-11-11 20:55:12 
-## >> identifying nearest features...		 2024-11-11 20:55:13
+## >> preparing features information...		 2026-06-11 18:12:31 
+## >> identifying nearest features...		 2026-06-11 18:12:32
 ```
 
 ```
-## >> calculating distance from peak to TSS...	 2024-11-11 20:55:13 
-## >> assigning genomic annotation...		 2024-11-11 20:55:13
+## >> calculating distance from peak to TSS...	 2026-06-11 18:12:33 
+## >> assigning genomic annotation...		 2026-06-11 18:12:33
 ```
 
 ```
-## >> adding gene annotation...			 2024-11-11 20:55:32
+## >> adding gene annotation...			 2026-06-11 18:12:52
 ```
 
 ```
-## >> assigning chromosome lengths			 2024-11-11 20:55:32 
-## >> done...					 2024-11-11 20:55:32
+## >> assigning chromosome lengths			 2026-06-11 18:12:52 
+## >> done...					 2026-06-11 18:12:52
 ```
 
 ``` r
@@ -258,7 +266,16 @@ Most peaks are in the promoter region of genes, then in intronic regions and in 
 
 ## Quality control
 
-In single-cell ATAC-seq (scATAC-seq) data, quality control is essential to ensure meaningful interpretation of chromatin accessibility at the single-cell level. Several metrics are commonly used to assess data quality. First, the nucleosome banding pattern provides insight into chromatin structure by identifying whether fragments align in characteristic periodic patterns, reflecting nucleosome-bound and nucleosome-free regions. This pattern helps distinguish high-quality cells with well-defined chromatin states. TSS enrichment score measures the accumulation of fragments near transcription start sites (TSS), with high scores indicating open, accessible regions around gene promoters, characteristic of active chromatin. Additionally, the total number of fragments in peaks is evaluated to confirm that sufficient reads fall within identified accessible regions (peaks), a sign of effective enrichment in regulatory regions. Lastly, the ratio of reads in genomic blacklist regions is checked; these blacklist regions are typically artifactual and non-informative, so a low proportion of reads mapping to them suggests cleaner, high-quality data with minimal background noise. 
+In single-cell ATAC-seq (scATAC-seq) data, quality control is essential to ensure meaningful interpretation of chromatin accessibility at the single-cell level. Several metrics are commonly used to assess data quality. 
+
+First, the **nucleosome banding pattern** provides insight into chromatin structure by identifying whether fragments align in characteristic periodic patterns, reflecting nucleosome-bound and nucleosome-free regions. 
+This pattern helps distinguish high-quality cells with well-defined chromatin states. 
+
+**TSS enrichment score** measures the accumulation of fragments near transcription start sites (TSS), with high scores indicating open, accessible regions around gene promoters, characteristic of active chromatin. 
+
+Additionally, the **total number of fragments in peaks** is evaluated to confirm that sufficient reads fall within identified accessible regions (peaks), a sign of effective enrichment in regulatory regions. 
+
+Lastly, the **ratio of reads in genomic blacklist regions** is checked; these blacklist regions are typically artifactual and non-informative, so a low proportion of reads mapping to them suggests cleaner, high-quality data with minimal background noise. 
 
 
 In the following chunk these QC metrics are calculated.
@@ -388,6 +405,7 @@ DepthCor(pbmc)
 
 <img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
+Component 1 seems to be very much correlated to the sequencing depth, hence we will discard it.
 
 As in the Gene Expression data we can project our data now in two dimensions
 in order to visualize the cells. The next
@@ -402,7 +420,6 @@ DimPlot(object = pbmc, label = TRUE) + NoLegend()
 ```
 
 <img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
-
 
 ## Gene Activity Analysis
 
@@ -424,6 +441,7 @@ The following step performs a normalization of the calculated gene activities.
 ``` r
 # add the gene activity matrix to the Seurat object as a new assay and normalize it
 pbmc[['RNA']] <- CreateAssayObject(counts = gene.activities)
+rm(gene.activities)
 pbmc <- NormalizeData(
   object = pbmc,
   assay = 'RNA',
@@ -449,284 +467,7 @@ FeaturePlot(
 )
 ```
 
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
-
-## Label transfer from RNA to ATAC
-
-
-Since scRNA-seq captures gene expression and scATAC-seq captures regulatory region 
-accessibility, label transfer leverages the shared biological information between 
-the two modalities. This is typically achieved by first clustering the scRNA-seq data 
-(the reference) and assigning cell-type labels based on expression profiles. Then, a 
-correspondence is established between the RNA and ATAC data by integrating both datasets 
-in a shared low-dimensional space, often using anchor-based methods or common latent spaces.
-The scRNA-seq labels can then be transferred to the scATAC-seq cells based on their 
-proximity to scRNA-seq cells in this space. This approach enables researchers to 
-annotate cell types in scATAC-seq data even in the absence of direct transcriptional 
-information, improving the interpretation of chromatin accessibility landscapes 
-and supporting integrative analyses across modalities.
-
-First, we load the reference scRNA-Seq dataset, that we previously worked with.
-
-
-``` r
-# Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("/Users/carlherrmann/Downloads/pbmc_1k_v3.rds")
-pbmc_rna <- UpdateSeuratObject(pbmc_rna)
-```
-
-Using the shared low-dimensional space, algorithms (such as those in Seurat) identify anchors by matching cells in the scRNA-seq dataset to similar cells in the scATAC-seq dataset. Anchors are defined based on the similarity of cell profiles and are typically selected using nearest-neighbor or mutual nearest neighbor (MNN) methods, ensuring each anchor reflects genuine similarity rather than noise.
-
-
-
-``` r
-transfer.anchors <- FindTransferAnchors(
-  reference = pbmc_rna,
-  query = pbmc,
-  reduction = 'cca'
-)
-```
-
-Once anchors are established, cell-type labels from the scRNA-seq dataset can be transferred to the scATAC-seq cells based on anchor assignments. Cells that share an anchor are likely to represent the same cell type or state, enabling accurate annotation of cell types in scATAC-seq data.
-
-
-
-``` r
-predicted.labels <- TransferData(
-  anchorset = transfer.anchors,
-  refdata = pbmc_rna$celltype,
-  weight.reduction = pbmc[['lsi']],
-  dims = 2:30
-)
-
-pbmc <- AddMetaData(object = pbmc, metadata = predicted.labels)
-```
-
-
-
-``` r
-plot1 <- DimPlot(
-  object = pbmc_rna,
-  group.by = 'celltype',
-  label = TRUE,
-  repel = TRUE) + NoLegend() + ggtitle('scRNA-seq')
-
-plot2 <- DimPlot(
-  object = pbmc,
-  group.by = 'predicted.id',
-  label = TRUE,
-  repel = TRUE) + NoLegend() + ggtitle('scATAC-seq')
-
-plot1 + plot2
-```
-
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/umap_plots_label_transfer-1.png" style="display: block; margin: auto;" />
-
-## Identification of cell type chromosomic features
-
-First, we filter out under-represented cell types since is difficult 
-to state valid conclusions based in few cells.
-
-
-
-``` r
-predicted_id_counts <- table(pbmc$predicted.id)
-
-# Identify the predicted.id values that have more than 20 cells
-major_predicted_ids <- names(predicted_id_counts[predicted_id_counts > 20])
-pbmc <- pbmc[, pbmc$predicted.id %in% major_predicted_ids]
-```
-
-
-In the following step the function FindMarkers() is employed to identify 
-differentially accessible peaks between two specified cell types: CD4 Naive 
-and CD14+ Monocytes. The Wilcoxon test is set as the default statistical method 
-for comparing the accessibility profiles of these two cell types, and a minimum 
-percentage threshold of 0.1 is applied to ensure that only peaks present in at least 
-10% of the cells in either group are considered. Finally, the results of the 
-differential accessibility analysis are displayed using the head function, 
-which shows the top entries of the resulting data frame da_peaks.
-
-
-
-``` r
-# change cell identities to the per-cell predicted labels
-Idents(pbmc) <- pbmc$predicted.id
-
-# change back to working with peaks instead of gene activities
-DefaultAssay(pbmc) <- 'peaks'
-
-# wilcox is the default option for test.use
-da_peaks <- FindMarkers(
-  object = pbmc,
-  ident.1 = "CD4 Naive",
-  ident.2 = "CD14+ Monocytes",
-  test.use = 'wilcox',
-  min.pct = 0.1
-)
-
-head(da_peaks)
-```
-
-```
-##                                  p_val avg_log2FC pct.1 pct.2    p_val_adj
-## chr1-59814285-59815204    9.788138e-50   7.071777 0.787 0.008 7.825127e-45
-## chr12-119988529-119989427 6.356302e-46   4.481727 0.838 0.046 5.081546e-41
-## chr17-82126437-82127355   4.846764e-45  12.813766 0.700 0.000 3.874746e-40
-## chr7-142808582-142809442  3.497653e-43   7.909902 0.688 0.004 2.796199e-38
-## chr19-49500586-49501460   1.795631e-41   5.281571 0.725 0.025 1.435517e-36
-## chr6-96924166-96925086    8.178543e-41   3.786530 0.838 0.080 6.538336e-36
-```
-
-Now we can visualize cell type specific peaks as follows.
-
-
-``` r
-plot1 <- VlnPlot(
-  object = pbmc,
-  features = rownames(da_peaks)[1],
-  pt.size = 0.1,
-  idents = c("CD4 Naive","CD14+ Monocytes")
-)
-plot2 <- FeaturePlot(
-  object = pbmc,
-  features = rownames(da_peaks)[1],
-  pt.size = 0.1
-)
-
-plot1 | plot2
-```
-
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/diff_peaks_umap-1.png" style="display: block; margin: auto;" />
-
-
-
-## Interpreting identified peaks
-
-In order to drive conclusions about the identified cell type specific open peaks
-it's very useful to identify which genomic locations are closed to that
-positions. The `ClosestFeature` is used to annotate peaks to closest annotated
-features in chromosome references.
-
-
-
-``` r
-open_cd4naive <- rownames(da_peaks[da_peaks$avg_log2FC > 3, ])
-open_cd14mono <- rownames(da_peaks[da_peaks$avg_log2FC < -3, ])
-
-closest_genes_cd4naive <- ClosestFeature(pbmc, regions = open_cd4naive)
-closest_genes_cd14mono <- ClosestFeature(pbmc, regions = open_cd14mono)
-```
-
-
-
-
-``` r
-head(closest_genes_cd4naive)
-```
-
-```
-##                           tx_id gene_name         gene_id   gene_biotype type
-## ENST00000455990 ENST00000455990     HOOK1 ENSG00000134709 protein_coding  cds
-## ENSE00002206071 ENST00000397558    BICDL1 ENSG00000135127 protein_coding exon
-## ENST00000665763 ENST00000665763    CCDC57 ENSG00000176155 protein_coding  gap
-## ENST00000632998 ENST00000632998     PRSS2 ENSG00000275896 protein_coding  utr
-## ENST00000270625 ENST00000270625     RPS11 ENSG00000142534 protein_coding  utr
-## ENST00000544166 ENST00000544166    KLHL32 ENSG00000186231 protein_coding  utr
-##                            closest_region              query_region distance
-## ENST00000455990    chr1-59815118-59815180    chr1-59814285-59815204        0
-## ENSE00002206071 chr12-119989869-119990297 chr12-119988529-119989427      441
-## ENST00000665763   chr17-82101867-82127691   chr17-82126437-82127355        0
-## ENST00000632998  chr7-142774509-142774564  chr7-142808582-142809442    34017
-## ENST00000270625   chr19-49499636-49499708   chr19-49500586-49501460      877
-## ENST00000544166    chr6-96924620-96925026    chr6-96924166-96925086        0
-```
-
-
-
-
-``` r
-head(closest_genes_cd14mono)
-```
-
-```
-##                           tx_id gene_name         gene_id   gene_biotype type
-## ENSE00001389095 ENST00000340607     PTGES ENSG00000148344 protein_coding exon
-## ENST00000554237 ENST00000554237     VASH1 ENSG00000071246 protein_coding  gap
-## ENST00000606214 ENST00000606214    TBC1D7 ENSG00000145979 protein_coding  gap
-## ENST00000336600 ENST00000336600  C6orf223 ENSG00000181577 protein_coding  utr
-## ENST00000610832 ENST00000610832      KLF4 ENSG00000136826 protein_coding  utr
-## ENST00000303004 ENST00000303004     CEBPB ENSG00000172216 protein_coding  utr
-##                           closest_region             query_region distance
-## ENSE00001389095 chr9-129752887-129753042 chr9-129776921-129777829    23878
-## ENST00000554237  chr14-76763131-76769962  chr14-76768047-76768963        0
-## ENST00000606214   chr6-13267836-13305061   chr6-13302519-13303438        0
-## ENST00000336600   chr6-44003127-44007612   chr6-44058502-44059239    50889
-## ENST00000610832 chr9-107489168-107489766 chr9-107489471-107490352        0
-## ENST00000303004  chr20-50192072-50192668  chr20-50274659-50275584    81990
-```
-
-
-## Visualization of peaks
-
-For peaks visualization we can use built-in function like `CoveragePlot`.
-This function generates coverage plots that display the number of fragments 
-(or reads) mapped to specified peaks or genomic features, such as promoters 
-or enhancers, in individual cells or aggregated across a group of cells. 
-By providing a graphical representation of the accessibility landscape, 
-CoveragePlot helps identify patterns of chromatin accessibility that may 
-correlate with gene activity or regulatory mechanisms. 
-The function can also highlight differences in accessibility between different 
-cell types or conditions, making it a valuable tool for interpreting the 
-functional significance of chromatin dynamics in single-cell ATAC-seq analyses. 
-Additionally, users can customize the plot to focus on specific genes or genomic 
-regions of interest, facilitating a targeted exploration of the data.
-
-Here, we visualize a peak identified to be open in CD4 Naive T cells. The peak
-is located by looking at a gene and annotated peaks to it. Here, we use the
-CD4 gene. 
-
-
-``` r
-## Sorting samples by similarity
-pbmc <- SortIdents(pbmc)
-
-# find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), 
-                                      LookupGeneCoords(pbmc, "CD4"))
-
-CoveragePlot(
-  object = pbmc,
-  region = "CD4",
-  region.highlight = regions_highlight,
-  extend.upstream = 1000,
-  extend.downstream = 1000
-)
-```
-
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
-
-It's interesting to play with the parameters for plotting. We can zoom in/out
-chromosomic regions by extending bases up/downstream to the selected
-
-
-
-``` r
-# find DA peaks overlapping gene of interest
-regions_highlight <- subsetByOverlaps(StringToGRanges(open_cd4naive), 
-                                      LookupGeneCoords(pbmc, "CD4"))
-
-CoveragePlot(
-  object = pbmc,
-  region = "CD4",
-  region.highlight = regions_highlight,
-  extend.upstream = 50000,
-  extend.downstream = 50000
-)
-```
-
-<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
-
+<img src="09_single_cell_atac_seq_preprocessing_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 
 

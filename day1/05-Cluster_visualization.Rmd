@@ -87,7 +87,7 @@ This method can be implemented by using the functions `FindNeighbors()` and
 ```{r, message=FALSE, warning=FALSE}
 ad_medula_filtered <- FindNeighbors(ad_medula_filtered)
 ad_medula_filtered <- FindClusters(ad_medula_filtered, 
-                            resolution = 0.1, 
+                            resolution = 1, 
                             verbose = FALSE)
 ```
 

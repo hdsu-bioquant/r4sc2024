@@ -7,6 +7,7 @@ output:
     keep_md: yes
 ---
 
+## 10. Integrating scRNA and scATAC
 
 In this section we start using the PBMC data already preprocessed from the last 
 section. Please, make sure not to skip any step.
@@ -32,32 +33,19 @@ library(AnnotationHub)
 
 
 ```{r, loading_data,  include=FALSE}
-#counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_filtered_peak_bc_matrix.h5")
-#counts <- Read10X_h5(filename = "/Users/cbg-mbp-02/Documents/data/r2sc2024/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
-counts <- Read10X_h5(filename = "/home/carlos/Documents/r4sc2024/day2/data/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
-#metadata <- read.csv(
-#  file = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_singlecell.csv",
-#  header = TRUE,
-#  row.names = 1
-#)
+
+counts <- Read10X_h5("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/atac_pbmc_1k_nextgem_filtered_peak_bc_matrix.h5")
+
 metadata <- read.csv(
-  file = "/home/carlos/Documents/r4sc2024/day2/data/atac_pbmc_1k_nextgem_singlecell.csv",
+  file = file.path("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/atac_pbmc_1k_nextgem_singlecell.csv"),
   header = TRUE,
   row.names = 1
 )
 
-#chrom_assay <- CreateChromatinAssay(
-#  counts = counts,
-#  sep = c(":", "-"),
-#  fragments = "/Users/cbg-mbp-02/Documents/data/r2sc2024/10k_pbmc_ATACv2_nextgem_Chromium_Controller_fragments.tsv.gz",
-#  min.cells = 10,
-#  min.features = 200
-#)
-
 chrom_assay <- CreateChromatinAssay(
   counts = counts,
   sep = c(":", "-"),
-  fragments = "/home/carlos/Documents/r4sc2024/day2/data/atac_pbmc_1k_nextgem_fragments.tsv.gz",
+  fragments = file.path("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/atac_pbmc_1k_nextgem_fragments.tsv.gz"),
   min.cells = 10,
   min.features = 200
 )
@@ -117,26 +105,8 @@ pbmc <- FindNeighbors(object = pbmc, reduction = 'lsi', dims = 2:30)
 pbmc <- FindClusters(object = pbmc, verbose = FALSE, algorithm = 3)
 #DimPlot(object = pbmc, label = TRUE) + NoLegend()
 
-```
-
-
-## Gene Activity Analysis
-
-
-In scATAC-seq analysis, gene activity analysis aims to infer gene expression potential from chromatin accessibility data, providing a proxy for transcriptional activity in the absence of direct RNA measurements. Since scATAC-seq profiles accessible regulatory regions, we can estimate the activity of genes by measuring the accessibility of their promoters and nearby regulatory elements, such as enhancers. This is often achieved by aggregating accessibility counts from peaks located within or near a gene body, typically within a defined distance from the transcription start site (TSS). These aggregated signals can be used to build a "gene activity matrix," which resembles an expression matrix in scRNA-seq data and enables comparative analysis. Gene activity analysis is especially valuable in multi-modal or integration workflows, as it allows researchers to connect chromatin accessibility profiles to transcriptional states, facilitating cell type annotation and regulatory network inference in single-cell studies.
-
-The following function calculates gene activities.
-
-
-```{r,  gene_activity_calculation, include=TRUE}
-## This step takes some time to run
 gene.activities <- GeneActivity(pbmc)
-```
 
-The following step performs a normalization of the calculated gene activities.
-
-```{r,  include=TRUE}
-# add the gene activity matrix to the Seurat object as a new assay and normalize it
 pbmc[['RNA']] <- CreateAssayObject(counts = gene.activities)
 rm(gene.activities)
 pbmc <- NormalizeData(
@@ -146,14 +116,6 @@ pbmc <- NormalizeData(
   scale.factor = median(pbmc$nCount_RNA)
 )
 
-
-```
-
-Then, we can visualize specific gene activity in clusters by inspecting
-the UMAP projection.
-
-
-```{r,  , fig.width=14, fig.height=8, include=TRUE}
 DefaultAssay(pbmc) <- 'RNA'
 
 FeaturePlot(
@@ -163,7 +125,11 @@ FeaturePlot(
   max.cutoff = 'q95',
   ncol = 3
 )
+
 ```
+
+
+
 
 ## Label transfer from RNA to ATAC
 
@@ -186,17 +152,14 @@ First, we load the reference scRNA-Seq dataset, that you can download
 
 ```{r,  subseting_reference, include=FALSE, eval=FALSE}
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("/home/carlos/Documents/r4sc2024/day2/data/pbmc_10k_v3.rds")
+pbmc_rna <- readRDS("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/pbmc_1k_v3.rds")
 pbmc_rna <- UpdateSeuratObject(pbmc_rna)
-pbmc_subset <- pbmc_rna[, sample(x = 1:ncol(pbmc_rna), 1000)]
-saveRDS(pbmc_subset, file = "/home/carlos/Documents/r4sc2024/day2/data/pbmc_1k_v3.rds", compress = TRUE)
-rm(pbmc_subset)
 ```
 
 
 ```{r,  reading_reference, include=TRUE}
 # Load the pre-processed scRNA-seq data for PBMCs
-pbmc_rna <- readRDS("/home/carlos/Documents/r4sc2024/day2/data/pbmc_1k_v3.rds")
+pbmc_rna <- readRDS("~/Library/CloudStorage/Dropbox/00_MBP_Carl/Teaching/OtherCourses/Freiburg_June_2026/pbmc_1k_v3.rds")
 pbmc_rna
 ```
 
@@ -241,6 +204,7 @@ plot2 <- DimPlot(
 
 plot1 + plot2
 ```
+
 
 ## Identification of cell type chromosomic features
 

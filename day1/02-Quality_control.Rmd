@@ -5,7 +5,7 @@ output:
 ---
 
 
-```{r, dependencies, warning=FALSE, message=FALSE, include=FALSE}
+```{r dependencies, message=FALSE, warning=FALSE, include=FALSE}
 library(Seurat)
 library(tidyverse)
 library(Matrix)
