@@ -116,7 +116,7 @@ table(ad_medula_filtered$seurat_clusters)
 ```
 
 
-So, 297 cells were assigned to the cluster 0.
+So, 624 cells were assigned to the cluster 0.
 
 ## Exercise
 
