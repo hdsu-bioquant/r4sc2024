@@ -80,7 +80,9 @@ These Markdown files contain some exercises in R
 
 ## Practical parts
 
-### Day 1: a simple single-cell RNA-seq analysis workflow
+
+**IF YOU HAVE FINISHED DAY1 and DAY2 early: You can redo the analysis steps of Day 1 using this 10x dataset from glioblastoma (brain tumor), which contains 2000 cells. Download the files [here](https://drive.google.com/drive/folders/1PwWkTIBjewgZpo5nHJK4W2dQsvYuylGg?usp=sharing), and rerun all the steps of day1!**
+
 
 On the first day, we will go through a step by step simple analysis of a small scRNA-seq dataset using the Seurat toolkit. **Don't expect to be able to carry a full scRNA-seq analysis after this!** This is meant to give you an idea of a typical workflow rather.
 
